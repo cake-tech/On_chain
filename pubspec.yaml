@@ -13,13 +13,14 @@ topics:
   - wallet
   
 environment:
-  sdk: '>=2.15.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 
 dependencies:
-  blockchain_utils: ^2.1.2
-  # blockchain_utils:
-  #   path: ../blockchain_utils
+  blockchain_utils:
+    git:
+      url: https://github.com/cake-tech/blockchain_utils
+      ref: cake-update-v1
 
 dev_dependencies:
   test: ^1.25.2
