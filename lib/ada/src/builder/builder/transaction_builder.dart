@@ -10,6 +10,9 @@ import 'mint_builder.dart';
 typedef ONSignADA = ADABaseTransactionWitness Function(
     {required List<int> digest, required ADAAddress address});
 
+typedef ONSignADAAsync = Future<ADABaseTransactionWitness> Function(
+    {required List<int> digest, required ADAAddress address});
+
 class ADATransactionBuilder {
   BigInt? _fee;
   BigInt? get fee => _fee;
@@ -91,7 +94,7 @@ class ADATransactionBuilder {
 
   int estimateSize({ADAAddress? onChangeAddress}) {
     if (utxos.isEmpty || _outputs.isEmpty) {
-      throw MessageException("Utxos and outputs must not be not empty.");
+      throw const MessageException("Utxos and outputs must not be not empty.");
     }
     final outs = _outputs.map((e) {
       if (e.amount.coin == BigInt.zero) {
@@ -135,7 +138,7 @@ class ADATransactionBuilder {
 
   TransactionOutput? onChangeAddress(ADAAddress onChangeAddress) {
     if (_fee == null) {
-      throw MessageException(
+      throw const MessageException(
           "please calculation the transaction fees befor using change address.");
     }
     final change = _changeOutput(onChangeAddress);
@@ -153,7 +156,7 @@ class ADATransactionBuilder {
 
   TransactionBody buildTxBody({AuxiliaryDataHash? auxHash}) {
     if (fee == null) {
-      throw MessageException(
+      throw const MessageException(
           "cannot build transaction body before calculation fee.");
     }
     final mint = getMint();
@@ -176,8 +179,32 @@ class ADATransactionBuilder {
     final transactionSigners = signers;
 
     for (final i in transactionSigners) {
-      final wit = onSignADA(address: i, digest: bodyHash);
-      witnesses.add(wit);
+      final witness = onSignADA(address: i, digest: bodyHash);
+      witnesses.add(witness);
+    }
+    final vkeys = witnesses.whereType<Vkeywitness>().toList();
+    final bootstraps = witnesses.whereType<BootstrapWitness>().toList();
+    return ADATransaction(
+        body: trBody,
+        data: aux,
+        witnessSet: TransactionWitnessSet(
+            vKeys: vkeys,
+            nativeScripts: transactionNativeScripts,
+            bootstraps: bootstraps));
+  }
+
+  Future<ADATransaction> signAndBuildTransactionAsync(
+      ONSignADAAsync onSignADA) async {
+    _validateAmounts();
+    final aux = auxiliaryData;
+    final trBody = buildTxBody(auxHash: aux?.toHash());
+    final bodyHash = List<int>.unmodifiable(trBody.toHash().data);
+    final List<ADABaseTransactionWitness> witnesses = [];
+    final transactionSigners = signers;
+
+    for (final i in transactionSigners) {
+      final witness = await onSignADA(address: i, digest: bodyHash);
+      witnesses.add(witness);
     }
     final vkeys = witnesses.whereType<Vkeywitness>().toList();
     final bootstraps = witnesses.whereType<BootstrapWitness>().toList();

@@ -16,7 +16,7 @@ class ConstrPlutusData extends PlutusData {
 
   /// Deserializes a [ConstrPlutusData] instance from CBOR.
   factory ConstrPlutusData.deserialize(CborTagValue cbor) {
-    if (bytesEqual(cbor.tags, [PlutusDataUtils.generalFormTag])) {
+    if (BytesUtils.bytesEqual(cbor.tags, [PlutusDataUtils.generalFormTag])) {
       final CborListValue data = cbor.getValue<CborListValue>();
       return ConstrPlutusData(
           alternative: data.getIndex<CborObject>(0).getInteger(),
@@ -25,7 +25,7 @@ class ConstrPlutusData extends PlutusData {
     final BigInt? alternative =
         PlutusDataUtils.cborTagToAlternative(cbor.tags.first);
     if (alternative == null) {
-      throw MessageException("Invalid ConstrPlutusData tag.");
+      throw const MessageException("Invalid ConstrPlutusData tag.");
     }
     return ConstrPlutusData(
         alternative: alternative,

@@ -17,7 +17,7 @@ void _initializeAccount() {
   test("initializeAccount", () {
     final owner = QuickWalletForTest(index: 406);
     final account1 = QuickWalletForTest(index: 405);
-    final blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
+    const blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
     final layout = VoteProgramInitializeAccountLayout(
         authorizedVoter: account1.address,
         authorizedWithdrawer: account1.address,
@@ -54,7 +54,7 @@ void _authorize() {
   test("authorize", () {
     final owner = QuickWalletForTest(index: 406);
     final account1 = QuickWalletForTest(index: 405);
-    final blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
+    const blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
     final layout = VoteProgramAuthorizeLayout(
         newAuthorized: account1.address, voteAuthorizationType: 1);
     final program = VoteProgram.authorize(
@@ -88,7 +88,7 @@ void _authorizeWithSeed() {
 
     final account1 = QuickWalletForTest(index: 405);
 
-    final blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
+    const blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
     final layout = VoteProgramAuthorizeWithSeedLayout(
         newAuthorized: account1.address,
         voteAuthorizationType: 1,
@@ -123,7 +123,7 @@ void _withdraw() {
   test("withdraw", () {
     final owner = QuickWalletForTest(index: 406);
     final account1 = QuickWalletForTest(index: 405);
-    final blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
+    const blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
     final layout = VoteProgramWithdrawLayout(lamports: BigInt.from(25000));
     final program = VoteProgram.withdraw(
         authorizedWithdrawerPubkey: account1.address,
@@ -154,7 +154,7 @@ void _transferWithLookup() {
   test("transfer with lookup", () {
     final owner = QuickWalletForTest(index: 406);
 
-    final blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
+    const blockHash = "GWWy2aAev5X3TMRVwdw8W2KMN3dyVrHrQMZukGTf9R1A";
     final tableAddress =
         AddressLookupTableProgramUtils.findAddressLookupTableProgram(
             authority: owner.address, recentSlot: BigInt.from(277777145));
@@ -162,7 +162,7 @@ void _transferWithLookup() {
     final tableAccount = AddressLookupTableAccount.fromBuffer(
         accountData: StringUtils.encode(
             "AQAAAP//////////8DWPEAAAAAAAAfbB2syLF0sQ2sGHux7n/tgZt36EWR3Bgn3DiUOl2712AAD2wdrMixdLENrBh7se5/7YGbd+hFkdwYJ9w4lDpdu9dj0EJ1aNtYEXVGUYUa4bWCPVK3APyDUHgkGHGrKwylBd9sHazIsXSxDawYe7Huf+2Bm3foRZHcGCfcOJQ6XbvXY=",
-            StringEncoding.base64),
+            type: StringEncoding.base64),
         accountKey: tableAddress.address);
 
     final instractuions = tableAccount.addresses

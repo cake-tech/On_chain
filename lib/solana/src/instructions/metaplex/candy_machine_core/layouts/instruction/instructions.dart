@@ -1,5 +1,5 @@
-import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:on_chain/solana/src/layout/layout.dart';
+import 'package:blockchain_utils/utils/utils.dart';
+import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 
 class MetaplexCandyMachineProgramInstruction
     implements ProgramLayoutInstruction {
@@ -79,8 +79,8 @@ class MetaplexCandyMachineProgramInstruction
   ];
   static MetaplexCandyMachineProgramInstruction? getInstruction(dynamic value) {
     try {
-      return values
-          .firstWhere((element) => bytesEqual(element.insturction, value));
+      return values.firstWhere(
+          (element) => BytesUtils.bytesEqual(element.insturction, value));
     } on StateError {
       return null;
     }

@@ -1,5 +1,5 @@
-import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:on_chain/solana/src/layout/layout.dart';
+import 'package:blockchain_utils/utils/binary/utils.dart';
+import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 
 class SPLTokenMetaDataProgramSplDiscriminate
     implements ProgramLayoutInstruction {
@@ -32,8 +32,8 @@ class SPLTokenMetaDataProgramSplDiscriminate
   ];
   static SPLTokenMetaDataProgramSplDiscriminate? getInstruction(dynamic value) {
     try {
-      return values
-          .firstWhere((element) => bytesEqual(value, element.insturction));
+      return values.firstWhere(
+          (element) => BytesUtils.bytesEqual(value, element.insturction));
     } on StateError {
       return null;
     }

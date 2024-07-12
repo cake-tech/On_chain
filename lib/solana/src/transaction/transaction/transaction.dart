@@ -21,7 +21,7 @@ class TransactionSerializeEncoding {
       case TransactionSerializeEncoding.base58:
         return Base58Encoder.encode(data);
       case TransactionSerializeEncoding.base64:
-        return StringUtils.decode(data, StringEncoding.base64);
+        return StringUtils.decode(data, type: StringEncoding.base64);
       default:
         return BytesUtils.toHexString(data);
     }
@@ -69,7 +69,7 @@ class SolanaTransaction {
     } else {
       if (type == TransactionType.legacy &&
           addressLookupTableAccounts.isNotEmpty) {
-        throw MessageException(
+        throw const MessageException(
             "Do not use addressLookupTableAccounts in legacy transactions.");
       }
     }
@@ -90,7 +90,7 @@ class SolanaTransaction {
     }
     if (signatures.isNotEmpty) {
       if (signatures.length != message.header.numRequiredSignatures) {
-        throw MessageException(
+        throw const MessageException(
             "The expected length of signatures should match the number of required signatures.");
       }
     } else {
@@ -121,7 +121,8 @@ class SolanaTransaction {
     final signerPubkeys = message.item1.accountKeys
         .sublist(0, message.item1.header.numRequiredSignatures);
     for (int i = 0; i < message.item2.length; i++) {
-      if (bytesEqual(emptySignatureBytes, message.item2.elementAt(i))) {
+      if (BytesUtils.bytesEqual(
+          emptySignatureBytes, message.item2.elementAt(i))) {
         continue;
       }
       transaction.addSignature(
@@ -176,7 +177,8 @@ class SolanaTransaction {
   List<int> serialize({bool verifySignatures = false}) {
     if (verifySignatures) {
       if (!areSignaturesReady()) {
-        throw MessageException("Not all transaction signatures are ready.");
+        throw const MessageException(
+            "Not all transaction signatures are ready.");
       }
     }
     return SolanaTransactionUtils.serializeTransaction(message, _signatures);
@@ -225,7 +227,7 @@ class SolanaTransaction {
   void addSignature(SolAddress address, List<int> signature,
       {bool verifySignature = true}) {
     if (signature.length != SolanaTransactionConstant.signatureLengthInBytes) {
-      throw MessageException("Signature must be 64 bytes long");
+      throw const MessageException("Signature must be 64 bytes long");
     }
     final signerPubkeys =
         message.accountKeys.sublist(0, message.header.numRequiredSignatures);
@@ -239,7 +241,7 @@ class SolanaTransaction {
         !address
             .toPublicKey()
             .verify(message: serializeMessage(), signature: signature)) {
-      throw MessageException("Signature verification failed.");
+      throw const MessageException("Signature verification failed.");
     }
     List<List<int>> currentSigs = List.from(_signatures);
     currentSigs[signerIndex] = List<int>.unmodifiable(signature);

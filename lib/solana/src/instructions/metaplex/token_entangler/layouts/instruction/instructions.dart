@@ -1,5 +1,5 @@
-import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:on_chain/solana/src/layout/layout.dart';
+import 'package:blockchain_utils/utils/binary/utils.dart';
+import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 
 class MetaplexTokenEntanglerProgramInstruction
     implements ProgramLayoutInstruction {
@@ -26,8 +26,8 @@ class MetaplexTokenEntanglerProgramInstruction
   static MetaplexTokenEntanglerProgramInstruction? getInstruction(
       dynamic value) {
     try {
-      return values
-          .firstWhere((element) => bytesEqual(element.insturction, value));
+      return values.firstWhere(
+          (element) => BytesUtils.bytesEqual(element.insturction, value));
     } on StateError {
       return null;
     }
