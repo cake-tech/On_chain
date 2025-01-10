@@ -30,9 +30,9 @@ class SPLTokenSwapInitSwapLayout extends SPLTokenSwapProgramLayout {
     );
 
     return SPLTokenSwapInitSwapLayout(
-      fees: TokenSwapFees.fromJson(decode["fees"]),
-      curveType: SPLTokenSwapCurveType.fromValue(decode["curveType"]),
-      curveParameters: decode["curveParameters"],
+      fees: TokenSwapFees.fromJson(decode['fees']),
+      curveType: SPLTokenSwapCurveType.fromValue(decode['curveType']),
+      curveParameters: decode['curveParameters'],
     );
   }
 
@@ -47,16 +47,17 @@ class SPLTokenSwapInitSwapLayout extends SPLTokenSwapProgramLayout {
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => SPLTokenSwapProgramInstruction.initSwap.insturction;
+  SPLTokenSwapProgramInstruction get instruction =>
+      SPLTokenSwapProgramInstruction.initSwap;
 
   @override
   Map<String, dynamic> serialize() {
     final curveParam = List<int>.filled(32, 0);
     curveParam.setAll(0, curveParameters);
     return {
-      "fees": fees.serialize(),
-      "curveType": curveType.value,
-      "curveParameters": curveParam,
+      'fees': fees.serialize(),
+      'curveType': curveType.value,
+      'curveParameters': curveParam,
     };
   }
 }

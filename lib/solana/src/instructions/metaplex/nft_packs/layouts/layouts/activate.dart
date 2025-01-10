@@ -14,14 +14,14 @@ class MetaplexNFTPacksActivateLayout extends MetaplexNFTPacksProgramLayout {
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexNFTPacksProgramInstruction.activate.insturction;
+  MetaplexNFTPacksProgramInstruction get instruction =>
+      MetaplexNFTPacksProgramInstruction.activate;
 
   @override
   Map<String, dynamic> serialize() {

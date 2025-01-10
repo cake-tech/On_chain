@@ -1,8 +1,7 @@
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:blockchain_utils/layout/layout.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/instructions/instructions.dart';
-
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 import 'package:on_chain/solana/src/utils/layouts.dart';
 
@@ -17,12 +16,12 @@ class _Utils {
   static Map<String, dynamic> decode(List<int> extensionData) {
     try {
       if (extensionData.length < accountSize) {
-        throw MessageException("Account data length is insufficient.",
-            details: {"Expected": accountSize, "length": extensionData.length});
+        throw SolanaPluginException('Account data length is insufficient.',
+            details: {'Expected': accountSize, 'length': extensionData.length});
       }
       return LayoutSerializable.decode(bytes: extensionData, layout: layout);
     } catch (e) {
-      throw const MessageException("Invalid extionsion bytes");
+      throw const SolanaPluginException('Invalid extionsion bytes');
     }
   }
 
@@ -34,7 +33,7 @@ class _Utils {
               extensionType: ExtensionType.metadataPointer);
       return LayoutSerializable.decode(bytes: extensionBytes, layout: layout);
     } catch (e) {
-      throw const MessageException("Invalid extionsion bytes");
+      throw const SolanaPluginException('Invalid extionsion bytes');
     }
   }
 }
@@ -51,22 +50,22 @@ class MetadataPointer extends LayoutSerializable {
   factory MetadataPointer.fromBuffer(List<int> extensionData) {
     final decode = _Utils.decode(extensionData);
     return MetadataPointer(
-        authority: decode["authority"] == SolAddress.defaultPubKey
+        authority: decode['authority'] == SolAddress.defaultPubKey
             ? null
-            : decode["authority"],
-        metadataAddress: decode["metadataAddress"] == SolAddress.defaultPubKey
+            : decode['authority'],
+        metadataAddress: decode['metadataAddress'] == SolAddress.defaultPubKey
             ? null
-            : decode["metadataAddress"]);
+            : decode['metadataAddress']);
   }
   factory MetadataPointer.fromAccountBytes(List<int> accountBytes) {
     final decode = _Utils.decodeFromAccount(accountBytes);
     return MetadataPointer(
-        authority: decode["authority"] == SolAddress.defaultPubKey
+        authority: decode['authority'] == SolAddress.defaultPubKey
             ? null
-            : decode["authority"],
-        metadataAddress: decode["metadataAddress"] == SolAddress.defaultPubKey
+            : decode['authority'],
+        metadataAddress: decode['metadataAddress'] == SolAddress.defaultPubKey
             ? null
-            : decode["metadataAddress"]);
+            : decode['metadataAddress']);
   }
 
   @override
@@ -74,13 +73,13 @@ class MetadataPointer extends LayoutSerializable {
   @override
   Map<String, dynamic> serialize() {
     return {
-      "authority": authority ?? SolAddress.defaultPubKey,
-      "metadataAddress": metadataAddress ?? SolAddress.defaultPubKey
+      'authority': authority ?? SolAddress.defaultPubKey,
+      'metadataAddress': metadataAddress ?? SolAddress.defaultPubKey
     };
   }
 
   @override
   String toString() {
-    return "MetadataPointer${serialize()}";
+    return 'MetadataPointer${serialize()}';
   }
 }

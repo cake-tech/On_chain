@@ -18,22 +18,22 @@ class MetaplexCandyMachineSetCandyMachineAuthorityLayout
         instruction: MetaplexCandyMachineProgramInstruction
             .setCandyMachineAuthority.insturction);
     return MetaplexCandyMachineSetCandyMachineAuthorityLayout(
-        newAuthority: decode["newAuthority"]);
+        newAuthority: decode['newAuthority']);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    SolanaLayoutUtils.publicKey("newAuthority")
+    LayoutConst.blob(8, property: 'instruction'),
+    SolanaLayoutUtils.publicKey('newAuthority')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction => MetaplexCandyMachineProgramInstruction
-      .setCandyMachineAuthority.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.setCandyMachineAuthority;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"newAuthority": newAuthority};
+    return {'newAuthority': newAuthority};
   }
 }

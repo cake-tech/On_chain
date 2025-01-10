@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/models/models.dart';
 import 'package:on_chain/solana/src/transaction/core/core.dart';
@@ -33,6 +33,21 @@ class MessageV0 implements VersionedMessage {
     required this.compiledInstructions,
     required this.addressTableLookups,
   });
+
+  @override
+  MessageV0 copyWith(
+      {MessageHeader? header,
+      List<SolAddress>? accountKeys,
+      SolAddress? recentBlockhash,
+      List<CompiledInstruction>? compiledInstructions,
+      List<AddressTableLookup>? addressTableLookups}) {
+    return MessageV0(
+        header: header ?? this.header,
+        accountKeys: accountKeys ?? this.accountKeys,
+        recentBlockhash: recentBlockhash ?? this.recentBlockhash,
+        compiledInstructions: compiledInstructions ?? this.compiledInstructions,
+        addressTableLookups: addressTableLookups ?? this.addressTableLookups);
+  }
 
   /// Compiles a version 0 message from provided parameters.
   factory MessageV0.compile({
@@ -73,13 +88,13 @@ class MessageV0 implements VersionedMessage {
     if (lookupKeys != null) {
       if (numAccountKeysFromLookups !=
           lookupKeys.writable.length + lookupKeys.readonly.length) {
-        throw const MessageException(
+        throw const SolanaPluginException(
             'Failed to get account keys because of a mismatch in the number of account keys from lookups');
       }
     } else if (addressLookupTableAccounts.isNotEmpty) {
       lookupKeys = _resolveAddressTableLookups(addressLookupTableAccounts);
     } else if (addressTableLookups.isNotEmpty) {
-      throw const MessageException(
+      throw const SolanaPluginException(
           'Failed to get account keys because address table lookups were not resolved');
     }
     return MessageAccountKeys(accountKeys, lookupKeys);
@@ -101,25 +116,25 @@ class MessageV0 implements VersionedMessage {
       List<AddressLookupTableAccount> addressLookupTableAccounts) {
     final List<SolAddress> writable = [];
     final List<SolAddress> readonly = [];
-    for (var tableLookup in addressTableLookups) {
+    for (final tableLookup in addressTableLookups) {
       final tableAccount = addressLookupTableAccounts.firstWhere(
         (account) => account.key == tableLookup.accountKey,
-        orElse: () => throw MessageException(
+        orElse: () => throw SolanaPluginException(
             'Failed to find address lookup table account for table key ${tableLookup.accountKey}'),
       );
-      for (var index in tableLookup.writableIndexes) {
+      for (final index in tableLookup.writableIndexes) {
         if (index < tableAccount.addresses.length) {
           writable.add(tableAccount.addresses[index]);
         } else {
-          throw MessageException(
+          throw SolanaPluginException(
               'Failed to find address for index $index in address lookup table ${tableLookup.accountKey}');
         }
       }
-      for (var index in tableLookup.readonlyIndexes) {
+      for (final index in tableLookup.readonlyIndexes) {
         if (index < tableAccount.addresses.length) {
           readonly.add(tableAccount.addresses[index]);
         } else {
-          throw MessageException(
+          throw SolanaPluginException(
               'Failed to find address for index $index in address lookup table ${tableLookup.accountKey}');
         }
       }

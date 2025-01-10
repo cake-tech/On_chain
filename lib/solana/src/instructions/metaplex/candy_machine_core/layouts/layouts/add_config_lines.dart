@@ -16,31 +16,31 @@ class MetaplexCandyMachineAddConfigLinesLayout
         instruction:
             MetaplexCandyMachineProgramInstruction.addConfigLines.insturction);
     return MetaplexCandyMachineAddConfigLinesLayout(
-        configLines: (decode["configLines"] as List)
+        configLines: (decode['configLines'] as List)
             .map((e) => ConfigLine.fromJson(e))
             .toList(),
-        index: decode["index"]);
+        index: decode['index']);
   }
 
   final int index;
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u32(property: "index"),
-    LayoutConst.vec(ConfigLine.staticLayout, property: "configLines")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u32(property: 'index'),
+    LayoutConst.vec(ConfigLine.staticLayout, property: 'configLines')
   ]);
 
   @override
   late final StructLayout layout = _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.addConfigLines.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.addConfigLines;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "index": index,
-      "configLines": configLines.map((e) => e.serialize()).toList()
+      'index': index,
+      'configLines': configLines.map((e) => e.serialize()).toList()
     };
   }
 }

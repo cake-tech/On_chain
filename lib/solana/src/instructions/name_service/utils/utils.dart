@@ -7,7 +7,7 @@ import 'package:on_chain/solana/src/utils/utils.dart';
 class NameServiceProgramUtils {
   /// Returns the hashed name for the given name.
   static List<int> getHashedName(String name) {
-    final combine = "${NameServiceProgramConst.hashPrefix}$name";
+    final combine = '${NameServiceProgramConst.hashPrefix}$name';
     final encode = StringUtils.encode(combine);
     return QuickCrypto.sha256Hash(encode);
   }
@@ -18,7 +18,7 @@ class NameServiceProgramUtils {
     SolAddress? nameClass,
     SolAddress? nameParent,
   }) {
-    List<List<int>> seeds = [hashedName];
+    final List<List<int>> seeds = [hashedName];
     seeds.add(nameClass?.toBytes() ?? List<int>.filled(32, 0));
     seeds.add(nameParent?.toBytes() ?? List<int>.filled(32, 0));
     return SolanaUtils.findProgramAddress(

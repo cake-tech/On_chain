@@ -13,13 +13,13 @@ class TokenLendingInitObligationLayout extends TokenLendingProgramLayout {
     return const TokenLendingInitObligationLayout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      TokenLendingProgramInstruction.initObligation.insturction;
+  TokenLendingProgramInstruction get instruction =>
+      TokenLendingProgramInstruction.initObligation;
 
   @override
   Map<String, dynamic> serialize() {

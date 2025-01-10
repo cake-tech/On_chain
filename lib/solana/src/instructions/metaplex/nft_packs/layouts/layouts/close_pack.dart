@@ -14,14 +14,14 @@ class MetaplexNFTPacksClosePackLayout extends MetaplexNFTPacksProgramLayout {
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexNFTPacksProgramInstruction.closePack.insturction;
+  MetaplexNFTPacksProgramInstruction get instruction =>
+      MetaplexNFTPacksProgramInstruction.closePack;
 
   @override
   Map<String, dynamic> serialize() {

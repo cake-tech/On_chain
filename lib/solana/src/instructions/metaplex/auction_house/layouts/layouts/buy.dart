@@ -19,35 +19,35 @@ class MetaplexAuctionHouseBuyLayout extends MetaplexAuctionHouseProgramLayout {
         bytes: data,
         instruction: MetaplexAuctionHouseProgramInstruction.buy.insturction);
     return MetaplexAuctionHouseBuyLayout(
-        tradeStateBump: decode["tradeStateBump"],
-        escrowPaymentBump: decode["escrowPaymentBump"],
-        buyerPrice: decode["buyerPrice"],
-        tokenSize: decode["tokenSize"]);
+        tradeStateBump: decode['tradeStateBump'],
+        escrowPaymentBump: decode['escrowPaymentBump'],
+        buyerPrice: decode['buyerPrice'],
+        tokenSize: decode['tokenSize']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "tradeStateBump"),
-    LayoutConst.u8(property: "escrowPaymentBump"),
-    LayoutConst.u64(property: "buyerPrice"),
-    LayoutConst.u64(property: "tokenSize"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'tradeStateBump'),
+    LayoutConst.u8(property: 'escrowPaymentBump'),
+    LayoutConst.u64(property: 'buyerPrice'),
+    LayoutConst.u64(property: 'tokenSize'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.buy.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.buy;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "tradeStateBump": tradeStateBump,
-      "escrowPaymentBump": escrowPaymentBump,
-      "buyerPrice": buyerPrice,
-      "tokenSize": tokenSize
+      'tradeStateBump': tradeStateBump,
+      'escrowPaymentBump': escrowPaymentBump,
+      'buyerPrice': buyerPrice,
+      'tokenSize': tokenSize
     };
   }
 }

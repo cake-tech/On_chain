@@ -15,24 +15,24 @@ class MetaplexFixedPriceSaleCreateStoreLayout
         instruction:
             MetaplexFixedPriceSaleProgramInstruction.createStore.insturction);
     return MetaplexFixedPriceSaleCreateStoreLayout(
-        name: decode["name"], description: decode["description"]);
+        name: decode['name'], description: decode['description']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.string(property: "name"),
-    LayoutConst.string(property: "description"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.string(property: 'name'),
+    LayoutConst.string(property: 'description'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.createStore.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.createStore;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"name": name, "description": description};
+    return {'name': name, 'description': description};
   }
 }

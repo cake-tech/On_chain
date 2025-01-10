@@ -1,5 +1,5 @@
 import 'package:blockchain_utils/utils/utils.dart';
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:blockchain_utils/layout/layout.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/instructions/token_lending/layouts/instruction/instruction.dart';
@@ -22,15 +22,16 @@ class TokenLendingInitLendingMarketLayout extends TokenLendingProgramLayout {
   factory TokenLendingInitLendingMarketLayout(
       {required SolAddress owner, required List<int> quoteCurrency}) {
     if (quoteCurrency.length != 32) {
-      throw const MessageException("quoteCurrency must not exceed 32 bytes.");
+      throw const SolanaPluginException(
+          'quoteCurrency must not exceed 32 bytes.');
     }
     return TokenLendingInitLendingMarketLayout._(
         owner: owner, quoteCurrency: quoteCurrency);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    SolanaLayoutUtils.publicKey("owner"),
-    LayoutConst.blob(32, property: "quoteCurrency"),
+    LayoutConst.u8(property: 'instruction'),
+    SolanaLayoutUtils.publicKey('owner'),
+    LayoutConst.blob(32, property: 'quoteCurrency'),
   ]);
 
   factory TokenLendingInitLendingMarketLayout.fromBuffer(List<int> data) {
@@ -40,18 +41,18 @@ class TokenLendingInitLendingMarketLayout extends TokenLendingProgramLayout {
         instruction:
             TokenLendingProgramInstruction.initLendingMarket.insturction);
     return TokenLendingInitLendingMarketLayout(
-        quoteCurrency: decode["quoteCurrency"], owner: decode["owner"]);
+        quoteCurrency: decode['quoteCurrency'], owner: decode['owner']);
   }
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      TokenLendingProgramInstruction.initLendingMarket.insturction;
+  TokenLendingProgramInstruction get instruction =>
+      TokenLendingProgramInstruction.initLendingMarket;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"owner": owner, "quoteCurrency": quoteCurrency};
+    return {'owner': owner, 'quoteCurrency': quoteCurrency};
   }
 }

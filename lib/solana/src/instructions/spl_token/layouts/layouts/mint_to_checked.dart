@@ -16,9 +16,9 @@ class SPLTokenMintToCheckedLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for minting tokens to a checked account.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "amount"),
-    LayoutConst.u8(property: "decimals")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'amount'),
+    LayoutConst.u8(property: 'decimals')
   ]);
 
   /// Constructs an SPLTokenMintToCheckedLayout instance from buffer.
@@ -29,8 +29,8 @@ class SPLTokenMintToCheckedLayout extends SPLTokenProgramLayout {
       instruction: SPLTokenProgramInstruction.mintToChecked.insturction,
     );
     return SPLTokenMintToCheckedLayout(
-      amount: decode["amount"],
-      decimals: decode["decimals"],
+      amount: decode['amount'],
+      decimals: decode['decimals'],
     );
   }
 
@@ -40,11 +40,12 @@ class SPLTokenMintToCheckedLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.mintToChecked.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.mintToChecked;
 
   /// Serializes the layout data.
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount, "decimals": decimals};
+    return {'amount': amount, 'decimals': decimals};
   }
 }

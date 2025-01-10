@@ -14,14 +14,14 @@ class MetaplexHydraRemoveMemberLayout extends MetaplexHydraProgramLayout {
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexHydraProgramInstruction.processRemoveMember.insturction;
+  MetaplexHydraProgramInstruction get instruction =>
+      MetaplexHydraProgramInstruction.processRemoveMember;
 
   @override
   Map<String, dynamic> serialize() {

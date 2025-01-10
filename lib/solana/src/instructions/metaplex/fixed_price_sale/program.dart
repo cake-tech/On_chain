@@ -8,10 +8,10 @@ import 'package:on_chain/solana/src/models/models.dart';
 
 class MetaplexFixedPriceSaleProgram extends TransactionInstruction {
   MetaplexFixedPriceSaleProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
 
   factory MetaplexFixedPriceSaleProgram.buy({
     required SolAddress market,

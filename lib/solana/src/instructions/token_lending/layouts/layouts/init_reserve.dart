@@ -20,12 +20,12 @@ class TokenLendingInitReserveLayout extends TokenLendingProgramLayout {
         instruction: TokenLendingProgramInstruction.initReserve.insturction);
 
     return TokenLendingInitReserveLayout(
-        liquidityAmount: decode["liquidityAmount"],
-        config: ReserveConfig.fromJson(decode["config"]));
+        liquidityAmount: decode['liquidityAmount'],
+        config: ReserveConfig.fromJson(decode['config']));
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "liquidityAmount"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'liquidityAmount'),
     ReserveConfig.layout
   ]);
 
@@ -33,10 +33,11 @@ class TokenLendingInitReserveLayout extends TokenLendingProgramLayout {
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => TokenLendingProgramInstruction.initReserve.insturction;
+  TokenLendingProgramInstruction get instruction =>
+      TokenLendingProgramInstruction.initReserve;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"liquidityAmount": liquidityAmount, "config": config.serialize()};
+    return {'liquidityAmount': liquidityAmount, 'config': config.serialize()};
   }
 }

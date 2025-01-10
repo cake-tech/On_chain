@@ -28,44 +28,44 @@ class MetaplexAuctionHouseExecutePartialSaleLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .executePartialSale.insturction);
     return MetaplexAuctionHouseExecutePartialSaleLayout(
-        escrowPaymentBump: decode["escrowPaymentBump"],
-        freeTradeStateBump: decode["freeTradeStateBump"],
-        programAsSignerBump: decode["programAsSignerBump"],
-        buyerPrice: decode["buyerPrice"],
-        tokenSize: decode["tokenSize"],
-        partialOrderSize: decode["partialOrderSize"],
-        partialOrderPrice: decode["partialOrderPrice"]);
+        escrowPaymentBump: decode['escrowPaymentBump'],
+        freeTradeStateBump: decode['freeTradeStateBump'],
+        programAsSignerBump: decode['programAsSignerBump'],
+        buyerPrice: decode['buyerPrice'],
+        tokenSize: decode['tokenSize'],
+        partialOrderSize: decode['partialOrderSize'],
+        partialOrderPrice: decode['partialOrderPrice']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "escrowPaymentBump"),
-    LayoutConst.u8(property: "freeTradeStateBump"),
-    LayoutConst.u8(property: "programAsSignerBump"),
-    LayoutConst.u64(property: "buyerPrice"),
-    LayoutConst.u64(property: "tokenSize"),
-    LayoutConst.optional(LayoutConst.u64(), property: "partialOrderSize"),
-    LayoutConst.optional(LayoutConst.u64(), property: "partialOrderPrice")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'escrowPaymentBump'),
+    LayoutConst.u8(property: 'freeTradeStateBump'),
+    LayoutConst.u8(property: 'programAsSignerBump'),
+    LayoutConst.u64(property: 'buyerPrice'),
+    LayoutConst.u64(property: 'tokenSize'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'partialOrderSize'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'partialOrderPrice')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.executePartialSale.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.executePartialSale;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "escrowPaymentBump": escrowPaymentBump,
-      "freeTradeStateBump": freeTradeStateBump,
-      "programAsSignerBump": programAsSignerBump,
-      "buyerPrice": buyerPrice,
-      "tokenSize": tokenSize,
-      "partialOrderSize": partialOrderSize,
-      "partialOrderPrice": partialOrderPrice,
+      'escrowPaymentBump': escrowPaymentBump,
+      'freeTradeStateBump': freeTradeStateBump,
+      'programAsSignerBump': programAsSignerBump,
+      'buyerPrice': buyerPrice,
+      'tokenSize': tokenSize,
+      'partialOrderSize': partialOrderSize,
+      'partialOrderPrice': partialOrderPrice,
     };
   }
 }

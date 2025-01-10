@@ -15,24 +15,24 @@ class MetaplexAuctionHouseWithdrawFromTreasuryLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .withdrawFromTreasury.insturction);
     return MetaplexAuctionHouseWithdrawFromTreasuryLayout(
-        amount: decode["amount"]);
+        amount: decode['amount']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u64(property: "amount"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u64(property: 'amount'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.withdrawFromTreasury.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.withdrawFromTreasury;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount};
+    return {'amount': amount};
   }
 }

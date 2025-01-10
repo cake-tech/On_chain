@@ -18,14 +18,14 @@ class MetaplexAuctionHouseCancelListingReceiptLayout
 
   /// StructLayout layout definition.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.cancelListingReceipt.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.cancelListingReceipt;
 
   @override
   Map<String, dynamic> serialize() {

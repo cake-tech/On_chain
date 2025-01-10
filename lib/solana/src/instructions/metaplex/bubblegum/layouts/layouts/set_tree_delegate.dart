@@ -15,15 +15,15 @@ class MetaplexBubblegumSetTreeDelegateLayout
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
+    LayoutConst.blob(8, property: 'instruction'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexBubblegumProgramInstruction.setTreeDelegate.insturction;
+  MetaplexBubblegumProgramInstruction get instruction =>
+      MetaplexBubblegumProgramInstruction.setTreeDelegate;
 
   @override
   Map<String, dynamic> serialize() {

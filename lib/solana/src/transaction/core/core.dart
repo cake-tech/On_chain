@@ -1,5 +1,5 @@
-import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:on_chain/solana/src/models/models.dart';
 import 'package:on_chain/solana/src/rpc/models/models/encoding.dart';
 import 'package:on_chain/solana/src/transaction/constant/solana_transaction_constant.dart';
@@ -12,10 +12,10 @@ class TransactionType {
   const TransactionType._(this.name);
 
   /// Version 0 transaction type.
-  static const TransactionType v0 = TransactionType._("V0");
+  static const TransactionType v0 = TransactionType._('V0');
 
   /// Legacy transaction type.
-  static const TransactionType legacy = TransactionType._("legacy");
+  static const TransactionType legacy = TransactionType._('legacy');
 
   static TransactionType find(dynamic v) {
     if (v == null) return TransactionType.legacy;
@@ -27,18 +27,25 @@ class TransactionType {
         return v0;
       }
     }
-    throw MessageException("Invalid Versioned transaction type",
-        details: {"value": v});
+    throw SolanaPluginException('Invalid Versioned transaction type',
+        details: {'value': v});
   }
 
   @override
   String toString() {
-    return "TransactionType.$name";
+    return 'TransactionType.$name';
   }
 }
 
 /// Abstract class representing a versioned message.
 abstract class VersionedMessage {
+  VersionedMessage copyWith(
+      {MessageHeader? header,
+      List<SolAddress>? accountKeys,
+      SolAddress? recentBlockhash,
+      List<CompiledInstruction>? compiledInstructions,
+      List<AddressTableLookup>? addressTableLookups});
+
   /// The message header, identifying signed and read-only [accountKeys].
   abstract final MessageHeader header;
 
@@ -53,8 +60,9 @@ abstract class VersionedMessage {
 
   /// Constructs a versioned message from a serialized buffer.
   factory VersionedMessage.fromBuffer(List<int> serializedMessage) {
-    int prefix = serializedMessage[0];
-    int maskedPrefix = prefix & SolanaTransactionConstant.versionPrefixMask;
+    final int prefix = serializedMessage[0];
+    final int maskedPrefix =
+        prefix & SolanaTransactionConstant.versionPrefixMask;
     if (maskedPrefix == prefix) {
       return Message.fromBuffer(serializedMessage);
     }
@@ -106,7 +114,7 @@ abstract class VersionedMessage {
   factory VersionedMessage.fromJson(Map<String, dynamic> json,
       {TransactionType? type}) {
     final List<AddressTableLookup> addressTableLookups =
-        (json["addressTableLookups"] as List?)
+        (json['addressTableLookups'] as List?)
                 ?.map((e) => AddressTableLookup.fromJson(e))
                 .toList() ??
             [];
@@ -123,15 +131,15 @@ abstract class VersionedMessage {
     final AccountLookupKeys? accountLookupKeys = (addressTableLookups.isEmpty)
         ? null
         : AccountLookupKeys(readonly: readonly, writable: writable);
-    final List<SolAddress> staticAccounts = (json["accountKeys"] as List)
+    final List<SolAddress> staticAccounts = (json['accountKeys'] as List)
         .map((e) => SolAddress.uncheckCurve(e))
         .toList();
     final msg = MessageAccountKeys(staticAccounts, accountLookupKeys);
-    final messageHeader = MessageHeader.fromJson(json["header"]);
-    final instructions = (json["instructions"] as List).map((e) {
-      final List<int> accountMetaKeys = (e["accounts"] as List).cast();
-      final instruction = TransactionInstruction.fromBytes(
-          programId: msg.byIndex(e["programIdIndex"])!,
+    final messageHeader = MessageHeader.fromJson(json['header']);
+    final instructions = (json['instructions'] as List).map((e) {
+      final List<int> accountMetaKeys = (e['accounts'] as List).cast();
+      final instruction = TransactionInstruction(
+          programId: msg.byIndex(e['programIdIndex'])!,
           keys: accountMetaKeys.map((i) {
             return AccountMeta(
                 publicKey: msg.byIndex(i)!,
@@ -141,7 +149,7 @@ abstract class VersionedMessage {
                     numStaticAccountKeys: staticAccounts.length,
                     addressTableLookups: addressTableLookups));
           }).toList(),
-          instructionBytes: SolanaRPCEncoding.decode(e["data"]));
+          data: SolanaRequestEncoding.decode(e['data']));
       return instruction;
     });
     if (type == TransactionType.v0 ||
@@ -149,7 +157,7 @@ abstract class VersionedMessage {
       return MessageV0(
           header: messageHeader,
           accountKeys: staticAccounts,
-          recentBlockhash: SolAddress.uncheckCurve(json["recentBlockhash"]),
+          recentBlockhash: SolAddress.uncheckCurve(json['recentBlockhash']),
           compiledInstructions: msg.compileInstructions(instructions.toList()),
           addressTableLookups: addressTableLookups);
     }
@@ -157,7 +165,7 @@ abstract class VersionedMessage {
       accountKeys: staticAccounts,
       compiledInstructions: msg.compileInstructions(instructions.toList()),
       header: messageHeader,
-      recentBlockhash: SolAddress.uncheckCurve(json["recentBlockhash"]),
+      recentBlockhash: SolAddress.uncheckCurve(json['recentBlockhash']),
     );
   }
 }

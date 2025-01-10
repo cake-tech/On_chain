@@ -1,4 +1,6 @@
+import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
+import 'package:on_chain/solana/src/instructions/token_lending/constant.dart';
 
 class TokenLendingProgramInstruction implements ProgramLayoutInstruction {
   @override
@@ -7,35 +9,35 @@ class TokenLendingProgramInstruction implements ProgramLayoutInstruction {
   final String name;
   const TokenLendingProgramInstruction(this.insturction, this.name);
   static const TokenLendingProgramInstruction initLendingMarket =
-      TokenLendingProgramInstruction(0, "InitLendingMarket");
+      TokenLendingProgramInstruction(0, 'InitLendingMarket');
 
   static const TokenLendingProgramInstruction setLendingMarketOwner =
-      TokenLendingProgramInstruction(1, "SetLendingMarketOwner");
+      TokenLendingProgramInstruction(1, 'SetLendingMarketOwner');
   static const TokenLendingProgramInstruction initReserve =
-      TokenLendingProgramInstruction(2, "InitReserve");
+      TokenLendingProgramInstruction(2, 'InitReserve');
   static const TokenLendingProgramInstruction refreshReserve =
-      TokenLendingProgramInstruction(3, "RefreshReserve");
+      TokenLendingProgramInstruction(3, 'RefreshReserve');
   static const TokenLendingProgramInstruction depositReserveLiquidity =
-      TokenLendingProgramInstruction(4, "DepositReserveLiquidity");
+      TokenLendingProgramInstruction(4, 'DepositReserveLiquidity');
   static const TokenLendingProgramInstruction redeemReserveCollateral =
-      TokenLendingProgramInstruction(5, "RedeemReserveCollateral");
+      TokenLendingProgramInstruction(5, 'RedeemReserveCollateral');
   static const TokenLendingProgramInstruction initObligation =
-      TokenLendingProgramInstruction(6, "InitObligation");
+      TokenLendingProgramInstruction(6, 'InitObligation');
   static const TokenLendingProgramInstruction refreshObligation =
-      TokenLendingProgramInstruction(7, "RefreshObligation");
+      TokenLendingProgramInstruction(7, 'RefreshObligation');
   static const TokenLendingProgramInstruction depositObligationCollateral =
-      TokenLendingProgramInstruction(8, "DepositObligationCollateral");
+      TokenLendingProgramInstruction(8, 'DepositObligationCollateral');
   static const TokenLendingProgramInstruction withdrawObligationCollateral =
-      TokenLendingProgramInstruction(9, "WithdrawObligationCollateral");
+      TokenLendingProgramInstruction(9, 'WithdrawObligationCollateral');
 
   static const TokenLendingProgramInstruction borrowObligationLiquidity =
-      TokenLendingProgramInstruction(10, "BorrowObligationLiquidity");
+      TokenLendingProgramInstruction(10, 'BorrowObligationLiquidity');
   static const TokenLendingProgramInstruction repayObligationLiquidity =
-      TokenLendingProgramInstruction(11, "RepayObligationLiquidity");
+      TokenLendingProgramInstruction(11, 'RepayObligationLiquidity');
   static const TokenLendingProgramInstruction liquidateObligation =
-      TokenLendingProgramInstruction(12, "LiquidateObligation");
+      TokenLendingProgramInstruction(12, 'LiquidateObligation');
   static const TokenLendingProgramInstruction flashLoan =
-      TokenLendingProgramInstruction(13, "FlashLoan");
+      TokenLendingProgramInstruction(13, 'FlashLoan');
   static const List<TokenLendingProgramInstruction> values = [
     initLendingMarket,
     setLendingMarketOwner,
@@ -55,8 +57,13 @@ class TokenLendingProgramInstruction implements ProgramLayoutInstruction {
   static TokenLendingProgramInstruction? getInstruction(dynamic value) {
     try {
       return values.firstWhere((element) => element.insturction == value);
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
+
+  @override
+  String get programName => 'TokenLending';
+  @override
+  SolAddress get programAddress => TokenLendingProgramConst.lendingProgramId;
 }

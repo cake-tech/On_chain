@@ -10,25 +10,25 @@ abstract class AbiBaseFragment {
   abstract final FragmentTypes type;
 
   /// Creates an instance of [AbiBaseFragment] from JSON representation.
-  factory AbiBaseFragment.fromJson(Map<String, dynamic> json, bool tronTypes) {
-    final type = FragmentTypes.fromName(json["type"]);
+  factory AbiBaseFragment.fromJson(Map<String, dynamic> json) {
+    final type = FragmentTypes.fromName(json['type']);
 
     switch (type) {
       case FragmentTypes.event:
-        return AbiEventFragment.fromJson(json, tronTypes);
+        return AbiEventFragment.fromJson(json);
       case FragmentTypes.function:
-        return AbiFunctionFragment.fromJson(json, tronTypes);
+        return AbiFunctionFragment.fromJson(json);
       case FragmentTypes.receive:
         return AbiReceiveFragment.fromJson(json);
       case FragmentTypes.constructor:
-        return AbiConstructorFragment.fromJson(json, tronTypes);
+        return AbiConstructorFragment.fromJson(json);
       case FragmentTypes.fallback:
-        return AbiFallbackFragment.fromJson(json, tronTypes);
+        return AbiFallbackFragment.fromJson(json);
       case FragmentTypes.error:
-        return AbiErrorFragment.fromJson(json, tronTypes);
+        return AbiErrorFragment.fromJson(json);
 
       default:
-        throw MessageException("unsupported fragment $type");
+        throw MessageException('unsupported fragment $type');
     }
   }
 
@@ -45,12 +45,11 @@ abstract class AbiBaseFragment {
 
 /// Class representing an ABI constructor fragment.
 class AbiConstructorFragment implements AbiBaseFragment {
-  factory AbiConstructorFragment.fromJson(
-      Map<String, dynamic> json, bool tronTypes) {
-    final List<dynamic> inputs = json["inputs"] ?? [];
+  factory AbiConstructorFragment.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> inputs = json['inputs'] ?? [];
     return AbiConstructorFragment(
-      stateMutability: StateMutability.fromName(json["stateMutability"])!,
-      inputs: inputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
+      stateMutability: StateMutability.fromName(json['stateMutability'])!,
+      inputs: inputs.map((e) => AbiParameter.fromJson(e)).toList(),
     );
   }
   @override
@@ -71,18 +70,16 @@ class AbiConstructorFragment implements AbiBaseFragment {
 /// Represents a function fragment in ABI, providing methods for working with function calls.
 class AbiFunctionFragment implements AbiBaseFragment {
   /// Creates an instance of [AbiFunctionFragment] from JSON representation.
-  factory AbiFunctionFragment.fromJson(
-      Map<String, dynamic> json, bool tronTypes) {
-    final List<dynamic> inputs = json["inputs"] ?? [];
-    final List<dynamic> outputs = json["outputs"] ?? [];
+  factory AbiFunctionFragment.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> inputs = json['inputs'] ?? [];
+    final List<dynamic> outputs = json['outputs'] ?? [];
     return AbiFunctionFragment(
-        name: json["name"],
-        inputs: inputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
-        outputs:
-            outputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
-        stateMutability: StateMutability.fromName(json["stateMutability"]),
-        constant: json["constant"],
-        payable: json["payable"]);
+        name: json['name'],
+        inputs: inputs.map((e) => AbiParameter.fromJson(e)).toList(),
+        outputs: outputs.map((e) => AbiParameter.fromJson(e)).toList(),
+        stateMutability: StateMutability.fromName(json['stateMutability']),
+        constant: json['constant'],
+        payable: json['payable']);
   }
 
   /// The name of the function
@@ -134,7 +131,7 @@ class AbiFunctionFragment implements AbiBaseFragment {
   /// Encodes the function with the provided parameters.
   List<int> encode(List params, [bool withSelector = true]) {
     final abi =
-        AbiParameter(name: "", type: "tuple", components: List.from(inputs))
+        AbiParameter(name: '', type: 'tuple', components: List.from(inputs))
             .abiEncode(params);
     if (!withSelector) {
       return abi.encoded;
@@ -150,10 +147,18 @@ class AbiFunctionFragment implements AbiBaseFragment {
   /// Decodes the output of the function from the encoded output bytes.
   List<dynamic> decodeOutput(List<int> encodedOutput) {
     final abi =
-        AbiParameter(name: "", type: "tuple", components: List.from(outputs))
+        AbiParameter(name: '', type: 'tuple', components: List.from(outputs))
             .decode(encodedOutput);
     return abi.result;
   }
+
+  // /// Decodes the output of the function from the encoded output bytes.
+  // List<dynamic> decodeOutput(List<int> encodedOutput) {
+  //   final abi =
+  //       AbiParameter(name: "", type: "tuple", components: List.from(outputs))
+  //           .decode(encodedOutput);
+  //   return abi.result;
+  // }
 
   /// Decodes the output of the function from the encoded hexadecimal string output.
   List<dynamic> decodeOutputHex(String encodedOutput) {
@@ -170,20 +175,19 @@ class AbiFunctionFragment implements AbiBaseFragment {
       }
     }
     final abi =
-        AbiParameter(name: "", type: "tuple", components: List.from(inputs))
+        AbiParameter(name: '', type: 'tuple', components: List.from(inputs))
             .decode(encodeBytes);
     return abi.result;
   }
 }
 
 class AbiReceiveFragment extends AbiFunctionFragment {
-  AbiReceiveFragment(
-      {required String name, required StateMutability mutability})
-      : super(name: name, stateMutability: mutability);
+  AbiReceiveFragment({required super.name, required StateMutability mutability})
+      : super(stateMutability: mutability);
   factory AbiReceiveFragment.fromJson(Map<String, dynamic> json) {
     return AbiReceiveFragment(
-        name: "receive",
-        mutability: StateMutability.fromName(json["stateMutability"])!);
+        name: 'receive',
+        mutability: StateMutability.fromName(json['stateMutability'])!);
   }
   @override
   FragmentTypes get type => FragmentTypes.receive;
@@ -192,17 +196,15 @@ class AbiReceiveFragment extends AbiFunctionFragment {
 /// Represents a fallback function fragment in ABI, providing methods for working with fallback functions.
 class AbiFallbackFragment implements AbiBaseFragment {
   /// Creates an instance of [AbiFallbackFragment] from JSON representation.
-  factory AbiFallbackFragment.fromJson(
-      Map<String, dynamic> json, bool tronTypes) {
-    final List<dynamic> inputs = json["inputs"] ?? [];
-    final List<dynamic> outputs = json["outputs"] ?? [];
+  factory AbiFallbackFragment.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> inputs = json['inputs'] ?? [];
+    final List<dynamic> outputs = json['outputs'] ?? [];
     return AbiFallbackFragment(
-        stateMutability: StateMutability.fromName(json["stateMutability"])!,
-        inputs: inputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
-        outputs:
-            outputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
-        constant: json["constant"],
-        payable: json["payable"]);
+        stateMutability: StateMutability.fromName(json['stateMutability'])!,
+        inputs: inputs.map((e) => AbiParameter.fromJson(e)).toList(),
+        outputs: outputs.map((e) => AbiParameter.fromJson(e)).toList(),
+        constant: json['constant'],
+        payable: json['payable']);
   }
 
   @override
@@ -236,14 +238,13 @@ class AbiFallbackFragment implements AbiBaseFragment {
 /// Represents an event fragment in ABI, providing methods for decoding event data.
 class AbiEventFragment implements AbiBaseFragment {
   /// Creates an instance of [AbiEventFragment] from JSON representation.
-  factory AbiEventFragment.fromJson(Map<String, dynamic> json, bool tronTypes) {
-    final List<dynamic> inputs = json["inputs"] ?? [];
+  factory AbiEventFragment.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> inputs = json['inputs'] ?? [];
 
     return AbiEventFragment(
-        name: json["name"] ?? "",
-        anonymous: json["anonymous"],
-        inputs:
-            inputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList());
+        name: json['name'] ?? '',
+        anonymous: json['anonymous'],
+        inputs: inputs.map((e) => AbiParameter.fromJson(e)).toList());
   }
 
   /// The name of the event fragment.
@@ -277,7 +278,7 @@ class AbiEventFragment implements AbiBaseFragment {
     int nonIndexedCounter =
         topics.length > indexed.length ? topics.length - indexed.length : 0;
     int noneIndexCounter = 0;
-    final abi = AbiParameter(name: "", type: "tuple", components: noIndexed)
+    final abi = AbiParameter(name: '', type: 'tuple', components: noIndexed)
         .decode(data);
     for (int i = 0; i < inputs.length; i++) {
       final input = inputs.elementAt(i);
@@ -310,11 +311,11 @@ class AbiEventFragment implements AbiBaseFragment {
 /// Represents an error fragment in ABI, providing methods for decoding errors.
 class AbiErrorFragment implements AbiBaseFragment {
   /// Creates an instance of [AbiErrorFragment] from JSON representation.
-  factory AbiErrorFragment.fromJson(Map<String, dynamic> json, bool tronTypes) {
-    final List<dynamic> inputs = json["inputs"] ?? [];
+  factory AbiErrorFragment.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> inputs = json['inputs'] ?? [];
     return AbiErrorFragment(
-        inputs: inputs.map((e) => AbiParameter.fromJson(e, tronTypes)).toList(),
-        name: json["name"]);
+        inputs: inputs.map((e) => AbiParameter.fromJson(e)).toList(),
+        name: json['name']);
   }
 
   /// The name of the error fragment.
@@ -344,10 +345,10 @@ class AbiErrorFragment implements AbiBaseFragment {
 
   /// Decodes the error parameters from the encoded bytes.
   List<dynamic> decodeError(List<int> encodedParams) {
-    List<int> encodeBytes =
+    final List<int> encodeBytes =
         List.from(encodedParams.sublist(ABIConst.selectorLength));
     final abi =
-        AbiParameter(name: "", type: "tuple", components: List.from(inputs))
+        AbiParameter(name: '', type: 'tuple', components: List.from(inputs))
             .decode(encodeBytes);
     return abi.result;
   }
@@ -359,16 +360,16 @@ class StateMutability {
   const StateMutability._(this.name);
 
   /// Function with no side effects and doesn't read from or modify the blockchain state.
-  static const StateMutability pure = StateMutability._("pure");
+  static const StateMutability pure = StateMutability._('pure');
 
   /// Function that doesn't modify the blockchain state but can read from it.
-  static const StateMutability view = StateMutability._("view");
+  static const StateMutability view = StateMutability._('view');
 
   /// Function that can receive Ether and modify the blockchain state.
-  static const StateMutability payable = StateMutability._("payable");
+  static const StateMutability payable = StateMutability._('payable');
 
   /// Function that can modify the blockchain state but cannot receive Ether.
-  static const StateMutability nonpayable = StateMutability._("nonpayable");
+  static const StateMutability nonpayable = StateMutability._('nonpayable');
 
   /// List of all possible state mutabilities.
   static const List<StateMutability> values = [pure, view, payable, nonpayable];
@@ -391,21 +392,21 @@ class FragmentTypes {
   const FragmentTypes._(this.name);
 
   /// Constructor fragment type.
-  static const FragmentTypes constructor = FragmentTypes._("constructor");
+  static const FragmentTypes constructor = FragmentTypes._('constructor');
 
   /// Event fragment type.
-  static const FragmentTypes event = FragmentTypes._("event");
+  static const FragmentTypes event = FragmentTypes._('event');
 
   /// Function fragment type.
-  static const FragmentTypes function = FragmentTypes._("function");
+  static const FragmentTypes function = FragmentTypes._('function');
 
   /// Fallback fragment type.
-  static const FragmentTypes fallback = FragmentTypes._("fallback");
+  static const FragmentTypes fallback = FragmentTypes._('fallback');
 
   /// Error fragment type.
-  static const FragmentTypes error = FragmentTypes._("error");
+  static const FragmentTypes error = FragmentTypes._('error');
 
-  static const FragmentTypes receive = FragmentTypes._("receive");
+  static const FragmentTypes receive = FragmentTypes._('receive');
 
   /// List of all possible fragment types.
   static const List<FragmentTypes> values = [
@@ -423,7 +424,7 @@ class FragmentTypes {
       return values
           .firstWhere((element) => element.name == name?.toLowerCase());
     } catch (e) {
-      throw MessageException("unsupported fragment", details: {"type": name});
+      throw MessageException('unsupported fragment', details: {'type': name});
     }
   }
 }

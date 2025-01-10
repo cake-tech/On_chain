@@ -1,19 +1,23 @@
 import 'package:on_chain/tron/src/address/tron_address.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
-import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/protbuf/decoder.dart';
+import 'package:on_chain/utils/utils.dart';
 
 /// Creates a proposal transaction.
 class ProposalCreateContract extends TronBaseContract {
   /// Create a new [ProposalCreateContract] instance by parsing a JSON map.
   factory ProposalCreateContract.fromJson(Map<String, dynamic> json) {
     return ProposalCreateContract(
-      ownerAddress: TronAddress(json["owner_address"]),
-      parameters: json["parameters"] == null
+      ownerAddress: OnChainUtils.parseTronAddress(
+          value: json['owner_address'], name: 'owner_address'),
+      parameters: OnChainUtils.parseMap<dynamic, dynamic>(
+                  value: json['parameters'], name: 'parameters') ==
+              null
           ? null
-          : (json["parameters"] as Map).map(
-              (key, value) =>
-                  MapEntry(BigintUtils.parse(key), BigintUtils.parse(value)),
+          : (json['parameters'] as Map).map(
+              (key, value) => MapEntry<BigInt, BigInt>(
+                  OnChainUtils.parseBigInt(value: key, name: 'parameters'),
+                  OnChainUtils.parseBigInt(value: value, name: 'parameters')),
             ),
     );
   }
@@ -32,6 +36,7 @@ class ProposalCreateContract extends TronBaseContract {
             : Map<BigInt, BigInt>.unmodifiable(parameters);
 
   /// Account address
+  @override
   final TronAddress ownerAddress;
 
   /// Parameters proposed to be modified and their values
@@ -47,8 +52,8 @@ class ProposalCreateContract extends TronBaseContract {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "owner_address": ownerAddress.toString(),
-      "parameters": parameters
+      'owner_address': ownerAddress.toString(),
+      'parameters': parameters
           ?.map((key, value) => MapEntry(key.toString(), value.toString())),
     };
   }
@@ -56,7 +61,7 @@ class ProposalCreateContract extends TronBaseContract {
   /// Convert the [ProposalCreateContract] object to its string representation.
   @override
   String toString() {
-    return "ProposalCreateContract{${toJson()}}";
+    return 'ProposalCreateContract{${toJson()}}';
   }
 
   @override

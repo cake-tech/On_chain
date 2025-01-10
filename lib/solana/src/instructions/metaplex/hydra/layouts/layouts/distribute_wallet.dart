@@ -12,23 +12,23 @@ class MetaplexHydraDistributeWalletLayout extends MetaplexHydraProgramLayout {
         instruction: MetaplexHydraProgramInstruction
             .processDistributeWallet.insturction);
     return MetaplexHydraDistributeWalletLayout(
-        distributeForMint: decode["distributeForMint"]);
+        distributeForMint: decode['distributeForMint']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.boolean(property: "distributeForMint"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.boolean(property: 'distributeForMint'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexHydraProgramInstruction.processDistributeWallet.insturction;
+  MetaplexHydraProgramInstruction get instruction =>
+      MetaplexHydraProgramInstruction.processDistributeWallet;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"distributeForMint": distributeForMint};
+    return {'distributeForMint': distributeForMint};
   }
 }

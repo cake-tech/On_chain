@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/blockchain_utils.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:on_chain/solana/src/models/models.dart';
 
 /// The message header, identifying signed and read-only account.
@@ -48,8 +48,8 @@ class MessageHeader {
       List<AddressTableLookup> addressTableLookups = const []}) {
     if (index >= numStaticAccountKeys) {
       if (addressTableLookups.isEmpty) {
-        throw const MessageException(
-            "Invalid index. The index must be lower than numStaticAccountKeys.");
+        throw const SolanaPluginException(
+            'Invalid index. The index must be lower than numStaticAccountKeys.');
       }
       final lookupAccountKeysIndex = index - numStaticAccountKeys;
       final numWritableLookupAccountKeys = addressTableLookups.fold<int>(
@@ -71,6 +71,6 @@ class MessageHeader {
   /// Override the toString method to provide a string representation of the object.
   @override
   String toString() {
-    return "MessageHeader${toJson()}";
+    return 'MessageHeader${toJson()}';
   }
 }

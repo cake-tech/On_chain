@@ -19,34 +19,34 @@ class MetaplexNFTPacksEditPackLayout extends MetaplexNFTPacksProgramLayout {
         bytes: data,
         instruction: MetaplexNFTPacksProgramInstruction.editPack.insturction);
     return MetaplexNFTPacksEditPackLayout(
-        name: decode["name"],
-        desciption: decode["desciption"],
-        uri: decode["uri"],
-        mutable: decode["mutable"]);
+        name: decode['name'],
+        desciption: decode['desciption'],
+        uri: decode['uri'],
+        mutable: decode['mutable']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.optional(LayoutConst.blob(32), property: "name"),
-    LayoutConst.optional(LayoutConst.string(), property: "desciption"),
-    LayoutConst.optional(LayoutConst.string(), property: "uri"),
-    LayoutConst.optional(LayoutConst.boolean(), property: "mutable"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.optional(LayoutConst.blob(32), property: 'name'),
+    LayoutConst.optional(LayoutConst.string(), property: 'desciption'),
+    LayoutConst.optional(LayoutConst.string(), property: 'uri'),
+    LayoutConst.optional(LayoutConst.boolean(), property: 'mutable'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexNFTPacksProgramInstruction.editPack.insturction;
+  MetaplexNFTPacksProgramInstruction get instruction =>
+      MetaplexNFTPacksProgramInstruction.editPack;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "name": name,
-      "desciption": desciption,
-      "uri": uri,
-      "mutable": mutable
+      'name': name,
+      'desciption': desciption,
+      'uri': uri,
+      'mutable': mutable
     };
   }
 }

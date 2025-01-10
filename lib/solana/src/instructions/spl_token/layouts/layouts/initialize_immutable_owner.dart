@@ -10,7 +10,7 @@ class SPLTokenInitializeImmutableOwnerLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenInitializeImmutableOwnerLayout.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenInitializeImmutableOwnerLayout instance from buffer.
   factory SPLTokenInitializeImmutableOwnerLayout.fromBuffer(List<int> bytes) {
@@ -28,8 +28,8 @@ class SPLTokenInitializeImmutableOwnerLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.initializeImmutableOwner.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.initializeImmutableOwner;
 
   /// Serializes the layout.
   @override

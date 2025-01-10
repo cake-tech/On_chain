@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/exception/exceptions.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 import 'package:on_chain/solana/src/instructions/spl_token/constant.dart';
@@ -11,10 +11,10 @@ import 'layouts/layouts.dart';
 /// This class represents instructions for interacting with the SPL Token Program
 class SPLTokenProgram extends TransactionInstruction {
   SPLTokenProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
   factory SPLTokenProgram.fromBytes({
     required List<AccountMeta> keys,
     required List<int> instructionBytes,
@@ -190,8 +190,8 @@ class SPLTokenProgram extends TransactionInstruction {
       SolAddress nativeMintId = SPLTokenProgramConst.nativeMint2022,
       SolAddress programId = SPLTokenProgramConst.token2022ProgramId}) {
     if (programId == SPLTokenProgramConst.tokenProgramId) {
-      throw const MessageException(
-          "Token program id does not support extensions");
+      throw const SolanaPluginException(
+          'Token program id does not support extensions');
     }
     return SPLTokenProgram(
         layout: SPLTokenCreateNativeMintLayout(),
@@ -349,7 +349,8 @@ class SPLTokenProgram extends TransactionInstruction {
       required SolAddress mint,
       required SolAddress programId}) {
     if (programId == SPLTokenProgramConst.tokenProgramId) {
-      throw const MessageException("Token program does not support extensions");
+      throw const SolanaPluginException(
+          'Token program does not support extensions');
     }
     return SPLTokenProgram(
         layout: layout, keys: [mint.toWritable()], programId: programId);
@@ -387,7 +388,8 @@ class SPLTokenProgram extends TransactionInstruction {
       required SolAddress mint,
       required SolAddress programId}) {
     if (programId == SPLTokenProgramConst.tokenProgramId) {
-      throw const MessageException("Token program does not support extensions");
+      throw const SolanaPluginException(
+          'Token program does not support extensions');
     }
     return SPLTokenProgram(
         layout: SPLTokenInitializeNonTransferableMintLayout(),
@@ -401,7 +403,8 @@ class SPLTokenProgram extends TransactionInstruction {
       required SolAddress mint,
       required SolAddress programId}) {
     if (programId == SPLTokenProgramConst.tokenProgramId) {
-      throw const MessageException("Token program does not support extensions");
+      throw const SolanaPluginException(
+          'Token program does not support extensions');
     }
     return SPLTokenProgram(
         layout: layout, keys: [mint.toWritable()], programId: programId);
@@ -481,7 +484,8 @@ class SPLTokenProgram extends TransactionInstruction {
     List<SolAddress> multiSigners = const [],
   }) {
     if (programId == SPLTokenProgramConst.tokenProgramId) {
-      throw const MessageException("Token program does not support extensions");
+      throw const SolanaPluginException(
+          'Token program does not support extensions');
     }
     return SPLTokenProgram(
         layout: layout,

@@ -18,28 +18,28 @@ class MetaplexGumdropNewDistributorLayout extends MetaplexGumdropProgramLayout {
         instruction:
             MetaplexGumdropProgramInstruction.newDistributor.insturction);
     return MetaplexGumdropNewDistributorLayout(
-        bump: decode["bump"],
-        temporal: decode["temporal"],
-        root: decode["root"]);
+        bump: decode['bump'],
+        temporal: decode['temporal'],
+        root: decode['root']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "bump"),
-    LayoutConst.blob(32, property: "root"),
-    SolanaLayoutUtils.publicKey("temporal"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'bump'),
+    LayoutConst.blob(32, property: 'root'),
+    SolanaLayoutUtils.publicKey('temporal'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexGumdropProgramInstruction.newDistributor.insturction;
+  MetaplexGumdropProgramInstruction get instruction =>
+      MetaplexGumdropProgramInstruction.newDistributor;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"bump": bump, "root": root, "temporal": temporal};
+    return {'bump': bump, 'root': root, 'temporal': temporal};
   }
 }

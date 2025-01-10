@@ -12,10 +12,10 @@ class SPLToken2022UpdateDefaultAccountStateLayout
   SPLToken2022UpdateDefaultAccountStateLayout({required this.accountState});
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
     LayoutConst.wrap(DefaultAccountStateInstruction.staticLayout,
-        property: "defaultAccountState"),
-    LayoutConst.wrap(AccountState.staticLayout, property: "accountState"),
+        property: 'defaultAccountState'),
+    LayoutConst.wrap(AccountState.staticLayout, property: 'accountState'),
   ]);
 
   factory SPLToken2022UpdateDefaultAccountStateLayout.fromBuffer(
@@ -26,21 +26,21 @@ class SPLToken2022UpdateDefaultAccountStateLayout
         instruction: SPLTokenProgramInstruction
             .defaultAccountStateExtension.insturction);
     return SPLToken2022UpdateDefaultAccountStateLayout(
-        accountState: AccountState.fromJson(decode["accountState"]));
+        accountState: AccountState.fromJson(decode['accountState']));
   }
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.defaultAccountStateExtension.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.defaultAccountStateExtension;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "defaultAccountState": DefaultAccountStateInstruction.update.serialize(),
-      "accountState": accountState.serialize()
+      'defaultAccountState': DefaultAccountStateInstruction.update.serialize(),
+      'accountState': accountState.serialize()
     };
   }
 }

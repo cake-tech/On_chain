@@ -22,21 +22,21 @@ class StakePoolUpdateValidatorListBalanceLayout extends StakePoolProgramLayout {
         instruction:
             StakePoolProgramInstruction.updateValidatorListBalance.insturction);
     return StakePoolUpdateValidatorListBalanceLayout(
-        noMerge: decode["noMerge"], startIndex: decode["startIndex"]);
+        noMerge: decode['noMerge'], startIndex: decode['startIndex']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u32(property: "startIndex"),
-    LayoutConst.boolean(property: "noMerge")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u32(property: 'startIndex'),
+    LayoutConst.boolean(property: 'noMerge')
   ]);
   @override
   StructLayout get layout => _layout;
   @override
-  int get instruction =>
-      StakePoolProgramInstruction.updateValidatorListBalance.insturction;
+  StakePoolProgramInstruction get instruction =>
+      StakePoolProgramInstruction.updateValidatorListBalance;
   @override
   Map<String, dynamic> serialize() {
-    return {"startIndex": startIndex, "noMerge": noMerge};
+    return {'startIndex': startIndex, 'noMerge': noMerge};
   }
 }

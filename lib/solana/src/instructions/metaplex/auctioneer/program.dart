@@ -9,10 +9,10 @@ import 'constant.dart';
 
 class MetaplexAuctioneerProgram extends TransactionInstruction {
   MetaplexAuctioneerProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
 
   /// Authorize the Auctioneer to manage an Auction House.
   factory MetaplexAuctioneerProgram.authorize({

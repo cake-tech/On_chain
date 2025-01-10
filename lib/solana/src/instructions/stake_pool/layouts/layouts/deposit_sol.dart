@@ -12,19 +12,20 @@ class StakePoolDepositSolLayout extends StakePoolProgramLayout {
         layout: _layout,
         bytes: bytes,
         instruction: StakePoolProgramInstruction.depositSol.insturction);
-    return StakePoolDepositSolLayout(lamports: decode["lamports"]);
+    return StakePoolDepositSolLayout(lamports: decode['lamports']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.ns64(property: "lamports")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.ns64(property: 'lamports')
   ]);
   @override
   StructLayout get layout => _layout;
   @override
-  int get instruction => StakePoolProgramInstruction.depositSol.insturction;
+  StakePoolProgramInstruction get instruction =>
+      StakePoolProgramInstruction.depositSol;
   @override
   Map<String, dynamic> serialize() {
-    return {"lamports": lamports};
+    return {'lamports': lamports};
   }
 }

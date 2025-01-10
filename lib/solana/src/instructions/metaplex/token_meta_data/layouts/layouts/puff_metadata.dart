@@ -16,14 +16,14 @@ class MetaplexTokenMetaDataPuffMetadataLayout
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.puffMetadata.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.puffMetadata;
 
   @override
   Map<String, dynamic> serialize() {

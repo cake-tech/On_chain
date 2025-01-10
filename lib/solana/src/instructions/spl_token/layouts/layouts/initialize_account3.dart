@@ -15,8 +15,8 @@ class SPLTokenInitializeAccount3Layout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenInitializeAccount3Layout.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    SolanaLayoutUtils.publicKey("owner")
+    LayoutConst.u8(property: 'instruction'),
+    SolanaLayoutUtils.publicKey('owner')
   ]);
 
   /// Constructs an SPLTokenInitializeAccount3Layout instance from buffer.
@@ -25,7 +25,7 @@ class SPLTokenInitializeAccount3Layout extends SPLTokenProgramLayout {
         layout: _layout,
         bytes: bytes,
         instruction: SPLTokenProgramInstruction.initializeAccount3.insturction);
-    return SPLTokenInitializeAccount3Layout(owner: decode["owner"]);
+    return SPLTokenInitializeAccount3Layout(owner: decode['owner']);
   }
 
   /// Gets the layout structure.
@@ -34,12 +34,12 @@ class SPLTokenInitializeAccount3Layout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.initializeAccount3.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.initializeAccount3;
 
   /// Serializes the layout.
   @override
   Map<String, dynamic> serialize() {
-    return {"owner": owner};
+    return {'owner': owner};
   }
 }

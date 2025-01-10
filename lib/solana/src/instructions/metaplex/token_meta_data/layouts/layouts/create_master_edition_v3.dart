@@ -15,23 +15,23 @@ class MetaplexTokenMetaDataCreateMasterEditionV3Layout
         instruction: MetaplexTokenMetaDataProgramInstruction
             .createMasterEditionV3.insturction);
     return MetaplexTokenMetaDataCreateMasterEditionV3Layout(
-        maxSupply: decode["maxSupply"]);
+        maxSupply: decode['maxSupply']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.optional(LayoutConst.u64(), property: "maxSupply")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'maxSupply')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.createMasterEditionV3.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.createMasterEditionV3;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"maxSupply": maxSupply};
+    return {'maxSupply': maxSupply};
   }
 }

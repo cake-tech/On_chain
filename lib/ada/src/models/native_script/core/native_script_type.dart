@@ -1,4 +1,5 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 
 /// Represents a native script type.
@@ -14,25 +15,25 @@ class NativeScriptType with ADASerialization {
 
   /// Native script type representing a script pubkey.
   static const NativeScriptType scriptPubkey =
-      NativeScriptType._("script_pubkey", 0);
+      NativeScriptType._('script_pubkey', 0);
 
   /// Native script type representing a script all.
-  static const NativeScriptType scriptAll = NativeScriptType._("script_all", 1);
+  static const NativeScriptType scriptAll = NativeScriptType._('script_all', 1);
 
   /// Native script type representing a script any.
-  static const NativeScriptType scriptAny = NativeScriptType._("script_any", 2);
+  static const NativeScriptType scriptAny = NativeScriptType._('script_any', 2);
 
   /// Native script type representing a script n-of-k.
   static const NativeScriptType scriptNOfK =
-      NativeScriptType._("script_n_of_k", 3);
+      NativeScriptType._('script_n_of_k', 3);
 
   /// Native script type representing a timelock start.
   static const NativeScriptType timelockStart =
-      NativeScriptType._("timelock_start", 4);
+      NativeScriptType._('timelock_start', 4);
 
   /// Native script type representing a timelock expiry.
   static const NativeScriptType timelockExpiry =
-      NativeScriptType._("timelock_expiry", 5);
+      NativeScriptType._('timelock_expiry', 5);
 
   /// List of all native script types.
   static const List<NativeScriptType> values = [
@@ -58,9 +59,9 @@ class NativeScriptType with ADASerialization {
   static NativeScriptType fromValue(int? value) {
     return values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw MessageException(
-          "No NativeScriptType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw ADAPluginException(
+          'No NativeScriptType found matching the specified value',
+          details: {'value': value}),
     );
   }
 
@@ -68,15 +69,15 @@ class NativeScriptType with ADASerialization {
   static NativeScriptType fromName(String? name) {
     return values.firstWhere(
       (element) => element.name == name,
-      orElse: () => throw MessageException(
-          "No NativeScriptType found matching the specified name",
-          details: {"name": name}),
+      orElse: () => throw ADAPluginException(
+          'No NativeScriptType found matching the specified name',
+          details: {'name': name}),
     );
   }
 
   @override
   String toString() {
-    return "NativeScriptType.$name";
+    return 'NativeScriptType.$name';
   }
 
   @override

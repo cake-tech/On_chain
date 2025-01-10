@@ -2,16 +2,20 @@ import 'package:on_chain/tron/src/address/tron_address.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/protbuf/decoder.dart';
+import 'package:on_chain/utils/utils/utils.dart';
 
 /// Transfer TRC10 token.
 class TransferAssetContract extends TronBaseContract {
   /// Create a new [TransferAssetContract] instance by parsing a JSON map.
   factory TransferAssetContract.fromJson(Map<String, dynamic> json) {
     return TransferAssetContract(
-      assetName: StringUtils.encode(json['asset_name']),
-      ownerAddress: TronAddress(json['owner_address']),
-      toAddress: TronAddress(json['to_address']),
-      amount: BigintUtils.parse(json['amount']),
+      assetName: OnChainUtils.parseBytes(
+          value: json['asset_name'], name: 'asset_name'),
+      ownerAddress: OnChainUtils.parseTronAddress(
+          value: json['owner_address'], name: 'owner_address'),
+      toAddress: OnChainUtils.parseTronAddress(
+          value: json['to_address'], name: 'to_address'),
+      amount: OnChainUtils.parseBigInt(value: json['amount'], name: 'amount'),
     );
   }
 
@@ -34,7 +38,10 @@ class TransferAssetContract extends TronBaseContract {
   /// Token id
   final List<int> assetName;
 
+  String get assestId => StringUtils.decode(assetName);
+
   /// Owner address
+  @override
   final TronAddress ownerAddress;
 
   /// receiving address
@@ -53,17 +60,17 @@ class TransferAssetContract extends TronBaseContract {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "owner_address": ownerAddress.toString(),
-      "to_address": toAddress.toString(),
-      "asset_name": StringUtils.decode(assetName),
-      "amount": amount.toString()
+      'owner_address': ownerAddress.toString(),
+      'to_address': toAddress.toString(),
+      'asset_name': StringUtils.decode(assetName),
+      'amount': amount.toString()
     }..removeWhere((key, value) => value == null);
   }
 
   /// Convert the [TransferAssetContract] object to its string representation.
   @override
   String toString() {
-    return "TransferAssetContract{${toJson()}}";
+    return 'TransferAssetContract{${toJson()}}';
   }
 
   @override

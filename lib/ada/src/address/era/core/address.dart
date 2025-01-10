@@ -3,6 +3,7 @@ import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/ada/src/address/era/byron/byron.dart';
 import 'package:on_chain/ada/src/address/era/shelly/shelly.dart';
 import 'package:on_chain/ada/src/address/utils/utils.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 
 /// Represents an abstract class for ADA addresses with serialization capabilities.
@@ -20,6 +21,7 @@ abstract class ADAAddress with ADASerialization {
   abstract final String bech32Address;
 
   bool get isRewardAddress => addressType == ADAAddressType.reward;
+  bool get isByron => addressType == ADAAddressType.byron;
 
   /// Default constructor for ADAAddress.
   const ADAAddress.init();
@@ -47,10 +49,10 @@ abstract class ADAAddress with ADASerialization {
         break;
     }
     if (addr is! T) {
-      throw MessageException("Invalid address type.", details: {
-        "Excepted": "$T",
-        "Type": addr.runtimeType,
-        "address": addr.address
+      throw ADAPluginException('Invalid address type.', details: {
+        'Excepted': '$T',
+        'Type': addr.runtimeType,
+        'address': addr.address
       });
     }
     return addr;
@@ -73,10 +75,10 @@ abstract class ADAAddress with ADASerialization {
     }
 
     if (address is! T) {
-      throw MessageException("Invalid ADA address type.", details: {
-        "Excepted": "$T",
-        "Type": address.addressType,
-        "address": address.address
+      throw ADAPluginException('Invalid ADA address type.', details: {
+        'Excepted': '$T',
+        'Type': address.addressType,
+        'address': address.address
       });
     }
     return address;
@@ -94,8 +96,16 @@ abstract class ADAAddress with ADASerialization {
     return address;
   }
 
+  T cast<T extends ADAAddress>() {
+    if (this is! T) {
+      throw ADAPluginException('ADAAddress casting failed.',
+          details: {'excepted': '$T', 'type': addressType.name});
+    }
+    return this as T;
+  }
+
   @override
-  operator ==(other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ADAAddress &&
             other.runtimeType == runtimeType &&

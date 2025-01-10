@@ -12,15 +12,14 @@ class ContractABI {
   ContractABI._(this.fragments);
 
   /// Factory method to create a ContractABI instance from JSON.
-  factory ContractABI.fromJson(List<Map<String, dynamic>> abi,
-      {bool isTron = false}) {
+  factory ContractABI.fromJson(List<Map<String, dynamic>> abi) {
     try {
       final fragments = abi.map((e) {
-        return AbiBaseFragment.fromJson(e, isTron);
+        return AbiBaseFragment.fromJson(e);
       }).toList();
       return ContractABI._(fragments);
     } catch (e) {
-      throw MessageException("invalid contract abi", details: {"input": abi});
+      throw MessageException('invalid contract abi', details: {'input': abi});
     }
   }
 
@@ -61,11 +60,25 @@ class ContractABI {
       functions.singleWhere((element) => element.name == name);
 
   /// Retrieves a function fragment from the contract ABI based from selector.
-  AbiFunctionFragment functionFromSelector(String selectorHex) {
-    final selector = BytesUtils.fromHexString(selectorHex)
-        .sublist(0, ABIConst.selectorLength);
+  AbiFunctionFragment functionFromSelector(List<int> selectorBytes) {
+    final selector = selectorBytes.sublist(0, ABIConst.selectorLength);
     return functions.singleWhere(
         (element) => BytesUtils.bytesEqual(selector, element.selector));
+  }
+
+  /// Retrieves a function fragment from the contract ABI based from selector.
+  AbiFunctionFragment functionFromSelectorHex(String selectorHex) {
+    return functionFromSelector(BytesUtils.fromHexString(selectorHex));
+  }
+
+  AbiFunctionFragment? findFunctionFromSelector(List<int> selectorBytes) {
+    try {
+      final selector = selectorBytes.sublist(0, ABIConst.selectorLength);
+      return functions.singleWhere(
+          (element) => BytesUtils.bytesEqual(selector, element.selector));
+    } on StateError {
+      return null;
+    }
   }
 
   /// Retrieves an error fragment from the contract ABI from selector.
@@ -78,8 +91,8 @@ class ContractABI {
 
   /// solidity revert Error fragment
   static final revert = AbiErrorFragment(
-      name: "Error",
-      inputs: [const AbiParameter(name: "message", type: "string")]);
+      name: 'Error',
+      inputs: [const AbiParameter(name: 'message', type: 'string')]);
 
   /// Decodes the error data based on the error fragment in the contract ABI.
   List<dynamic>? decodeError(dynamic error) {

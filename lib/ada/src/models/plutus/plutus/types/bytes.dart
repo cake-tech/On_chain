@@ -16,13 +16,13 @@ class PlutusBytes extends PlutusData {
     return PlutusBytes(value: cbor.getValue<List<int>>());
   }
   factory PlutusBytes.fromJson(Map<String, dynamic> json) {
-    return PlutusBytes(value: BytesUtils.fromHexString(json["bytes"]));
+    return PlutusBytes(value: BytesUtils.fromHexString(json['bytes']));
   }
 
   @override
   CborObject toCbor() {
     if (value.length > PlutusDataUtils.chunkSize) {
-      List<List<int>> chunks = [];
+      final List<List<int>> chunks = [];
       for (var i = 0; i < value.length; i += PlutusDataUtils.chunkSize) {
         chunks.add(value.sublist(
             i,
@@ -40,7 +40,7 @@ class PlutusBytes extends PlutusData {
 
   @override
   Map<String, dynamic> toJson() {
-    return {"bytes": BytesUtils.toHexString(value)};
+    return {'bytes': BytesUtils.toHexString(value)};
   }
 
   @override
@@ -54,16 +54,16 @@ class PlutusBytes extends PlutusData {
   }
 
   @override
-  toJsonSchema(
+  Object toJsonSchema(
       {PlutusSchemaConfig config = const PlutusSchemaConfig(
           jsonSchema: PlutusJsonSchema.basicConversions)}) {
     if (config.jsonSchema == PlutusJsonSchema.basicConversions) {
       try {
         return StringUtils.decode(value);
       } catch (e) {
-        return BytesUtils.toHexString(value, prefix: "0x");
+        return BytesUtils.toHexString(value, prefix: '0x');
       }
     }
-    return {"bytes": BytesUtils.toHexString(value)};
+    return {'bytes': BytesUtils.toHexString(value)};
   }
 }

@@ -1,8 +1,9 @@
 import 'package:on_chain/ethereum/src/address/evm_address.dart';
+import 'package:on_chain/ethereum/src/exception/exception.dart';
 import 'package:on_chain/ethereum/src/rlp/decode.dart';
 import 'package:on_chain/ethereum/src/rlp/encode.dart';
 import 'package:on_chain/ethereum/src/models/access_list.dart';
-import 'package:on_chain/utils/number_utils.dart';
+import 'package:on_chain/utils/utils/number_utils.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 
 /// Represents the type of an Ethereum transaction.
@@ -16,19 +17,19 @@ class ETHTransactionType {
   final int prefix;
 
   /// Represents a legacy Ethereum transaction.
-  static const ETHTransactionType legacy = ETHTransactionType._("Legacy", 0);
+  static const ETHTransactionType legacy = ETHTransactionType._('Legacy', 0);
 
   /// Represents an EIP-2930 Ethereum transaction (Berlin hard fork).
   static const ETHTransactionType eip2930 =
-      ETHTransactionType._("Berlin", 0x01);
+      ETHTransactionType._('Berlin', 0x01);
 
   /// Represents an EIP-1559 Ethereum transaction (London hard fork).
   static const ETHTransactionType eip1559 =
-      ETHTransactionType._("London", 0x02);
+      ETHTransactionType._('London', 0x02);
 
   @override
   String toString() {
-    return "0x${prefix.toRadixString(16)}";
+    return '0x${prefix.toRadixString(16)}';
   }
 
   /// A list of all supported Ethereum transaction types.
@@ -65,6 +66,22 @@ class _ETHTransactionUtils {
     return (BigInt.from(v) - BigInt.from(35)) ~/ BigInt.two;
   }
 
+  static List<int> trimLeadingZero(List<int> bytes) {
+    List<int> data = bytes;
+    while (data.isNotEmpty) {
+      if (data[0] != 0) break;
+      data = data.sublist(1);
+    }
+    return data;
+  }
+
+  static List<int> leadingZero32Bytes(List<int> bytes) {
+    if (bytes.length >= 32) return bytes;
+    final data = List.filled(32, 0);
+    data.setAll(32 - bytes.length, bytes);
+    return data;
+  }
+
   /// Returns the parity for a given integer [v].
   /// Returns 0 if [v] is 27, otherwise returns 1.
   static int parity(int v) => (v == 27) ? 0 : 1;
@@ -82,9 +99,9 @@ class _ETHTransactionUtils {
   ///
   /// Returns an [ETHTransaction] object representing the legacy transaction.
   static ETHTransaction _fromLegacy(List<dynamic> decode) {
-    int nonce = IntUtils.fromBytes(decode[0]);
-    BigInt gasPrice = BigintUtils.fromBytes(decode[1]);
-    BigInt gasLimit = BigintUtils.fromBytes(decode[2]);
+    final int nonce = IntUtils.fromBytes(decode[0]);
+    final BigInt gasPrice = BigintUtils.fromBytes(decode[1]);
+    final BigInt gasLimit = BigintUtils.fromBytes(decode[2]);
     final ETHAddress? to =
         (decode[3] as List).isEmpty ? null : ETHAddress.fromBytes(decode[3]);
     final value = BigintUtils.fromBytes(decode[4]);
@@ -92,8 +109,10 @@ class _ETHTransactionUtils {
     ETHSignature? sig;
     BigInt chainId = BigInt.zero;
     if (decode.length > 6) {
-      final List<int> rBytes = List<int>.from(decode[7]);
-      final List<int> sBytes = List<int>.from(decode[8]);
+      final List<int> rBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[7]));
+      final List<int> sBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[8]));
       final v = IntUtils.fromBytes(decode[6]);
       if (rBytes.isEmpty && sBytes.isEmpty) {
         chainId = BigInt.from(v);
@@ -118,9 +137,9 @@ class _ETHTransactionUtils {
   /// Converts the decoded data to an EIP-2930 transaction.
   static ETHTransaction _fromEIP2930(List<dynamic> decode) {
     final BigInt chainId = BigintUtils.fromBytes(decode[0]);
-    int nonce = IntUtils.fromBytes(decode[1]);
-    BigInt gasPrice = BigintUtils.fromBytes(decode[2]);
-    BigInt gasLimit = BigintUtils.fromBytes(decode[3]);
+    final int nonce = IntUtils.fromBytes(decode[1]);
+    final BigInt gasPrice = BigintUtils.fromBytes(decode[2]);
+    final BigInt gasLimit = BigintUtils.fromBytes(decode[3]);
     final ETHAddress? to =
         (decode[4] as List).isEmpty ? null : ETHAddress.fromBytes(decode[4]);
     final value = BigintUtils.fromBytes(decode[5]);
@@ -130,8 +149,11 @@ class _ETHTransactionUtils {
         .toList();
     ETHSignature? sig;
     if (decode.length > 8) {
-      final sigBytes =
-          List<int>.from([...decode[9], ...decode[10], ...decode[8]]);
+      final List<int> rBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[9]));
+      final List<int> sBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[10]));
+      final sigBytes = List<int>.from([...rBytes, ...sBytes, ...decode[8]]);
       sig = ETHSignature.fromBytes(sigBytes);
     }
     return ETHTransaction._(
@@ -151,10 +173,10 @@ class _ETHTransactionUtils {
   /// Converts the decoded data to an EIP-1559 transaction.
   static ETHTransaction _fromEIP1559(List<dynamic> decode) {
     final BigInt chainId = BigintUtils.fromBytes(decode[0]);
-    int nonce = IntUtils.fromBytes(decode[1]);
-    BigInt maxPriorityFeePerGas = BigintUtils.fromBytes(decode[2]);
-    BigInt maxFeePerGas = BigintUtils.fromBytes(decode[3]);
-    BigInt gasLimit = BigintUtils.fromBytes(decode[4]);
+    final int nonce = IntUtils.fromBytes(decode[1]);
+    final BigInt maxPriorityFeePerGas = BigintUtils.fromBytes(decode[2]);
+    final BigInt maxFeePerGas = BigintUtils.fromBytes(decode[3]);
+    final BigInt gasLimit = BigintUtils.fromBytes(decode[4]);
     final ETHAddress? to =
         (decode[5] as List).isEmpty ? null : ETHAddress.fromBytes(decode[5]);
     final value = BigintUtils.fromBytes(decode[6]);
@@ -164,8 +186,11 @@ class _ETHTransactionUtils {
         .toList();
     ETHSignature? sig;
     if (decode.length > 9) {
-      final sigBytes =
-          List<int>.from([...decode[10], ...decode[11], ...decode[9]]);
+      final List<int> rBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[10]));
+      final List<int> sBytes =
+          _ETHTransactionUtils.leadingZero32Bytes(List<int>.from(decode[11]));
+      final sigBytes = List<int>.from([...rBytes, ...sBytes, ...decode[9]]);
       sig = ETHSignature.fromBytes(sigBytes);
     }
     return ETHTransaction._(
@@ -278,7 +303,7 @@ class ETHTransaction {
   /// Factory constructor to create an [ETHTransaction] from serialized transaction bytes.
   factory ETHTransaction.fromSerialized(List<int> transactionBytes) {
     if (transactionBytes.isEmpty) {
-      throw const MessageException("invalid transaction bytes");
+      throw const ETHPluginException('invalid transaction bytes');
     }
     List<int> bytes = List.from(transactionBytes);
     final int prefix = bytes[0];
@@ -286,7 +311,7 @@ class ETHTransaction {
       bytes = bytes.sublist(1);
     } else {
       if (prefix < 0x7f) {
-        throw const MessageException("unsupported transaction type");
+        throw const ETHPluginException('unsupported transaction type');
       }
     }
     final decode = RLPDecoder.decode(bytes);
@@ -301,28 +326,28 @@ class ETHTransaction {
   /// Factory constructor to create an [ETHTransaction] from JSON.
   factory ETHTransaction.fromJson(Map<String, dynamic> json) {
     return ETHTransaction(
-        nonce: PluginIntUtils.hexToInt(json["nonce"]),
-        gasLimit: PluginBigintUtils.hexToBigint(json["gasLimit"]),
-        data: BytesUtils.tryFromHexString(json["data"]) ?? const <int>[],
-        value: PluginBigintUtils.hexToBigint(json["value"]),
-        chainId: PluginBigintUtils.hexToBigint(json["chainId"]),
-        gasPrice: PluginBigintUtils.tryHexToBigint(json["gasPrice"]),
-        maxFeePerGas: PluginBigintUtils.tryHexToBigint(json["maxFeePerGas"]),
+        nonce: PluginIntUtils.hexToInt(json['nonce']),
+        gasLimit: PluginBigintUtils.hexToBigint(json['gasLimit']),
+        data: BytesUtils.tryFromHexString(json['data']) ?? const <int>[],
+        value: PluginBigintUtils.hexToBigint(json['value']),
+        chainId: PluginBigintUtils.hexToBigint(json['chainId']),
+        gasPrice: PluginBigintUtils.tryHexToBigint(json['gasPrice']),
+        maxFeePerGas: PluginBigintUtils.tryHexToBigint(json['maxFeePerGas']),
         maxPriorityFeePerGas:
-            PluginBigintUtils.tryHexToBigint(json["maxPriorityFeePerGas"]),
-        from: ETHAddress(json["from"]),
-        to: json["to"] == null ? null : ETHAddress(json["to"]),
-        type: json["type"] == null
+            PluginBigintUtils.tryHexToBigint(json['maxPriorityFeePerGas']),
+        from: ETHAddress(json['from']),
+        to: json['to'] == null ? null : ETHAddress(json['to']),
+        type: json['type'] == null
             ? null
             : ETHTransactionType.fromPrefix(
-                PluginIntUtils.hexToInt(json["type"])),
-        accessList: (json["accessList"] as List?)
+                PluginIntUtils.hexToInt(json['type'])),
+        accessList: (json['accessList'] as List?)
             ?.map((e) => AccessListEntry.fromJson(e))
             .toList(),
-        signature: json["signature"] == null
+        signature: json['signature'] == null
             ? null
-            : ETHSignature(BigInt.parse(json["signature"]["r"]),
-                BigInt.parse(json["signature"]["s"]), json["signature"]["v"]));
+            : ETHSignature(BigInt.parse(json['signature']['r']),
+                BigInt.parse(json['signature']['s']), json['signature']['v']));
   }
 
   /// Creates a copy of the [ETHTransaction] with updated fields.
@@ -360,7 +385,7 @@ class ETHTransaction {
   /// Converts the [ETHTransaction] to its EIP-1559 serialized form.
   /// If [sig] is provided, includes the signature fields in the serialization.
   List<int> _toEIP1559([ETHSignature? sig]) {
-    List<List<dynamic>> fields = [
+    final List<List<dynamic>> fields = [
       _ETHTransactionUtils.bigintToBytes(chainId),
       _ETHTransactionUtils.intToBytes(nonce),
       _ETHTransactionUtils.bigintToBytes(maxPriorityFeePerGas!),
@@ -374,9 +399,10 @@ class ETHTransaction {
     if (sig != null) {
       fields.add(
           _ETHTransactionUtils.intToBytes(_ETHTransactionUtils.parity(sig.v)));
-      fields.add(sig.rBytes);
-      fields.add(sig.sBytes);
+      fields.add(_ETHTransactionUtils.trimLeadingZero(sig.rBytes));
+      fields.add(_ETHTransactionUtils.trimLeadingZero(sig.sBytes));
     }
+
     return [ETHTransactionType.eip1559.prefix, ...RLPEncoder.encode(fields)];
   }
 
@@ -396,8 +422,8 @@ class ETHTransaction {
     if (sig != null) {
       fields.add(
           _ETHTransactionUtils.intToBytes(_ETHTransactionUtils.parity(sig.v)));
-      fields.add(sig.rBytes);
-      fields.add(sig.sBytes);
+      fields.add(_ETHTransactionUtils.trimLeadingZero(sig.rBytes));
+      fields.add(_ETHTransactionUtils.trimLeadingZero(sig.sBytes));
     }
     return [ETHTransactionType.eip2930.prefix, ...RLPEncoder.encode(fields)];
   }
@@ -405,7 +431,7 @@ class ETHTransaction {
   /// Converts the [ETHTransaction] to its legacy (pre-EIP-155) serialized form.
   /// If [sig] is provided, includes the signature fields in the serialization.
   List<int> _toLegacy([ETHSignature? sig]) {
-    List<List<int>> fields = [
+    final List<List<int>> fields = [
       _ETHTransactionUtils.intToBytes(nonce),
       _ETHTransactionUtils.bigintToBytes(gasPrice!),
       _ETHTransactionUtils.bigintToBytes(gasLimit),
@@ -429,11 +455,11 @@ class ETHTransaction {
     if (chainId != BigInt.zero) {
       v = _ETHTransactionUtils.getLegacyChainId(sig.v, chainId);
     } else if (BigInt.from(sig.v) != v) {
-      throw const MessageException("Mismatch chainID/Signature.V");
+      throw const ETHPluginException('Mismatch chainID/Signature.V');
     }
     fields.add(BigintUtils.toBytes(v, length: BigintUtils.bitlengthInBytes(v)));
-    fields.add(sig.rBytes);
-    fields.add(sig.sBytes);
+    fields.add(_ETHTransactionUtils.trimLeadingZero(sig.rBytes));
+    fields.add(_ETHTransactionUtils.trimLeadingZero(sig.sBytes));
     return RLPEncoder.encode(fields);
   }
 
@@ -445,10 +471,10 @@ class ETHTransaction {
 
     if (maxFeePerGas != null && maxPriorityFeePerGas != null) {
       if (maxPriorityFeePerGas! > maxFeePerGas!) {
-        throw MessageException("priorityFee cannot be more than maxFee",
+        throw ETHPluginException('priorityFee cannot be more than maxFee',
             details: {
-              "priorityFee": maxFeePerGas,
-              "maxFee": maxPriorityFeePerGas
+              'priorityFee': maxFeePerGas,
+              'maxFee': maxPriorityFeePerGas
             });
       }
     }
@@ -456,37 +482,37 @@ class ETHTransaction {
       if (type == ETHTransactionType.legacy ||
           type == ETHTransactionType.eip2930) {
         if (gasPrice == null) {
-          throw const MessageException(
-              "Gas price must not be null for legacy transactions.");
+          throw const ETHPluginException(
+              'Gas price must not be null for legacy transactions.');
         }
         if (maxFeePerGas != null || maxPriorityFeePerGas != null) {
-          throw MessageException(
-              "maxFeePerGas and maxPriorityFeePerGas must be null for legacy transactions.",
+          throw ETHPluginException(
+              'maxFeePerGas and maxPriorityFeePerGas must be null for legacy transactions.',
               details: {
-                "maxFeePerGas": maxFeePerGas,
-                "maxPriorityFeePerGas": maxPriorityFeePerGas
+                'maxFeePerGas': maxFeePerGas,
+                'maxPriorityFeePerGas': maxPriorityFeePerGas
               });
         }
         if (type == ETHTransactionType.legacy && hasAccessList) {
-          throw MessageException(
-              "accsesslist must be null or empty for legacy transactions",
-              details: {"accessList": accessList});
+          throw ETHPluginException(
+              'accsesslist must be null or empty for legacy transactions',
+              details: {'accessList': accessList});
         }
       } else {
         if (gasPrice != null) {
-          throw MessageException(
-              "Gas price must be null for EIP1559 transactions.",
-              details: {"gasPrice": gasPrice});
+          throw ETHPluginException(
+              'Gas price must be null for EIP1559 transactions.',
+              details: {'gasPrice': gasPrice});
         }
         if (maxFeePerGas == null || maxPriorityFeePerGas == null) {
-          throw const MessageException(
-              "maxFeePerGas and maxPriorityFeePerGas must not be null for EIP1559 transactions.");
+          throw const ETHPluginException(
+              'maxFeePerGas and maxPriorityFeePerGas must not be null for EIP1559 transactions.');
         }
       }
     } else {
       if (!hasGasPrice && !isEIP1559) {
-        throw const MessageException(
-            "use gasPrice for legacy or Eip2930 transaction or priorityFee and maxFee for Eip1559 transactions");
+        throw const ETHPluginException(
+            'use gasPrice for legacy or Eip2930 transaction or priorityFee and maxFee for Eip1559 transactions');
       }
     }
 
@@ -525,8 +551,8 @@ class ETHTransaction {
   List<int> signedSerialized([ETHSignature? sig]) {
     sig ??= signature;
     if (sig == null) {
-      throw const MessageException(
-          "The transaction signed serialized cannot be obtained before the signing process.");
+      throw const ETHPluginException(
+          'The transaction signed serialized cannot be obtained before the signing process.');
     }
     return _serialized(sig);
   }
@@ -535,18 +561,18 @@ class ETHTransaction {
   String get transactionID {
     return BytesUtils.toHexString(
         QuickCrypto.keccack256Hash(signedSerialized()),
-        prefix: "0x");
+        prefix: '0x');
   }
 
   /// Converts the transaction details into a map for estimating gas.
   Map<String, dynamic> toEstimate() {
     return {
-      if (from != null) "from": from?.address,
-      if (to != null) "to": to?.address,
-      "value": "0x${value.toRadixString(16)}",
-      if (data.isNotEmpty) "data": BytesUtils.toHexString(data, prefix: "0x"),
+      if (from != null) 'from': from?.address,
+      if (to != null) 'to': to?.address,
+      'value': '0x${value.toRadixString(16)}',
+      if (data.isNotEmpty) 'data': BytesUtils.toHexString(data, prefix: '0x'),
       if (accessList?.isNotEmpty ?? false)
-        "accessList": accessList?.map((e) => e.toJson()).toList()
+        'accessList': accessList?.map((e) => e.toJson()).toList()
     };
   }
 
@@ -556,24 +582,24 @@ class ETHTransaction {
       'type': type?.toString(),
       'to': to?.toString(),
       'from': from.toString(),
-      'nonce': "0x${nonce.toRadixString(16)}",
-      'gasLimit': "0x${gasLimit.toRadixString(16)}",
-      'gasPrice': gasPrice == null ? null : "0x${gasPrice!.toRadixString(16)}",
+      'nonce': '0x${nonce.toRadixString(16)}',
+      'gasLimit': '0x${gasLimit.toRadixString(16)}',
+      'gasPrice': gasPrice == null ? null : '0x${gasPrice!.toRadixString(16)}',
       'maxPriorityFeePerGas': maxPriorityFeePerGas == null
           ? null
-          : "0x${maxPriorityFeePerGas!.toRadixString(16)}",
+          : '0x${maxPriorityFeePerGas!.toRadixString(16)}',
       'maxFeePerGas':
-          maxFeePerGas == null ? null : "0x${maxFeePerGas!.toRadixString(16)}",
-      'data': data.isEmpty ? null : BytesUtils.toHexString(data, prefix: "0x"),
-      'value': "0x${value.toRadixString(16)}",
-      'chainId': "0x${chainId.toRadixString(16)}",
+          maxFeePerGas == null ? null : '0x${maxFeePerGas!.toRadixString(16)}',
+      'data': data.isEmpty ? null : BytesUtils.toHexString(data, prefix: '0x'),
+      'value': '0x${value.toRadixString(16)}',
+      'chainId': '0x${chainId.toRadixString(16)}',
       'accessList': accessList?.map((e) => e.toJson()).toList(),
-      "signature": signature == null
+      'signature': signature == null
           ? null
           : {
-              "s": signature!.s.toString(),
-              "r": signature!.r.toString(),
-              "v": signature!.v
+              's': signature!.s.toString(),
+              'r': signature!.r.toString(),
+              'v': signature!.v
             }
     };
   }

@@ -1,5 +1,5 @@
 import 'package:blockchain_utils/cbor/cbor.dart';
-import 'package:blockchain_utils/exception/exceptions.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 
 /// Enum representing the type of relay.
@@ -14,13 +14,13 @@ class RelayType with ADASerialization {
   const RelayType._(this.name, this.value);
 
   /// RelayType for a single host address.
-  static const RelayType singleHostAddr = RelayType._("single_host_addr", 0);
+  static const RelayType singleHostAddr = RelayType._('single_host_addr', 0);
 
   /// RelayType for a single host name.
-  static const RelayType singleHostName = RelayType._("single_host_name", 1);
+  static const RelayType singleHostName = RelayType._('single_host_name', 1);
 
   /// RelayType for multiple host names.
-  static const RelayType multiHostName = RelayType._("multi_host_name", 2);
+  static const RelayType multiHostName = RelayType._('multi_host_name', 2);
 
   /// List of all RelayType values.
   static const List<RelayType> values = [
@@ -33,8 +33,8 @@ class RelayType with ADASerialization {
   factory RelayType.deserialize(CborIntValue cbor, {RelayType? validate}) {
     final type = fromValue(cbor.value);
     if (validate != null && type != validate) {
-      throw MessageException("Invalid RelayType.",
-          details: {"Expected": validate, "Type": type});
+      throw ADAPluginException('Invalid RelayType.',
+          details: {'Expected': validate, 'Type': type});
     }
     return fromValue(cbor.value);
   }
@@ -43,9 +43,9 @@ class RelayType with ADASerialization {
   static RelayType fromValue(int? value) {
     return values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw MessageException(
-          "No RelayType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw ADAPluginException(
+          'No RelayType found matching the specified value',
+          details: {'value': value}),
     );
   }
 
@@ -53,9 +53,9 @@ class RelayType with ADASerialization {
   static RelayType fromName(String? name) {
     return values.firstWhere(
       (element) => element.name == name,
-      orElse: () => throw MessageException(
-          "No RelayType found matching the specified name",
-          details: {"name": name}),
+      orElse: () => throw ADAPluginException(
+          'No RelayType found matching the specified name',
+          details: {'name': name}),
     );
   }
 
@@ -66,7 +66,7 @@ class RelayType with ADASerialization {
 
   @override
   String toString() {
-    return "RelayType.$name";
+    return 'RelayType.$name';
   }
 
   @override

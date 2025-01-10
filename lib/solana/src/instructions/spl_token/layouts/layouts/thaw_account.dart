@@ -10,7 +10,7 @@ class SPLTokenThawAccountLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for thawing an account in SPL.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenThawAccountLayout instance from buffer.
   factory SPLTokenThawAccountLayout.fromBuffer(List<int> bytes) {
@@ -27,7 +27,8 @@ class SPLTokenThawAccountLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.thawAccount.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.thawAccount;
 
   /// Serializes the layout data.
   @override

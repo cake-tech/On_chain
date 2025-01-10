@@ -30,14 +30,14 @@ class TransactionOutput with ADASerialization {
       this.scriptRef});
   factory TransactionOutput.fromJson(Map<String, dynamic> json) {
     return TransactionOutput(
-        address: ADAAddress.fromAddress(json["address"]),
-        amount: Value.fromJson(json["amount"]),
-        plutusData: json["plutus_data"] == null
+        address: ADAAddress.fromAddress(json['address']),
+        amount: Value.fromJson(json['amount']),
+        plutusData: json['plutus_data'] == null
             ? null
-            : DataOption.fromJson(json["plutus_data"]),
-        scriptRef: json["script_ref"] == null
+            : DataOption.fromJson(json['plutus_data']),
+        scriptRef: json['script_ref'] == null
             ? null
-            : ScriptRef.fromJson(json["script_ref"]));
+            : ScriptRef.fromJson(json['script_ref']));
   }
 
   /// Deserializes a [TransactionOutput] instance from a CBOR object.
@@ -49,10 +49,12 @@ class TransactionOutput with ADASerialization {
           amount: Value.deserialize(cbor.getIndex<CborObject>(1)),
           plutusData: cbor
               .getIndex<CborObject?>(2)
-              ?.to<DataOption, CborObject>((e) => DataOption.deserialize(e)),
+              ?.castTo<DataOption, CborObject>(
+                  (e) => DataOption.deserialize(e)),
           scriptRef: cbor
               .getIndex<CborObject?>(3)
-              ?.to<ScriptRef, CborListValue>((e) => ScriptRef.deserialize(e)));
+              ?.castTo<ScriptRef, CborListValue>(
+                  (e) => ScriptRef.deserialize(e)));
     }
     final CborMapValue<CborObject, CborObject> cborMap = cbor.cast();
     final address =
@@ -62,10 +64,10 @@ class TransactionOutput with ADASerialization {
         amount: Value.deserialize(cborMap.getValueFromIntKey(1)),
         plutusData: cborMap
             .getValueFromIntKey<CborObject?>(2)
-            ?.to<DataOption, CborObject>((e) => DataOption.deserialize(e)),
+            ?.castTo<DataOption, CborObject>((e) => DataOption.deserialize(e)),
         scriptRef: cborMap
             .getValueFromIntKey<CborTagValue?>(3)
-            ?.to<ScriptRef, CborTagValue>((e) => ScriptRef.deserialize(e)));
+            ?.castTo<ScriptRef, CborTagValue>((e) => ScriptRef.deserialize(e)));
   }
   TransactionOutput copyWith({
     ADAAddress? address,
@@ -106,10 +108,10 @@ class TransactionOutput with ADASerialization {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "address": address.toJson(),
-      "amount": amount.toJson(),
-      "plutus_data": plutusData?.toJson(),
-      "script_ref": scriptRef?.toJson()
+      'address': address.toJson(),
+      'amount': amount.toJson(),
+      'plutus_data': plutusData?.toJson(),
+      'script_ref': scriptRef?.toJson()
     };
   }
 

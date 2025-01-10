@@ -16,27 +16,27 @@ class MetaplexGumdropClaimCandyProvenLayout
         instruction:
             MetaplexGumdropProgramInstruction.claimCandyProven.insturction);
     return MetaplexGumdropClaimCandyProvenLayout(
-        walletBump: decode["walletBump"],
-        claimBump: decode["claimBump"],
-        index: decode["index"]);
+        walletBump: decode['walletBump'],
+        claimBump: decode['claimBump'],
+        index: decode['index']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "walletBump"),
-    LayoutConst.u8(property: "claimBump"),
-    LayoutConst.u64(property: "index")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'walletBump'),
+    LayoutConst.u8(property: 'claimBump'),
+    LayoutConst.u64(property: 'index')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexGumdropProgramInstruction.claimCandyProven.insturction;
+  MetaplexGumdropProgramInstruction get instruction =>
+      MetaplexGumdropProgramInstruction.claimCandyProven;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"walletBump": walletBump, "claimBump": claimBump, "index": index};
+    return {'walletBump': walletBump, 'claimBump': claimBump, 'index': index};
   }
 }

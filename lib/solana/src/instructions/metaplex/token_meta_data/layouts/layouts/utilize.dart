@@ -14,23 +14,23 @@ class MetaplexTokenMetaDataUtilizeLayout
         instruction:
             MetaplexTokenMetaDataProgramInstruction.utilize.insturction);
     return MetaplexTokenMetaDataUtilizeLayout(
-        numberOfUses: decode["numberOfUses"]);
+        numberOfUses: decode['numberOfUses']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "numberOfUses")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'numberOfUses')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.utilize.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.utilize;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"numberOfUses": numberOfUses};
+    return {'numberOfUses': numberOfUses};
   }
 }

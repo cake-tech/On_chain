@@ -13,8 +13,8 @@ class SPLTokenTransferLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for transferring tokens in SPL.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "amount"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'amount'),
   ]);
 
   /// Constructs an SPLTokenTransferLayout instance from buffer.
@@ -24,7 +24,7 @@ class SPLTokenTransferLayout extends SPLTokenProgramLayout {
       bytes: bytes,
       instruction: SPLTokenProgramInstruction.transfer.insturction,
     );
-    return SPLTokenTransferLayout(amount: decode["amount"]);
+    return SPLTokenTransferLayout(amount: decode['amount']);
   }
 
   /// Returns the layout structure.
@@ -33,11 +33,12 @@ class SPLTokenTransferLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.transfer.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.transfer;
 
   /// Serializes the layout data.
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount};
+    return {'amount': amount};
   }
 }

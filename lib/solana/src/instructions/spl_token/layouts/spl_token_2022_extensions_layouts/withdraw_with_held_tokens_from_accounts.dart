@@ -18,28 +18,28 @@ class SPLToken2022WithdrawWithheldTokensFromAccountsLayout
       instruction: SPLTokenProgramInstruction.transferFeeExtension.insturction,
     );
     return SPLToken2022WithdrawWithheldTokensFromAccountsLayout(
-        numTokenAccounts: decode["numTokenAccounts"]);
+        numTokenAccounts: decode['numTokenAccounts']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "transferFee"),
-    LayoutConst.u8(property: "numTokenAccounts"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'transferFee'),
+    LayoutConst.u8(property: 'numTokenAccounts'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.transferFeeExtension.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.transferFeeExtension;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "transferFee": TransferFeeInstructionInstruction
+      'transferFee': TransferFeeInstructionInstruction
           .withdrawWithheldTokensFromAccounts.value,
-      "numTokenAccounts": numTokenAccounts
+      'numTokenAccounts': numTokenAccounts
     };
   }
 }

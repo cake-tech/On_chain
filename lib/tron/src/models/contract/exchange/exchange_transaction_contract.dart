@@ -2,17 +2,22 @@ import 'package:on_chain/tron/src/address/tron_address.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/protbuf/decoder.dart';
+import 'package:on_chain/utils/utils/utils.dart';
 
 /// Participate the transaction of exchange pair
 class ExchangeTransactionContract extends TronBaseContract {
   /// Create a new [ExchangeTransactionContract] instance by parsing a JSON map.
   factory ExchangeTransactionContract.fromJson(Map<String, dynamic> json) {
     return ExchangeTransactionContract(
-      ownerAddress: TronAddress(json["owner_address"]),
-      exchangeId: BigintUtils.tryParse(json["exchange_id"]),
-      tokenId: BytesUtils.fromHexString(json["token_id"]),
-      quant: BigintUtils.tryParse(json["quant"]),
-      expected: BigintUtils.tryParse(json["expected"]),
+      ownerAddress: OnChainUtils.parseTronAddress(
+          value: json['owner_address'], name: 'owner_address'),
+      exchangeId: OnChainUtils.parseBigInt(
+          value: json['exchange_id'], name: 'exchange_id'),
+      tokenId:
+          OnChainUtils.parseBytes(value: json['token_id'], name: 'token_id'),
+      quant: OnChainUtils.parseBigInt(value: json['quant'], name: 'quant'),
+      expected:
+          OnChainUtils.parseBigInt(value: json['expected'], name: 'expected'),
     );
   }
 
@@ -35,6 +40,7 @@ class ExchangeTransactionContract extends TronBaseContract {
   }
 
   /// Trader's wallet address
+  @override
   final TronAddress ownerAddress;
 
   /// Transaction Pair ID
@@ -59,18 +65,18 @@ class ExchangeTransactionContract extends TronBaseContract {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "owner_address": ownerAddress.toString(),
-      "exchange_id": exchangeId?.toString(),
-      "token_id": BytesUtils.tryToHexString(tokenId),
-      "quant": quant?.toString(),
-      "expected": expected?.toString(),
+      'owner_address': ownerAddress.toString(),
+      'exchange_id': exchangeId?.toString(),
+      'token_id': BytesUtils.tryToHexString(tokenId),
+      'quant': quant?.toString(),
+      'expected': expected?.toString(),
     }..removeWhere((key, value) => value == null);
   }
 
   /// Convert the [ExchangeTransactionContract] object to its string representation.
   @override
   String toString() {
-    return "ExchangeTransactionContract{${toJson()}}";
+    return 'ExchangeTransactionContract{${toJson()}}';
   }
 
   @override

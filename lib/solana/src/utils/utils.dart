@@ -1,12 +1,13 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 
 /// Utility class for Solana-related operations.
 class SolanaUtils {
   static const int lamportsPerSol = 1000000000;
 
   static const int maxSeedLength = 32;
-  static const String programDerivedAddressSeed = "ProgramDerivedAddress";
+  static const String programDerivedAddressSeed = 'ProgramDerivedAddress';
   static const int decimal = 9;
   static final BigRational _decimalPlaces = BigRational.from(10).pow(decimal);
 
@@ -23,7 +24,7 @@ class SolanaUtils {
     List<int> seedBytes = [];
     for (final i in seeds) {
       if (i.length > maxSeedLength) {
-        throw const MessageException("Max seed length exceeded");
+        throw const SolanaPluginException('Max seed length exceeded');
       }
       seedBytes = [...seedBytes, ...i];
     }
@@ -38,8 +39,8 @@ class SolanaUtils {
         continue;
       }
     }
-    throw const MessageException(
-        "Unable to find a viable program address nonce");
+    throw const SolanaPluginException(
+        'Unable to find a viable program address nonce');
   }
 
   /// Finds a program address for the given seeds and program ID.
@@ -53,8 +54,8 @@ class SolanaUtils {
 
     seedBytes = QuickCrypto.sha256Hash(seedBytes);
     if (Ed25519PublicKey.isValidBytes(seedBytes)) {
-      throw const MessageException(
-          "Invalid seeds, address must fall off the curve");
+      throw const SolanaPluginException(
+          'Invalid seeds, address must fall off the curve');
     }
     return SolAddress.uncheckBytes(seedBytes);
   }

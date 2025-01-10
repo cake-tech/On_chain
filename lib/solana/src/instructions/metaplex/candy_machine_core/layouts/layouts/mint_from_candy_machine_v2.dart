@@ -15,14 +15,14 @@ class MetaplexCandyMachineMintFromCandyMachineV2Layout
     return const MetaplexCandyMachineMintFromCandyMachineV2Layout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.mintFromCandyMachineV2.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.mintFromCandyMachineV2;
 
   @override
   Map<String, dynamic> serialize() {

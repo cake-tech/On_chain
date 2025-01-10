@@ -27,8 +27,8 @@ class SPLTokenSwapDepositSingleTokenLayout extends SPLTokenSwapProgramLayout {
     );
 
     return SPLTokenSwapDepositSingleTokenLayout(
-      sourceTokenAmount: decode["sourceTokenAmount"],
-      minimumPoolTokenAmount: decode["minimumPoolTokenAmount"],
+      sourceTokenAmount: decode['sourceTokenAmount'],
+      minimumPoolTokenAmount: decode['minimumPoolTokenAmount'],
     );
   }
 
@@ -42,14 +42,14 @@ class SPLTokenSwapDepositSingleTokenLayout extends SPLTokenSwapProgramLayout {
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      SPLTokenSwapProgramInstruction.depositSingleToken.insturction;
+  SPLTokenSwapProgramInstruction get instruction =>
+      SPLTokenSwapProgramInstruction.depositSingleToken;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "sourceTokenAmount": sourceTokenAmount,
-      "minimumPoolTokenAmount": minimumPoolTokenAmount,
+      'sourceTokenAmount': sourceTokenAmount,
+      'minimumPoolTokenAmount': minimumPoolTokenAmount,
     };
   }
 }

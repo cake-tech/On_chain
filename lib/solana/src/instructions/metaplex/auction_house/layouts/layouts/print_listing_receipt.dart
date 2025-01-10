@@ -17,24 +17,24 @@ class MetaplexAuctionHousePrintListingReceiptLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .printListingReceipt.insturction);
     return MetaplexAuctionHousePrintListingReceiptLayout(
-        receiptBump: decode["receiptBump"]);
+        receiptBump: decode['receiptBump']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "receiptBump"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'receiptBump'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.printListingReceipt.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.printListingReceipt;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"receiptBump": receiptBump};
+    return {'receiptBump': receiptBump};
   }
 }

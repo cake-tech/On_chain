@@ -11,23 +11,23 @@ class MetaplexNFTPacksClaimPackLayout extends MetaplexNFTPacksProgramLayout {
         layout: _layout,
         bytes: data,
         instruction: MetaplexNFTPacksProgramInstruction.claimPack.insturction);
-    return MetaplexNFTPacksClaimPackLayout(index: decode["index"]);
+    return MetaplexNFTPacksClaimPackLayout(index: decode['index']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u32(property: "index")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u32(property: 'index')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexNFTPacksProgramInstruction.claimPack.insturction;
+  MetaplexNFTPacksProgramInstruction get instruction =>
+      MetaplexNFTPacksProgramInstruction.claimPack;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"index": index};
+    return {'index': index};
   }
 }

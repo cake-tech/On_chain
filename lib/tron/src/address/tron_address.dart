@@ -1,16 +1,23 @@
 import 'package:on_chain/solidity/address/core.dart';
 import 'package:blockchain_utils/bip/address/trx_addr.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:on_chain/ethereum/src/address/evm_address.dart';
+import 'package:on_chain/tron/src/exception/exception.dart';
+
+extension ToTronAddress on SolidityAddress {
+  TronAddress toTronAddress() {
+    if (this is TronAddress) return this as TronAddress;
+    return TronAddress.fromEthAddress(toBytes());
+  }
+}
 
 /// Class representing a Tron address, implementing the BaseHexAddress interface
-class TronAddress implements SolidityAddress {
-  /// Private constructor for internal use, initializing with address and hexAddress
-  const TronAddress._(this._address, this._hexAddress);
-
+class TronAddress extends SolidityAddress {
   /// Private fields to store the address and its hexadecimal representation
   final String _address;
-  final String _hexAddress;
+
+  /// Private constructor for internal use, initializing with address and hexAddress
+  const TronAddress._(this._address, String hexAddress)
+      : super.unsafe(hexAddress);
 
   /// Factory method to create a TronAddress from a Tron public key represented as a list of integers
   factory TronAddress.fromPublicKey(List<int> keyBytes) {
@@ -20,8 +27,8 @@ class TronAddress implements SolidityAddress {
       return TronAddress._(toAddress,
           BytesUtils.toHexString([...TrxAddressUtils.prefix, ...decode]));
     } catch (e) {
-      throw MessageException("invalid tron public key",
-          details: {"input": BytesUtils.toHexString(keyBytes)});
+      throw TronPluginException('invalid tron public key',
+          details: {'input': BytesUtils.toHexString(keyBytes)});
     }
   }
 
@@ -45,8 +52,8 @@ class TronAddress implements SolidityAddress {
         }
       }
     } catch (e) {
-      throw MessageException("invalid tron address",
-          details: {"input": address, "visible": visible});
+      throw TronPluginException('invalid tron address',
+          details: {'input': address, 'visible': visible});
     }
   }
 
@@ -63,18 +70,12 @@ class TronAddress implements SolidityAddress {
     return TronAddress._(addr, BytesUtils.toHexString(addrBytes));
   }
 
-  /// Implementation of the toBytes method from the BaseHexAddress interface
-  @override
-  List<int> toBytes() {
-    return BytesUtils.fromHexString(_hexAddress);
-  }
-
   /// Method to get the Tron address as a string, with an option to visible address (base58) or hex address
   String toAddress([bool visible = true]) {
     if (visible) {
       return _address;
     }
-    return _hexAddress;
+    return super.toHex();
   }
 
   /// Method to get the Tron address as a string, with an option to visible address (base58) or hex address
@@ -86,17 +87,13 @@ class TronAddress implements SolidityAddress {
   /// Constant representing the length of the Tron address in bytes
   static const int lengthInBytes = 21;
 
-  /// To Ethereum address
-  ETHAddress toETHAddress() {
-    final toBytes = BytesUtils.fromHexString(_hexAddress);
-
-    /// remove tron 0x41 prefix from bytes
-    return ETHAddress.fromBytes(
-        toBytes.sublist(toBytes.length - TronAddress.lengthInBytes));
+  @override
+  bool operator ==(other) {
+    if (identical(this, other)) return true;
+    if (other is! TronAddress) return false;
+    return _address == other._address;
   }
 
   @override
-  String toHex() {
-    return _hexAddress;
-  }
+  int get hashCode => _address.hashCode;
 }

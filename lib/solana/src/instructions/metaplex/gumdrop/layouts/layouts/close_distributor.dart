@@ -15,25 +15,25 @@ class MetaplexGumdropCloseDistributorLayout
         instruction:
             MetaplexGumdropProgramInstruction.closeDistributor.insturction);
     return MetaplexGumdropCloseDistributorLayout(
-        walletBump: decode["walletBump"], bump: decode["bump"]);
+        walletBump: decode['walletBump'], bump: decode['bump']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "bump"),
-    LayoutConst.u8(property: "walletBump"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'bump'),
+    LayoutConst.u8(property: 'walletBump'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexGumdropProgramInstruction.closeDistributor.insturction;
+  MetaplexGumdropProgramInstruction get instruction =>
+      MetaplexGumdropProgramInstruction.closeDistributor;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"bump": bump, "walletBump": walletBump};
+    return {'bump': bump, 'walletBump': walletBump};
   }
 }

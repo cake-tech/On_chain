@@ -1,4 +1,4 @@
-part of "package:on_chain/solidity/abi/abi.dart";
+part of 'package:on_chain/solidity/abi/abi.dart';
 
 /// ABICoder implementation for encoding and decoding boolean values.
 class BooleanCoder implements ABICoder<bool> {
@@ -13,7 +13,9 @@ class BooleanCoder implements ABICoder<bool> {
         BigintUtils.fromBytes(bytes.sublist(0, ABIConst.uintBytesLength));
     _ABIValidator.validateBoolean(params, toBigInt);
     return DecoderResult(
-        result: toBigInt == BigInt.one, consumed: ABIConst.uintBytesLength);
+        result: toBigInt == BigInt.one,
+        consumed: ABIConst.uintBytesLength,
+        name: params.name);
   }
 
   /// Encodes a boolean value to ABI-encoded bytes.
@@ -23,7 +25,7 @@ class BooleanCoder implements ABICoder<bool> {
     if (input) {
       bytes[bytes.length - 1] = 1;
     }
-    return EncoderResult(isDynamic: false, encoded: bytes);
+    return EncoderResult(isDynamic: false, encoded: bytes, name: params.name);
   }
 
   /// Legacy EIP-712 encoding for boolean values.
@@ -36,6 +38,6 @@ class BooleanCoder implements ABICoder<bool> {
     }
     final bytes = List<int>.filled(1, 0);
     bytes[0] = input ? 1 : 0;
-    return EncoderResult(isDynamic: false, encoded: bytes);
+    return EncoderResult(isDynamic: false, encoded: bytes, name: params.name);
   }
 }

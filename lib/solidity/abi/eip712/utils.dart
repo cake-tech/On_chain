@@ -1,4 +1,4 @@
-part of "package:on_chain/solidity/abi/abi.dart";
+part of 'package:on_chain/solidity/abi/abi.dart';
 
 /// Internal utility class for common operations related to EIP-712 encoding and decoding.
 class _EIP712Utils {
@@ -8,7 +8,7 @@ class _EIP712Utils {
   static const List<int> eip191PrefixBytes = [25, 1];
 
   /// Key name for the EIP-712 domain.
-  static const String domainKeyName = "EIP712Domain";
+  static const String domainKeyName = 'EIP712Domain';
 
   /// Regular expression for extracting the base type from a type string.
   static final RegExp typeRegex = RegExp(r'^\w+');
@@ -17,16 +17,17 @@ class _EIP712Utils {
   static final RegExp arrayRegex = RegExp(r'^(.*)\[([0-9]*?)]$');
 
   /// Type name for bytes32.
-  static const String bytes32TypeName = "bytes32";
+  static const String bytes32TypeName = 'bytes32';
 
   /// Ensures the input value is represented as bytes, handling different types.
   static List<int> ensureBytes(String type, dynamic value) {
-    if (!type.startsWith("bytes")) {
-      throw MessageException("invalid bytes type", details: {"type": type});
+    if (!type.startsWith('bytes')) {
+      throw const SolidityAbiException(
+          'Invalid data provided for bytes codec.');
     }
     if (value is! String && value is! List<int>) {
-      throw MessageException("invalid input for this type",
-          details: {"type": type, "value": value});
+      throw const SolidityAbiException(
+          'Invalid data provided for bytes codec.');
     }
     if (value is List<int>) return BytesUtils.toBytes(value);
     return StringUtils.toBytes(value);
@@ -38,26 +39,60 @@ class _EIP712Utils {
     final childType = match?.group(1);
     if (match != null) {
       if (value is! List) {
-        throw MessageException("invalid array input for this type",
-            details: {"type": type, "value": value});
+        throw SolidityAbiException('Invalid data provided for array codec.',
+            details: {'type': type, 'value': value});
       }
       return value.map((e) => ensureCorrectValues(childType!, e)).toList();
     }
-    if (type.startsWith("uint") || type.startsWith("int")) {
+    if (type.startsWith('uint') || type.startsWith('int')) {
       return BigintUtils.parse(value);
     }
     switch (type) {
-      case "address":
+      case 'address':
         return ensureIsAddress(value);
-      case "bool":
+      case 'bool':
         return ensureBoolean(value);
-      case "string":
+      case 'string':
         return ensureString(value);
       default:
-        if (type.startsWith("bytes")) {
+        if (type.startsWith('bytes')) {
           return ensureBytes(type, value);
         }
-        throw MessageException("unsupported type ", details: {"type": type});
+        throw SolidityAbiException('Unsuported type. codec not found.',
+            details: {'type': type});
+    }
+  }
+
+  /// Ensures correct representation of values based on the specified type.
+  static dynamic eip712TypedDataV1ValueToJson(String type, dynamic value) {
+    final match = arrayRegex.firstMatch(type);
+    final childType = match?.group(1);
+    if (match != null) {
+      if (value is! List) {
+        throw SolidityAbiException('Invalid data provided for array codec.',
+            details: {'type': type, 'value': value});
+      }
+      return value
+          .map((e) => eip712TypedDataV1ValueToJson(childType!, e))
+          .toList();
+    }
+    if (type.startsWith('uint') || type.startsWith('int')) {
+      return value.toString();
+    }
+    switch (type) {
+      case 'address':
+        if (value is String) {
+          return value;
+        }
+        if (value is SolidityAddress) {
+          return value.toHex();
+        }
+        break;
+      case 'bool':
+      case 'string':
+        return value;
+      default:
+        return BytesUtils.toHexString(value, prefix: '0x');
     }
   }
 
@@ -65,38 +100,39 @@ class _EIP712Utils {
   /// If the value is already an ETHAddress instance, it is returned as-is.
   /// If the value is a list of integers, it is interpreted as bytes and converted to an ETHAddress or TronAddress.
   /// If the value is a string, it is parsed to create an ETHAddress or TronAddress.
-  /// Throws a MessageException for invalid input.
+  /// Throws a [SolidityAbiException] for invalid input.
   static SolidityAddress ensureIsAddress(dynamic value) {
-    if (value is ETHAddress) return value;
-    if (value is List<int>) {
-      if (value.length == TronAddress.lengthInBytes) {
-        return TronAddress.fromBytes(value);
-      }
-      return ETHAddress.fromBytes(value);
-    } else if (value is String) {
-      try {
-        return ETHAddress(value);
-      } catch (e) {
+    try {
+      if (value is SolidityAddress) return value;
+      if (value is List<int>) {
+        return SolidityAddress.fromBytes(value);
+      } else if (value is String) {
+        if (StringUtils.isHexBytes(value)) {
+          return SolidityAddress(value);
+        }
         return TronAddress(value);
       }
-    }
-    throw MessageException("invalid address", details: {"input": value});
+    } catch (_) {}
+    throw SolidityAbiException('Invalid data provided for address codec.',
+        details: {'input': value});
   }
 
   /// Ensures that the input value is a boolean.
-  /// Throws a MessageException for invalid input.
+  /// Throws a [SolidityAbiException] for invalid input.
   static bool ensureBoolean(dynamic value) {
     if (value is! bool) {
-      throw MessageException("invalid boolean", details: {"input": value});
+      throw SolidityAbiException('Invalid data provided for boolean codec.',
+          details: {'input': value});
     }
     return value;
   }
 
   /// Ensures that the input value is a string.
-  /// Throws a MessageException for invalid input.
+  /// Throws a [SolidityAbiException] for invalid input.
   static String ensureString(dynamic value) {
     if (value is! String) {
-      throw MessageException("invalid string", details: {"input": value});
+      throw SolidityAbiException('invalid data provided for string codec.',
+          details: {'input': value});
     }
     return value;
   }
@@ -105,20 +141,19 @@ class _EIP712Utils {
   /// The struct is defined in the Eip712TypedData, and the data parameter contains field values.
   static List<int> encodeStruct(
       Eip712TypedData typedData, String type, Map<String, dynamic> data) {
-    List<String> types = [bytes32TypeName];
-    List<dynamic> inputBytes = [getMethodSigature(typedData, type)];
+    final List<String> types = [bytes32TypeName];
+    final List<dynamic> inputBytes = [getMethodSigature(typedData, type)];
 
-    for (Eip712TypeDetails field in typedData.types[type]!) {
+    for (final Eip712TypeDetails field in typedData.types[type]!) {
       if (data[field.name] == null) {
         if (typedData.version == EIP712Version.v3) continue;
-        throw MessageException(
-            'Cannot encode data: missing data for ${field.name}',
+        throw SolidityAbiException(
+            'Invalid Eip712TypedData data. data mising for field ${field.name}',
             details: {'data': data, 'field': field});
       }
 
-      dynamic value = data[field.name];
+      final dynamic value = data[field.name];
       final encodedValue = encodeValue(typedData, field.type, value);
-
       types.add(encodedValue.item1);
       inputBytes.add(encodedValue.item2);
     }
@@ -130,8 +165,8 @@ class _EIP712Utils {
   /// Recursively collects dependencies for the specified type and its subtypes.
   static List<String> getDependencies(Eip712TypedData typedData, String type,
       [List<String> dependencies = const []]) {
-    RegExpMatch? match = typeRegex.firstMatch(type);
-    String actualType = match != null ? match.group(0)! : type;
+    final RegExpMatch? match = typeRegex.firstMatch(type);
+    final String actualType = match != null ? match.group(0)! : type;
 
     if (dependencies.contains(actualType)) {
       return dependencies;
@@ -157,10 +192,10 @@ class _EIP712Utils {
   /// The type name is expected to follow the pattern `typeName[length]` where `length` is an optional integer.
   /// Returns a Tuple containing the array type and its length, or null if the type name does not match the pattern.
   static Tuple<String, int>? extractArrayType(String typeName) {
-    RegExpMatch? match = arrayRegex.firstMatch(typeName);
+    final RegExpMatch? match = arrayRegex.firstMatch(typeName);
     if (match == null) return null;
-    String arrayType = match.group(1)!;
-    int length = int.parse(match.group(2) ?? '0');
+    final String arrayType = match.group(1)!;
+    final int length = int.parse(match.group(2) ?? '0');
     return Tuple(arrayType, length);
   }
 
@@ -172,13 +207,13 @@ class _EIP712Utils {
     final isArray = extractArrayType(type);
     if (isArray != null) {
       if (data is! List) {
-        throw MessageException('Cannot encode data: value is not of array type',
+        throw SolidityAbiException('Invalid data provided for array codec.',
             details: {'input': data});
       }
 
       if (isArray.item2 > 0 && data.length != isArray.item2) {
-        throw MessageException(
-          'Cannot encode data: expected length of ${isArray.item2}, but got ${data.length}',
+        throw SolidityAbiException(
+          'Invalid array length: expected ${isArray.item2}, but got ${data.length}',
           details: {'input': data},
         );
       }
@@ -186,8 +221,9 @@ class _EIP712Utils {
       final encodedData = data
           .map((item) => encodeValue(typedData, isArray.item1, item))
           .toList();
-      List<String> types = encodedData.map((item) => item.item1).toList();
-      List<dynamic> values = encodedData.map((item) => item.item2).toList();
+      final List<String> types = encodedData.map((item) => item.item1).toList();
+      final List<dynamic> values =
+          encodedData.map((item) => item.item2).toList();
       return Tuple(bytes32TypeName,
           QuickCrypto.keccack256Hash(_EIP712Utils.abiEncode(types, values)));
     }
@@ -197,10 +233,9 @@ class _EIP712Utils {
     }
     if (type == 'string' || type == 'bytes') {
       final List<int> bytesData =
-          type == "string" ? StringUtils.encode(data) : data;
+          type == 'string' ? StringUtils.encode(data) : data;
       return Tuple(bytes32TypeName, QuickCrypto.keccack256Hash(bytesData));
     }
-
     return Tuple(type, data);
   }
 
@@ -218,8 +253,8 @@ class _EIP712Utils {
         ensureCorrectValues(types[i], inputs[i])
     ];
     final abiParams =
-        types.map((e) => AbiParameter(name: "", type: e)).toList();
-    final abi = AbiParameter(name: "", type: "tuple", components: abiParams)
+        types.map((e) => AbiParameter(name: '', type: e)).toList();
+    final abi = AbiParameter(name: '', type: 'tuple', components: abiParams)
         .abiEncode(inp);
     return abi.encoded;
   }
@@ -228,8 +263,8 @@ class _EIP712Utils {
   /// based on the provided types and inputs.
   static List<int> legacyV1encode(List<String> types, List<dynamic> inputs) {
     final abiParams =
-        types.map((e) => AbiParameter(name: "", type: e)).toList();
-    final abi = AbiParameter(name: "", type: "tuple", components: abiParams)
+        types.map((e) => AbiParameter(name: '', type: e)).toList();
+    final abi = AbiParameter(name: '', type: 'tuple', components: abiParams)
         .legacyEip712Encode(inputs, false);
     return abi.encoded;
   }
@@ -237,7 +272,8 @@ class _EIP712Utils {
   /// Generates the method signature hash for a given EIP-712 typed data and type.
   /// The method signature includes all dependencies and their corresponding types and names.
   static List<int> getMethodSigature(Eip712TypedData typedData, String type) {
-    List<String> dependencies = List.from(getDependencies(typedData, type));
+    final List<String> dependencies =
+        List.from(getDependencies(typedData, type));
     dependencies.sort();
     final encode = dependencies
         .map(

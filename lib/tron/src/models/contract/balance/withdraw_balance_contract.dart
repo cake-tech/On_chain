@@ -6,7 +6,7 @@ class WithdrawBalanceContract extends TronBaseContract {
   /// Create a new [WithdrawBalanceContract] instance by parsing a JSON map.
   factory WithdrawBalanceContract.fromJson(Map<String, dynamic> json) {
     return WithdrawBalanceContract(
-      ownerAddress: TronAddress(json["owner_address"]),
+      ownerAddress: TronAddress(json['owner_address']),
     );
   }
 
@@ -17,6 +17,7 @@ class WithdrawBalanceContract extends TronBaseContract {
     return WithdrawBalanceContract(
         ownerAddress: TronAddress.fromBytes(decode.getField(1)));
   }
+  @override
   final TronAddress ownerAddress;
 
   @override
@@ -28,7 +29,7 @@ class WithdrawBalanceContract extends TronBaseContract {
   /// Convert the [WithdrawBalanceContract] object to a JSON representation.
   @override
   Map<String, dynamic> toJson() {
-    return {"owner_address": ownerAddress};
+    return {'owner_address': ownerAddress};
   }
 
   /// Convert the [WithdrawBalanceContract] object to its string representation.

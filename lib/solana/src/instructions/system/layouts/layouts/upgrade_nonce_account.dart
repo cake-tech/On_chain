@@ -12,13 +12,14 @@ class SystemUpgradeNonceAccountLayout extends SystemProgramLayout {
     return const SystemUpgradeNonceAccountLayout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u32(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u32(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  final int instruction = 12;
+  final SystemProgramInstruction instruction =
+      SystemProgramInstruction.upgradeNonceAccount;
   @override
   Map<String, dynamic> serialize() {
     return {};

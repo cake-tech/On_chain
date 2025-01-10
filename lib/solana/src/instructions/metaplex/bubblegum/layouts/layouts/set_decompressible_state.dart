@@ -17,23 +17,23 @@ class MetaplexBubblegumSetDecompressibleStateLayout
             .setDecompressibleState.insturction);
     return MetaplexBubblegumSetDecompressibleStateLayout(
         decompressibleState:
-            DecompressibleState.fromValue(decode["decompressableState"]));
+            DecompressibleState.fromValue(decode['decompressableState']));
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "decompressableState"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'decompressableState'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexBubblegumProgramInstruction.setDecompressibleState.insturction;
+  MetaplexBubblegumProgramInstruction get instruction =>
+      MetaplexBubblegumProgramInstruction.setDecompressibleState;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"decompressableState": decompressibleState.value};
+    return {'decompressableState': decompressibleState.value};
   }
 }

@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 
 /// Enum representing the account type managed by the program
 class StakePoolAccountType {
@@ -8,15 +8,15 @@ class StakePoolAccountType {
 
   /// If the account has not been initialized, the enum will be 0
   static const StakePoolAccountType uninitialized =
-      StakePoolAccountType._("Uninitialized", 0);
+      StakePoolAccountType._('Uninitialized', 0);
 
   /// Stake pool
   static const StakePoolAccountType stakePool =
-      StakePoolAccountType._("StakePool", 1);
+      StakePoolAccountType._('StakePool', 1);
 
   /// Validator stake list
   static const StakePoolAccountType validatorList =
-      StakePoolAccountType._("ValidatorList", 2);
+      StakePoolAccountType._('ValidatorList', 2);
 
   static const List<StakePoolAccountType> values = [
     uninitialized,
@@ -25,28 +25,28 @@ class StakePoolAccountType {
   ];
 
   factory StakePoolAccountType.fromJson(Map<String, dynamic> json) {
-    return StakePoolAccountType.fromName(json["tokenState"]["key"]);
+    return StakePoolAccountType.fromName(json['tokenState']['key']);
   }
 
   factory StakePoolAccountType.fromName(String? value) {
     return values.firstWhere(
       (element) => element.name == value,
-      orElse: () => throw MessageException(
-          "No StakePoolAccountType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw SolanaPluginException(
+          'No StakePoolAccountType found matching the specified value',
+          details: {'value': value}),
     );
   }
   factory StakePoolAccountType.fromValue(int? value) {
     return values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw MessageException(
-          "No StakePoolAccountType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw SolanaPluginException(
+          'No StakePoolAccountType found matching the specified value',
+          details: {'value': value}),
     );
   }
 
   @override
   String toString() {
-    return "StakePoolAccountType.$name";
+    return 'StakePoolAccountType.$name';
   }
 }

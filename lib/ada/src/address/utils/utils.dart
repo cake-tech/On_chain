@@ -2,6 +2,7 @@ import 'package:blockchain_utils/bip/address/ada/ada.dart';
 import 'package:blockchain_utils/bip/address/addr_key_validator.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/ada/src/address/era/core/address.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/models/credential/core/stake_cred.dart';
 import 'package:on_chain/ada/src/models/credential/core/stake_cred_type.dart';
 import 'package:on_chain/ada/src/models/credential/key.dart';
@@ -20,11 +21,11 @@ class AdaAddressUtils {
   static AdaGenericAddrDecoderResult decodeAddres(String address,
       {ADAAddressType? addrType, ADANetwork? network}) {
     final decodeAddr =
-        AdaGenericAddrDecoder().decode(address, {"net_tag": network});
+        AdaGenericAddrDecoder().decode(address, {'net_tag': network});
     if (addrType != null) {
       if (decodeAddr.type.header != addrType.header) {
-        throw MessageException("Incorrect address type. ",
-            details: {"Excepted": addrType.name, "type": decodeAddr.type});
+        throw ADAPluginException('Incorrect address type. ',
+            details: {'Excepted': addrType.name, 'type': decodeAddr.type});
       }
     }
     return decodeAddr;
@@ -57,10 +58,10 @@ class AdaAddressUtils {
     bool keepPrefix = true,
   }) {
     final decode =
-        AdaGenericAddrDecoder().decode(address, {"net_tag": network});
+        AdaGenericAddrDecoder().decode(address, {'net_tag': network});
     if (decode.type == ADAAddressType.byron) {
-      throw MessageException("Invalid shelly address.",
-          details: {"address": address, "type": decode.type});
+      throw ADAPluginException('Invalid shelly address.',
+          details: {'address': address, 'type': decode.type});
     }
     if (keepPrefix) {
       return decode.addressBytes;
@@ -133,7 +134,7 @@ class AdaAddressUtils {
     return decodeAddr.type;
   }
 
-  static const String _poolIdHrp = "pool";
+  static const String _poolIdHrp = 'pool';
 
   /// Decode a Bech32-encoded pool ID string to bytes.
   ///

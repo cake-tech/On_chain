@@ -16,23 +16,23 @@ class MetaplexCandyMachineMintV2Layout
         bytes: data,
         instruction: MetaplexCandyMachineProgramInstruction.mintV2.insturction);
     return MetaplexCandyMachineMintV2Layout(
-        mintArgs: (decode["mintArgs"] as List).cast(), group: decode["group"]);
+        mintArgs: (decode['mintArgs'] as List).cast(), group: decode['group']);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.vecU8(property: "mintArgs"),
-    LayoutConst.optional(LayoutConst.string(), property: "group")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.vecU8(property: 'mintArgs'),
+    LayoutConst.optional(LayoutConst.string(), property: 'group')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.mintV2.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.mintV2;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"group": group, "mintArgs": mintArgs};
+    return {'group': group, 'mintArgs': mintArgs};
   }
 }

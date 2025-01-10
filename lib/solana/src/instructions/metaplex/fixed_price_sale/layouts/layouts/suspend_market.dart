@@ -15,14 +15,14 @@ class MetaplexFixedPriceSaleSuspendMarketLayout
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.suspendMarket.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.suspendMarket;
 
   @override
   Map<String, dynamic> serialize() {

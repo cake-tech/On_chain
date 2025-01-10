@@ -2,6 +2,7 @@ import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/ada/src/address/era/core/address.dart';
 import 'package:on_chain/ada/src/address/era/shelly/shelly.dart';
 import 'package:on_chain/ada/src/address/utils/utils.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 import 'package:on_chain/ada/src/models/credential/core/stake_cred.dart';
 
@@ -30,8 +31,8 @@ abstract class ADAShellyAddress extends ADAAddress {
       case ADAAddressType.enterprise:
         return ADAEnterpriseAddress(address, network: network);
       default:
-        throw const MessageException(
-            "Invalid shelly address. for byron address please use ByronAddress.");
+        throw const ADAPluginException(
+            'Invalid shelly address. for byron address please use ByronAddress.');
     }
   }
 
@@ -42,12 +43,12 @@ abstract class ADAShellyAddress extends ADAAddress {
 
   /// Deserializes a CBOR object into an ADAShellyAddress instance.
   static T deserialize<T extends ADAShellyAddress>(CborBytesValue cbor) {
-    ADAAddress address = ADAAddress.deserialize(cbor);
+    final address = ADAAddress.deserialize(cbor);
     if (address is! T) {
-      throw MessageException("Invalid address type.", details: {
-        "Excepted": "$T",
-        "Type": address.runtimeType,
-        "address": address.address
+      throw ADAPluginException('Invalid address type.', details: {
+        'Excepted': '$T',
+        'Type': address.runtimeType,
+        'address': address.address
       });
     }
     return address;

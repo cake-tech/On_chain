@@ -37,11 +37,11 @@ class AuxiliaryData with ADASerialization {
       return AuxiliaryData(
         metadata: cbor
             .getIndex<CborObject?>(0)
-            ?.to<GeneralTransactionMetadata, CborMapValue>(
+            ?.castTo<GeneralTransactionMetadata, CborMapValue>(
                 (e) => GeneralTransactionMetadata.deserialize(e)),
         nativeScripts: cbor
             .getIndex<CborObject?>(1)
-            ?.to<List<NativeScript>, CborListValue>((e) =>
+            ?.castTo<List<NativeScript>, CborListValue>((e) =>
                 e.value.map((i) => NativeScript.deserialize(i)).toList()),
       );
     } else {
@@ -51,19 +51,19 @@ class AuxiliaryData with ADASerialization {
           preferAlonzoFormat: true,
           metadata: cobrList
               .getValueFromIntKey<CborObject?>(0)
-              ?.to<GeneralTransactionMetadata, CborMapValue>(
+              ?.castTo<GeneralTransactionMetadata, CborMapValue>(
                   (e) => GeneralTransactionMetadata.deserialize(e)),
           nativeScripts: cobrList
               .getValueFromIntKey<CborObject?>(1)
-              ?.to<List<NativeScript>, CborListValue>((e) =>
+              ?.castTo<List<NativeScript>, CborListValue>((e) =>
                   e.value.map((i) => NativeScript.deserialize(i)).toList()),
           plutusScripts: cobrList
               .getValueFromIntKey<CborObject?>(2)
-              ?.to<List<PlutusScript>, CborListValue>((e) {
+              ?.castTo<List<PlutusScript>, CborListValue>((e) {
             final v1 = e.value.map((i) => PlutusScript.deserialize(i)).toList();
             final v2 = cobrList
                 .getValueFromIntKey<CborObject?>(3)
-                ?.to<List<PlutusScript>, CborListValue>((e) {
+                ?.castTo<List<PlutusScript>, CborListValue>((e) {
               return e.value
                   .map((i) =>
                       PlutusScript.deserialize(i, language: Language.plutusV2))
@@ -75,16 +75,16 @@ class AuxiliaryData with ADASerialization {
   }
   factory AuxiliaryData.fromJson(Map<String, dynamic> json) {
     return AuxiliaryData(
-        metadata: json["metadata"] == null
+        metadata: json['metadata'] == null
             ? null
-            : GeneralTransactionMetadata.fromJson(json["metadata"]),
-        nativeScripts: (json["native_scripts"] as List?)
+            : GeneralTransactionMetadata.fromJson(json['metadata']),
+        nativeScripts: (json['native_scripts'] as List?)
             ?.map((e) => NativeScript.fromJson(e))
             .toList(),
-        plutusScripts: (json["plutusScripts"] as List?)
+        plutusScripts: (json['plutusScripts'] as List?)
             ?.map((e) => PlutusScript.fromJson(e))
             .toList(),
-        preferAlonzoFormat: json["prefer_alonzo_format"]);
+        preferAlonzoFormat: json['prefer_alonzo_format']);
   }
 
   AuxiliaryData copyWith({
@@ -143,10 +143,10 @@ class AuxiliaryData with ADASerialization {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "metadata": metadata?.toJson(),
-      "native_scripts": nativeScripts?.map((e) => e.toJson()).toList(),
-      "plutus_scripts": plutusScripts?.map((e) => e.toJson()).toList(),
-      "prefer_alonzo_format": preferAlonzoFormat
+      'metadata': metadata?.toJson(),
+      'native_scripts': nativeScripts?.map((e) => e.toJson()).toList(),
+      'plutus_scripts': plutusScripts?.map((e) => e.toJson()).toList(),
+      'prefer_alonzo_format': preferAlonzoFormat
     };
   }
 }

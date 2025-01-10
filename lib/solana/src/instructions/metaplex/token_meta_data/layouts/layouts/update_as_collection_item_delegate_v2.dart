@@ -20,32 +20,32 @@ class MetaplexTokenMetaDataUpdateAsCollectionItemDelegateV2Layout
         instruction: MetaplexTokenMetaDataProgramInstruction
             .updateAsCollectionItemDelegateV2.insturction);
     return MetaplexTokenMetaDataUpdateAsCollectionItemDelegateV2Layout(
-        collection: CollectionToggle.fromJson(decode["collection"]),
-        authorizationData: decode["authorizationData"] == null
+        collection: CollectionToggle.fromJson(decode['collection']),
+        authorizationData: decode['authorizationData'] == null
             ? null
-            : Payload.fromJson(decode["authorizationData"]));
+            : Payload.fromJson(decode['authorizationData']));
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "discriminator"),
-    LayoutConst.wrap(CollectionToggle.staticLayout, property: "collection"),
-    LayoutConst.optional(Payload.staticLayout, property: "authorizationData")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'discriminator'),
+    LayoutConst.wrap(CollectionToggle.staticLayout, property: 'collection'),
+    LayoutConst.optional(Payload.staticLayout, property: 'authorizationData')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .updateAsCollectionItemDelegateV2.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.updateAsCollectionItemDelegateV2;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "authorizationData": authorizationData?.serialize(),
-      "discriminator": discriminator,
-      "collection": collection.serialize()
+      'authorizationData': authorizationData?.serialize(),
+      'discriminator': discriminator,
+      'collection': collection.serialize()
     };
   }
 }

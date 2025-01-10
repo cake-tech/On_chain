@@ -17,31 +17,31 @@ class MetaplexAuctioneerDepositLayout extends MetaplexAuctioneerProgramLayout {
         bytes: data,
         instruction: MetaplexAuctioneerProgramInstruction.deposit.insturction);
     return MetaplexAuctioneerDepositLayout(
-        amount: decode["amount"],
-        auctioneerAuthorityBump: decode["auctioneerAuthorityBump"],
-        escrowPaymentBump: decode["escrowPaymentBump"]);
+        amount: decode['amount'],
+        auctioneerAuthorityBump: decode['auctioneerAuthorityBump'],
+        escrowPaymentBump: decode['escrowPaymentBump']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "escrowPaymentBump"),
-    LayoutConst.u8(property: "auctioneerAuthorityBump"),
-    LayoutConst.u64(property: "amount"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'escrowPaymentBump'),
+    LayoutConst.u8(property: 'auctioneerAuthorityBump'),
+    LayoutConst.u64(property: 'amount'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctioneerProgramInstruction.deposit.insturction;
+  MetaplexAuctioneerProgramInstruction get instruction =>
+      MetaplexAuctioneerProgramInstruction.deposit;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "escrowPaymentBump": escrowPaymentBump,
-      "auctioneerAuthorityBump": auctioneerAuthorityBump,
-      "amount": amount
+      'escrowPaymentBump': escrowPaymentBump,
+      'auctioneerAuthorityBump': auctioneerAuthorityBump,
+      'amount': amount
     };
   }
 }

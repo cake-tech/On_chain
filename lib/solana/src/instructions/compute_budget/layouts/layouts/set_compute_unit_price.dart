@@ -19,23 +19,28 @@ class ComputeBudgetSetComputeUnitPriceLayout
         instruction:
             ComputeBudgetProgramInstruction.setComputeUnitPrice.insturction);
     return ComputeBudgetSetComputeUnitPriceLayout(
-        microLamports: decode["microLamports"]);
+        microLamports: decode['microLamports']);
   }
   // StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "microLamports"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'microLamports'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      ComputeBudgetProgramInstruction.setComputeUnitPrice.insturction;
+  ComputeBudgetProgramInstruction get instruction =>
+      ComputeBudgetProgramInstruction.setComputeUnitPrice;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"microLamports": microLamports};
+    return {'microLamports': microLamports};
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'microLamports': microLamports.toString()};
   }
 }

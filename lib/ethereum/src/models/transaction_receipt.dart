@@ -1,5 +1,5 @@
 import 'package:on_chain/ethereum/src/models/log_entry.dart';
-import 'package:on_chain/utils/number_utils.dart';
+import 'package:on_chain/utils/utils/number_utils.dart';
 
 /// Represents the receipt of an Ethereum transaction.
 class TransactionReceipt {
@@ -66,7 +66,7 @@ class TransactionReceipt {
   /// Creates a [TransactionReceipt] instance from a JSON map.
   factory TransactionReceipt.fromJson(Map<String, dynamic> json) {
     final List<LogEntry> logs =
-        (json["logs"] as List?)?.map((e) => LogEntry.fromJson(e)).toList() ??
+        (json['logs'] as List?)?.map((e) => LogEntry.fromJson(e)).toList() ??
             <LogEntry>[];
     return TransactionReceipt(
       logs: logs,

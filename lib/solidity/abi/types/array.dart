@@ -1,4 +1,4 @@
-part of "package:on_chain/solidity/abi/abi.dart";
+part of 'package:on_chain/solidity/abi/abi.dart';
 
 /// ABICoder implementation for encoding and decoding arrays of arbitrary types.
 class ArrayCoder implements ABICoder<List<dynamic>> {
@@ -11,9 +11,9 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
     final encodedParams = input.map((e) => param.item1.abiEncode(e)).toList();
     final dynamicItems =
         encodedParams.isNotEmpty && encodedParams.first.isDynamic;
-    bool isDynamic = param.item2 == -1;
+    final bool isDynamic = param.item2 == -1;
     if (!isDynamic && input.length != param.item2) {
-      throw _ABIValidator.invalidArgrumentsLength;
+      throw const SolidityAbiException('Invalid argument length detected.');
     }
     if (isDynamic || dynamicItems) {
       final encode = _ABIUtils.encodeDynamicParams(encodedParams);
@@ -23,13 +23,16 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
             .encoded;
         return EncoderResult(
             isDynamic: true,
-            encoded: encodedParams.isEmpty ? length : [...length, ...encode]);
+            encoded: encodedParams.isEmpty ? length : [...length, ...encode],
+            name: params.name);
       }
-      return EncoderResult(isDynamic: true, encoded: encode);
+      return EncoderResult(isDynamic: true, encoded: encode, name: params.name);
     }
     final resultBytes = encodedParams.map((e) => e.encoded);
     return EncoderResult(
-        isDynamic: false, encoded: [for (final i in resultBytes) ...i]);
+        isDynamic: false,
+        encoded: [for (final i in resultBytes) ...i],
+        name: params.name);
   }
 
   /// Decodes an ABI-encoded array of arbitrary types.
@@ -39,7 +42,7 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
     int consumed = 0;
     int size = extract.item2;
     List<int> remainingBytes = List<int>.from(bytes);
-    List<dynamic> result = [];
+    final List<dynamic> result = [];
     if (size.isNegative) {
       final length = const NumbersCoder().decode(AbiParameter.uint32, bytes);
       size = length.result.toInt();
@@ -56,7 +59,8 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
         consumed += decodeChild.consumed;
         result.add(decodeChild.result);
       }
-      return DecoderResult(result: result, consumed: consumed);
+      return DecoderResult(
+          result: result, consumed: consumed, name: params.name);
     }
     for (int i = 0; i < size; i++) {
       final decodeChild = _ABIUtils.decodeParamFromAbiParameter(
@@ -64,7 +68,7 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
       consumed += decodeChild.consumed;
       result.add(decodeChild.result);
     }
-    return DecoderResult(result: result, consumed: consumed);
+    return DecoderResult(result: result, consumed: consumed, name: params.name);
   }
 
   /// Legacy EIP-712 encoding for arrays of arbitrary types.
@@ -77,6 +81,8 @@ class ArrayCoder implements ABICoder<List<dynamic>> {
         input.map((e) => param.item1.legacyEip712Encode(e, true)).toList();
     final resultBytes = encodedParams.map((e) => e.encoded);
     return EncoderResult(
-        isDynamic: false, encoded: [for (final i in resultBytes) ...i]);
+        isDynamic: false,
+        encoded: [for (final i in resultBytes) ...i],
+        name: params.name);
   }
 }

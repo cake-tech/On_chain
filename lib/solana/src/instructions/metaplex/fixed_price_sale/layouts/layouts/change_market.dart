@@ -18,11 +18,11 @@ class MetaplexFixedPriceSaleChangeMarketLayout
         instruction:
             MetaplexFixedPriceSaleProgramInstruction.changeMarket.insturction);
     return MetaplexFixedPriceSaleChangeMarketLayout(
-        newName: decode["newName"],
-        newDescription: decode["newDescription"],
-        mutable: decode["mutable"],
-        newPrice: decode["newPrice"],
-        newPiecesInOneWallet: decode["newPiecesInOneWallet"]);
+        newName: decode['newName'],
+        newDescription: decode['newDescription'],
+        mutable: decode['mutable'],
+        newPrice: decode['newPrice'],
+        newPiecesInOneWallet: decode['newPiecesInOneWallet']);
   }
   final String? newName;
   final String? newDescription;
@@ -32,29 +32,29 @@ class MetaplexFixedPriceSaleChangeMarketLayout
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.optional(LayoutConst.string(), property: "newName"),
-    LayoutConst.optional(LayoutConst.string(), property: "newDescription"),
-    LayoutConst.optional(LayoutConst.boolean(), property: "mutable"),
-    LayoutConst.optional(LayoutConst.u64(), property: "newPrice"),
-    LayoutConst.optional(LayoutConst.u64(), property: "newPiecesInOneWallet"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.optional(LayoutConst.string(), property: 'newName'),
+    LayoutConst.optional(LayoutConst.string(), property: 'newDescription'),
+    LayoutConst.optional(LayoutConst.boolean(), property: 'mutable'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'newPrice'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'newPiecesInOneWallet'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.changeMarket.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.changeMarket;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "newName": newName,
-      "newDescription": newDescription,
-      "mutable": mutable,
-      "newPrice": newPrice,
-      "newPiecesInOneWallet": newPiecesInOneWallet
+      'newName': newName,
+      'newDescription': newDescription,
+      'mutable': mutable,
+      'newPrice': newPrice,
+      'newPiecesInOneWallet': newPiecesInOneWallet
     };
   }
 }

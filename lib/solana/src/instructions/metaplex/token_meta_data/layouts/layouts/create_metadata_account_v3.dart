@@ -23,34 +23,34 @@ class MetaplexTokenMetaDataCreateMetadataAccountV3Layout
         instruction: MetaplexTokenMetaDataProgramInstruction
             .createMetadataAccountV3.insturction);
     return MetaplexTokenMetaDataCreateMetadataAccountV3Layout(
-        metaDataV2: MetaDataV2.fromJson(decode["metaDataV2"]),
-        isMutable: decode["isMutable"],
-        collectionDetailsV1: decode["collectionDetails"] == null
+        metaDataV2: MetaDataV2.fromJson(decode['metaDataV2']),
+        isMutable: decode['isMutable'],
+        collectionDetailsV1: decode['collectionDetails'] == null
             ? null
-            : CollectionDetailsV1.fromJson(decode["collectionDetails"]));
+            : CollectionDetailsV1.fromJson(decode['collectionDetails']));
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
     MetaDataV2.staticLayout,
-    LayoutConst.boolean(property: "isMutable"),
+    LayoutConst.boolean(property: 'isMutable'),
     LayoutConst.optional(CollectionDetailsV1.staticLayout,
-        property: "collectionDetails"),
+        property: 'collectionDetails'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .createMetadataAccountV3.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.createMetadataAccountV3;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "metaDataV2": metaDataV2.serialize(),
-      "isMutable": isMutable,
-      "collectionDetails": collectionDetailsV1?.serialize()
+      'metaDataV2': metaDataV2.serialize(),
+      'isMutable': isMutable,
+      'collectionDetails': collectionDetailsV1?.serialize()
     };
   }
 }

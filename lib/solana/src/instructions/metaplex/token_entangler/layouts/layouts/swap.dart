@@ -14,14 +14,14 @@ class MetaplexTokenEntanglerSwapLayout
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexTokenEntanglerProgramInstruction.swap.insturction;
+  MetaplexTokenEntanglerProgramInstruction get instruction =>
+      MetaplexTokenEntanglerProgramInstruction.swap;
 
   @override
   Map<String, dynamic> serialize() {

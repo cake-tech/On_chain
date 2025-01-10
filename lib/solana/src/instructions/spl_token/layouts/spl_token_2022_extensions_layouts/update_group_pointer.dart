@@ -17,29 +17,29 @@ class SPLToken2022UpdateGroupPointerLayout extends SPLTokenProgramLayout {
       instruction: SPLTokenProgramInstruction.groupPointerExtension.insturction,
     );
     return SPLToken2022UpdateGroupPointerLayout(
-        groupAddress: decode["groupAddress"] == SolAddress.defaultPubKey
+        groupAddress: decode['groupAddress'] == SolAddress.defaultPubKey
             ? null
-            : decode["groupAddress"]);
+            : decode['groupAddress']);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
     LayoutConst.wrap(GroupPointerInstruction.staticLayout,
-        property: "groupPointer"),
-    SolanaLayoutUtils.publicKey("groupAddress"),
+        property: 'groupPointer'),
+    SolanaLayoutUtils.publicKey('groupAddress'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.groupPointerExtension.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.groupPointerExtension;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "groupPointer": GroupPointerInstruction.update.serialize(),
-      "groupAddress": groupAddress ?? SolAddress.defaultPubKey
+      'groupPointer': GroupPointerInstruction.update.serialize(),
+      'groupAddress': groupAddress ?? SolAddress.defaultPubKey
     };
   }
 }

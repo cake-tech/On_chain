@@ -15,13 +15,13 @@ class SystemAdvanceNonceLayout extends SystemProgramLayout {
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u32(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u32(property: 'instruction')]);
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      SystemProgramInstruction.advanceNonceAccount.insturction;
+  SystemProgramInstruction get instruction =>
+      SystemProgramInstruction.advanceNonceAccount;
   @override
   Map<String, dynamic> serialize() {
     return {};

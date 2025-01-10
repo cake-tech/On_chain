@@ -16,11 +16,11 @@ class SPLToken2022InterestBearingMintInitializeLayout
       {required this.rate, required this.rateAuthority});
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
     LayoutConst.wrap(InterestBearingMintInstruction.staticLayout,
-        property: "interestBearingMint"),
-    SolanaLayoutUtils.publicKey("rateAuthority"),
-    LayoutConst.u16(property: "rate"),
+        property: 'interestBearingMint'),
+    SolanaLayoutUtils.publicKey('rateAuthority'),
+    LayoutConst.u16(property: 'rate'),
   ]);
 
   factory SPLToken2022InterestBearingMintInitializeLayout.fromBuffer(
@@ -31,23 +31,23 @@ class SPLToken2022InterestBearingMintInitializeLayout
         instruction: SPLTokenProgramInstruction
             .interestBearingMintExtension.insturction);
     return SPLToken2022InterestBearingMintInitializeLayout(
-        rate: decode["rate"], rateAuthority: decode["rateAuthority"]);
+        rate: decode['rate'], rateAuthority: decode['rateAuthority']);
   }
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.interestBearingMintExtension.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.interestBearingMintExtension;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "interestBearingMint":
+      'interestBearingMint':
           InterestBearingMintInstruction.initialize.serialize(),
-      "rate": rate,
-      "rateAuthority": rateAuthority
+      'rate': rate,
+      'rateAuthority': rateAuthority
     };
   }
 }

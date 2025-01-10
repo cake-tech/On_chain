@@ -1,5 +1,5 @@
 /// Library for Ethereum-related functionality and utilities.
-library onchain_ethereum;
+library;
 
 /// Export individual components for ease of use.
 ///
@@ -23,3 +23,6 @@ export 'src/transaction/transaction.dart';
 
 /// General Ethereum-related helper functions
 export 'src/utils/helper.dart';
+
+/// All related ethereum exception
+export 'src/exception/exception.dart';

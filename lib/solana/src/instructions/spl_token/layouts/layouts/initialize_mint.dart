@@ -25,10 +25,10 @@ class SPLTokenInitializeMintLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenInitializeMintLayout.
   static final StructLayout staticLayout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "decimals"),
-    SolanaLayoutUtils.publicKey("mintAuthority"),
-    SolanaLayoutUtils.optionPubkey(property: "freezeAuthority", keepSize: true)
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'decimals'),
+    SolanaLayoutUtils.publicKey('mintAuthority'),
+    SolanaLayoutUtils.optionPubkey(property: 'freezeAuthority', keepSize: true)
   ]);
 
   /// Constructs an SPLTokenInitializeMintLayout instance from buffer.
@@ -38,9 +38,9 @@ class SPLTokenInitializeMintLayout extends SPLTokenProgramLayout {
         bytes: bytes,
         instruction: SPLTokenProgramInstruction.initializeMint.insturction);
     return SPLTokenInitializeMintLayout(
-      freezeAuthority: decode["freezeAuthority"],
-      decimals: decode["decimals"],
-      mintAuthority: decode["mintAuthority"],
+      freezeAuthority: decode['freezeAuthority'],
+      decimals: decode['decimals'],
+      mintAuthority: decode['mintAuthority'],
     );
   }
 
@@ -50,15 +50,16 @@ class SPLTokenInitializeMintLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.initializeMint.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.initializeMint;
 
   /// Serializes the layout.
   @override
   Map<String, dynamic> serialize() {
     return {
-      "mintAuthority": mintAuthority,
-      "decimals": decimals,
-      "freezeAuthority": freezeAuthority,
+      'mintAuthority': mintAuthority,
+      'decimals': decimals,
+      'freezeAuthority': freezeAuthority,
     };
   }
 }

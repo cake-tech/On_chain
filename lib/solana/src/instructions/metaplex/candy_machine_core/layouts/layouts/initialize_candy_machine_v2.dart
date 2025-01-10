@@ -18,28 +18,28 @@ class MetaplexCandyMachineInitializeCandyMachineV2Layout
         instruction: MetaplexCandyMachineProgramInstruction
             .initializeCandyMachineV2.insturction);
     return MetaplexCandyMachineInitializeCandyMachineV2Layout(
-        data: CandyMachineData.fromJson(decode["candyMachineData"]),
-        tokenStandard: MetaDataTokenStandard.fromJson(decode["tokenStandard"]));
+        data: CandyMachineData.fromJson(decode['candyMachineData']),
+        tokenStandard: MetaDataTokenStandard.fromJson(decode['tokenStandard']));
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
+    LayoutConst.blob(8, property: 'instruction'),
     CandyMachineData.staticLayout,
     LayoutConst.wrap(MetaDataTokenStandard.staticLayout,
-        property: "tokenStandard")
+        property: 'tokenStandard')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction => MetaplexCandyMachineProgramInstruction
-      .initializeCandyMachineV2.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.initializeCandyMachineV2;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "candyMachineData": data.serialize(),
-      "tokenStandard": tokenStandard.serialize()
+      'candyMachineData': data.serialize(),
+      'tokenStandard': tokenStandard.serialize()
     };
   }
 }

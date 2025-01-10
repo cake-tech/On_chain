@@ -21,38 +21,39 @@ class VoteProgramInitializeAccountLayout extends VoteProgramLayout {
         layout: _layout,
         bytes: data,
         instruction: VoteProgramInstruction.initializeAccount.insturction);
-    final voteData = Map<String, dynamic>.from(decode["voteInit"]);
+    final voteData = Map<String, dynamic>.from(decode['voteInit']);
     return VoteProgramInitializeAccountLayout(
-      nodePubkey: voteData["nodePubkey"],
-      authorizedVoter: voteData["authorizedVoter"],
-      authorizedWithdrawer: voteData["authorizedWithdrawer"],
-      commission: voteData["commission"],
+      nodePubkey: voteData['nodePubkey'],
+      authorizedVoter: voteData['authorizedVoter'],
+      authorizedWithdrawer: voteData['authorizedWithdrawer'],
+      commission: voteData['commission'],
     );
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u32(property: "instruction"),
+    LayoutConst.u32(property: 'instruction'),
     LayoutConst.struct([
-      SolanaLayoutUtils.publicKey("nodePubkey"),
-      SolanaLayoutUtils.publicKey("authorizedVoter"),
-      SolanaLayoutUtils.publicKey("authorizedWithdrawer"),
-      LayoutConst.u8(property: "commission")
-    ], property: "voteInit")
+      SolanaLayoutUtils.publicKey('nodePubkey'),
+      SolanaLayoutUtils.publicKey('authorizedVoter'),
+      SolanaLayoutUtils.publicKey('authorizedWithdrawer'),
+      LayoutConst.u8(property: 'commission')
+    ], property: 'voteInit')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => VoteProgramInstruction.initializeAccount.insturction;
+  VoteProgramInstruction get instruction =>
+      VoteProgramInstruction.initializeAccount;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "voteInit": {
-        "nodePubkey": nodePubkey,
-        "authorizedVoter": authorizedVoter,
-        "authorizedWithdrawer": authorizedWithdrawer,
-        "commission": commission
+      'voteInit': {
+        'nodePubkey': nodePubkey,
+        'authorizedVoter': authorizedVoter,
+        'authorizedWithdrawer': authorizedWithdrawer,
+        'commission': commission
       }
     };
   }

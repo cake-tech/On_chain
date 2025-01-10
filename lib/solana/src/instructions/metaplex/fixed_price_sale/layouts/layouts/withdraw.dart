@@ -14,31 +14,31 @@ class MetaplexFixedPriceSaleWithdrawLayout
         instruction:
             MetaplexFixedPriceSaleProgramInstruction.withdraw.insturction);
     return MetaplexFixedPriceSaleWithdrawLayout(
-        treasuryOwnerBump: decode["treasuryOwnerBump"],
-        payoutTicketBump: decode["payoutTicketBump"]);
+        treasuryOwnerBump: decode['treasuryOwnerBump'],
+        payoutTicketBump: decode['payoutTicketBump']);
   }
   final int treasuryOwnerBump;
   final int payoutTicketBump;
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "treasuryOwnerBump"),
-    LayoutConst.u8(property: "payoutTicketBump")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'treasuryOwnerBump'),
+    LayoutConst.u8(property: 'payoutTicketBump')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.withdraw.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.withdraw;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "treasuryOwnerBump": treasuryOwnerBump,
-      "payoutTicketBump": payoutTicketBump
+      'treasuryOwnerBump': treasuryOwnerBump,
+      'payoutTicketBump': payoutTicketBump
     };
   }
 }

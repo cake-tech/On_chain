@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:blockchain_utils/layout/layout.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/instructions/instructions.dart';
@@ -15,12 +15,12 @@ class _Utils {
   static Map<String, dynamic> decode(List<int> extensionData) {
     try {
       if (extensionData.length < accountSize) {
-        throw MessageException("Account data length is insufficient.",
-            details: {"Expected": accountSize, "length": extensionData.length});
+        throw SolanaPluginException('Account data length is insufficient.',
+            details: {'Expected': accountSize, 'length': extensionData.length});
       }
       return LayoutSerializable.decode(bytes: extensionData, layout: layout);
     } catch (e) {
-      throw const MessageException("Invalid extionsion bytes");
+      throw const SolanaPluginException('Invalid extionsion bytes');
     }
   }
 
@@ -33,7 +33,7 @@ class _Utils {
               type: SolanaTokenAccountType.mint);
       return LayoutSerializable.decode(bytes: extensionBytes, layout: layout);
     } catch (e) {
-      throw const MessageException("Invalid extionsion bytes");
+      throw const SolanaPluginException('Invalid extionsion bytes');
     }
   }
 }
@@ -44,22 +44,22 @@ class PermanentDelegate extends LayoutSerializable {
 
   factory PermanentDelegate.fromBuffer(List<int> extensionData) {
     final decode = _Utils.decode(extensionData);
-    return PermanentDelegate(delegate: decode["delegate"]);
+    return PermanentDelegate(delegate: decode['delegate']);
   }
   factory PermanentDelegate.fromAccountBytes(List<int> accountBytes) {
     final decode = _Utils.decodeFromAccount(accountBytes);
-    return PermanentDelegate(delegate: decode["delegate"]);
+    return PermanentDelegate(delegate: decode['delegate']);
   }
 
   @override
   StructLayout get layout => _Utils.layout;
   @override
   Map<String, dynamic> serialize() {
-    return {"delegate": delegate};
+    return {'delegate': delegate};
   }
 
   @override
   String toString() {
-    return "PermanentDelegate${serialize()}";
+    return 'PermanentDelegate${serialize()}';
   }
 }

@@ -19,9 +19,9 @@ class SPLTokenApproveCheckedLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenApproveCheckedLayout.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "amount"),
-    LayoutConst.u8(property: "decimals")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'amount'),
+    LayoutConst.u8(property: 'decimals')
   ]);
 
   /// Constructs an SPLTokenApproveCheckedLayout instance from buffer.
@@ -31,7 +31,7 @@ class SPLTokenApproveCheckedLayout extends SPLTokenProgramLayout {
         bytes: bytes,
         instruction: SPLTokenProgramInstruction.approveChecked.insturction);
     return SPLTokenApproveCheckedLayout(
-        amount: decode["amount"], decimals: decode["decimals"]);
+        amount: decode['amount'], decimals: decode['decimals']);
   }
 
   /// Gets the layout structure.
@@ -40,11 +40,12 @@ class SPLTokenApproveCheckedLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.approveChecked.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.approveChecked;
 
   /// Serializes the layout.
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount, "decimals": decimals};
+    return {'amount': amount, 'decimals': decimals};
   }
 }

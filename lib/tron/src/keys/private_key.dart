@@ -1,7 +1,7 @@
-import 'package:blockchain_utils/exception/exception.dart';
 import 'package:blockchain_utils/utils/utils.dart';
 import 'package:blockchain_utils/bip/ecc/keys/secp256k1_keys_ecdsa.dart';
 import 'package:blockchain_utils/signer/tron/tron_signer.dart';
+import 'package:on_chain/tron/src/exception/exception.dart';
 
 import 'public_key.dart';
 
@@ -26,8 +26,8 @@ class TronPrivateKey {
       return TronPrivateKey._(key);
     } catch (e) {
       // Throw a MessageException with details if an error occurs during the creation
-      throw MessageException("invalid tron private key",
-          details: {"input": BytesUtils.toHexString(keyBytes)});
+      throw TronPluginException('invalid tron private key',
+          details: {'input': BytesUtils.toHexString(keyBytes)});
     }
   }
 
@@ -65,6 +65,6 @@ class TronPrivateKey {
 
   @override
   String toString() {
-    return "privatekey: ${toHex().substring(0, 5)}...\npublicKey: ${publicKey().toHex()}";
+    return 'privatekey: ${toHex().substring(0, 5)}...\npublicKey: ${publicKey().toHex()}';
   }
 }

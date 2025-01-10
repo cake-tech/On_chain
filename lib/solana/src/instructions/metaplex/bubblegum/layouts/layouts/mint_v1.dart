@@ -12,21 +12,21 @@ class MetaplexBubblegumMintV1Layout extends MetaplexBubblegumProgramLayout {
         bytes: data,
         instruction: MetaplexBubblegumProgramInstruction.mintV1.insturction);
     return MetaplexBubblegumMintV1Layout(
-        message: MetaData.fromJson(decode["metaData"]));
+        message: MetaData.fromJson(decode['metaData']));
   }
 
   static final StructLayout _layout = LayoutConst.struct(
-      [LayoutConst.blob(8, property: "instruction"), MetaData.staticLayout]);
+      [LayoutConst.blob(8, property: 'instruction'), MetaData.staticLayout]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexBubblegumProgramInstruction.mintV1.insturction;
+  MetaplexBubblegumProgramInstruction get instruction =>
+      MetaplexBubblegumProgramInstruction.mintV1;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"metaData": message.serialize()};
+    return {'metaData': message.serialize()};
   }
 }

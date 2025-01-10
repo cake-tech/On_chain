@@ -17,22 +17,22 @@ class TokenLendingSetLendingMarketOwnerLayout
         bytes: data,
         instruction:
             TokenLendingProgramInstruction.setLendingMarketOwner.insturction);
-    return TokenLendingSetLendingMarketOwnerLayout(newOwner: decode["owner"]);
+    return TokenLendingSetLendingMarketOwnerLayout(newOwner: decode['owner']);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    SolanaLayoutUtils.publicKey("newOwner")
+    LayoutConst.u8(property: 'instruction'),
+    SolanaLayoutUtils.publicKey('newOwner')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      TokenLendingProgramInstruction.setLendingMarketOwner.insturction;
+  TokenLendingProgramInstruction get instruction =>
+      TokenLendingProgramInstruction.setLendingMarketOwner;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"newOwner": newOwner};
+    return {'newOwner': newOwner};
   }
 }

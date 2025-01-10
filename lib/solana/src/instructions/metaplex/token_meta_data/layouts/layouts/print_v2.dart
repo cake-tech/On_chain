@@ -16,24 +16,24 @@ class MetaplexTokenMetaDataPrintV2Layout
             MetaplexTokenMetaDataProgramInstruction.printV2.insturction,
         discriminator: discriminator);
     return MetaplexTokenMetaDataPrintV2Layout(
-        editionNumber: decode["editionNumber"]);
+        editionNumber: decode['editionNumber']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "discriminator"),
-    LayoutConst.u64(property: "editionNumber")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'discriminator'),
+    LayoutConst.u64(property: 'editionNumber')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.printV2.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.printV2;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"discriminator": discriminator, "editionNumber": editionNumber};
+    return {'discriminator': discriminator, 'editionNumber': editionNumber};
   }
 }

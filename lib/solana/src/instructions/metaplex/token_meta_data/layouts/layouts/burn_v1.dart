@@ -15,24 +15,24 @@ class MetaplexTokenMetaDataBurnV1Layout
         discriminator: discriminator,
         instruction:
             MetaplexTokenMetaDataProgramInstruction.burnV1.insturction);
-    return MetaplexTokenMetaDataBurnV1Layout(amount: decode["amount"]);
+    return MetaplexTokenMetaDataBurnV1Layout(amount: decode['amount']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "discriminator"),
-    LayoutConst.u64(property: "amount")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'discriminator'),
+    LayoutConst.u64(property: 'amount')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.burnV1.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.burnV1;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"discriminator": discriminator, "amount": amount};
+    return {'discriminator': discriminator, 'amount': amount};
   }
 }

@@ -1,3 +1,4 @@
+import 'package:on_chain/tron/src/address/tron_address.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
 import 'package:on_chain/tron/src/models/contract/shield/receive_description.dart';
 import 'package:on_chain/tron/src/models/contract/shield/spend_description.dart';
@@ -9,18 +10,18 @@ class ShieldedTransferContract extends TronBaseContract {
   factory ShieldedTransferContract.fromJson(Map<String, dynamic> json) {
     return ShieldedTransferContract(
       transparentFromAddress:
-          BytesUtils.tryFromHexString(json["transparent_from_address"]),
-      fromAmount: BigintUtils.tryParse(json["from_amount"]),
-      spendDescription: (json["spend_description"] as List?)
+          BytesUtils.tryFromHexString(json['transparent_from_address']),
+      fromAmount: BigintUtils.tryParse(json['from_amount']),
+      spendDescription: (json['spend_description'] as List?)
           ?.map((desc) => SpendDescription.fromJson(desc))
           .toList(),
-      receiveDescription: (json["receive_description"] as List?)
+      receiveDescription: (json['receive_description'] as List?)
           ?.map((desc) => ReceiveDescription.fromJson(desc))
           .toList(),
-      bindingSignature: BytesUtils.tryFromHexString(json["binding_signature"]),
+      bindingSignature: BytesUtils.tryFromHexString(json['binding_signature']),
       transparentToAddress:
-          BytesUtils.tryFromHexString(json["transparent_to_address"]),
-      toAmount: BigintUtils.tryParse(json["to_amount"]),
+          BytesUtils.tryFromHexString(json['transparent_to_address']),
+      toAmount: BigintUtils.tryParse(json['to_amount']),
     );
   }
 
@@ -89,26 +90,29 @@ class ShieldedTransferContract extends TronBaseContract {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "transparent_from_address":
+      'transparent_from_address':
           BytesUtils.tryToHexString(transparentFromAddress),
-      "from_amount": fromAmount?.toString(),
-      "spend_description":
+      'from_amount': fromAmount?.toString(),
+      'spend_description':
           spendDescription?.map((desc) => desc.toJson()).toList(),
-      "receive_description":
+      'receive_description':
           receiveDescription?.map((desc) => desc.toJson()).toList(),
-      "binding_signature": BytesUtils.tryToHexString(bindingSignature),
-      "transparent_to_address": BytesUtils.tryToHexString(transparentToAddress),
-      "to_amount": toAmount?.toString(),
+      'binding_signature': BytesUtils.tryToHexString(bindingSignature),
+      'transparent_to_address': BytesUtils.tryToHexString(transparentToAddress),
+      'to_amount': toAmount?.toString(),
     }..removeWhere((key, value) => value == null);
   }
 
   /// Convert the [ShieldedTransferContract] object to its string representation.
   @override
   String toString() {
-    return "ShieldedTransferContract{${toJson()}}";
+    return 'ShieldedTransferContract{${toJson()}}';
   }
 
   @override
   TransactionContractType get contractType =>
       TransactionContractType.shieldedTransferContract;
+
+  @override
+  TronAddress get ownerAddress => throw UnimplementedError();
 }

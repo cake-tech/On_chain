@@ -17,22 +17,22 @@ class TokenLendingRedeemReserveCollateralLayout
         instruction:
             TokenLendingProgramInstruction.redeemReserveCollateral.insturction);
     return TokenLendingRedeemReserveCollateralLayout(
-        collateralAmount: decode["collateralAmount"]);
+        collateralAmount: decode['collateralAmount']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "collateralAmount"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'collateralAmount'),
   ]);
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      TokenLendingProgramInstruction.redeemReserveCollateral.insturction;
+  TokenLendingProgramInstruction get instruction =>
+      TokenLendingProgramInstruction.redeemReserveCollateral;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"collateralAmount": collateralAmount};
+    return {'collateralAmount': collateralAmount};
   }
 }

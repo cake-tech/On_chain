@@ -16,23 +16,24 @@ class MetaplexTokenMetaDataMintNewEditionFromMasterEditionViaVaultProxyLayout
         instruction: MetaplexTokenMetaDataProgramInstruction
             .mintNewEditionFromMasterEditionViaVaultProxy.insturction);
     return MetaplexTokenMetaDataMintNewEditionFromMasterEditionViaVaultProxyLayout(
-        edition: decode["edition"]);
+        edition: decode['edition']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "edition")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'edition')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .mintNewEditionFromMasterEditionViaVaultProxy.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction
+          .mintNewEditionFromMasterEditionViaVaultProxy;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"edition": edition};
+    return {'edition': edition};
   }
 }

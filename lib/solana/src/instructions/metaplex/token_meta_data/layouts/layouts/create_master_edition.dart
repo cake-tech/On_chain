@@ -16,14 +16,14 @@ class MetaplexTokenMetaDataCreateMasterEditionLayout
     return const MetaplexTokenMetaDataCreateMasterEditionLayout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexTokenMetaDataProgramInstruction.createMasterEdition.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.createMasterEdition;
 
   @override
   Map<String, dynamic> serialize() {

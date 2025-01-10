@@ -6,11 +6,12 @@ import 'package:on_chain/solana/src/models/models.dart';
 import 'package:on_chain/solana/src/rpc/rpc.dart';
 import 'dart:math' as math;
 import 'utils.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 
 class StakePoolProgramHelper {
   /// Creates instructions required to deposit stake to stake pool.
   static Future<List<TransactionInstruction>> depositStake({
-    required SolanaRPC rpc,
+    required SolanaProvider rpc,
     required SolAddress stakePoolAddress,
     required SolAddress authorizedPubkey,
     required SolAddress validatorVote,
@@ -20,7 +21,7 @@ class StakePoolProgramHelper {
     final stakePool = await rpc
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
     final withdrawAuthority =
         StakePoolProgramUtils.findWithdrawAuthorityProgramAddress(
@@ -77,7 +78,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to deposit sol to stake pool.
   static Future<List<TransactionInstruction>> depositSol({
-    required SolanaRPC connection,
+    required SolanaProvider connection,
     required SolAddress stakePoolAddress,
     required SolAddress from,
     required SolAddress userSolTransfer,
@@ -87,15 +88,15 @@ class StakePoolProgramHelper {
     required SolAddress depositAuthority,
   }) async {
     final fromBalance =
-        await connection.request(SolanaRPCGetBalance(account: from));
+        await connection.request(SolanaRequestGetBalance(account: from));
     if (fromBalance < lamports) {
-      throw const MessageException('Not enough SOL to deposit into pool.');
+      throw const SolanaPluginException('Not enough SOL to deposit into pool.');
     }
 
     final stakePool = await connection
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
 
     final instructions = <TransactionInstruction>[];
@@ -143,7 +144,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to withdraw SOL directly from a stake pool.
   static Future<List<TransactionInstruction>> withdrawSol({
-    required SolanaRPC connection,
+    required SolanaProvider connection,
     required SolAddress stakePoolAddress,
     required SolAddress tokenOwner,
     required SolAddress solReceiver,
@@ -154,7 +155,7 @@ class StakePoolProgramHelper {
     final stakePool = await connection
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
 
     final poolTokenAccount =
@@ -163,14 +164,15 @@ class StakePoolProgramHelper {
       owner: tokenOwner,
     );
 
-    final tokenAccount = await connection
-        .request(SolanaRPCGetAccountInfo(account: poolTokenAccount.address));
+    final tokenAccount = await connection.request(
+        SolanaRequestGetAccountInfo(account: poolTokenAccount.address));
     if (tokenAccount == null) {
-      throw const MessageException("Token account not found.");
+      throw const SolanaPluginException('Token account not found.');
     }
     // Check withdrawFrom balance
     if (tokenAccount.lamports < poolAmountLamports) {
-      throw const MessageException('Not enough token balance to withdraw.');
+      throw const SolanaPluginException(
+          'Not enough token balance to withdraw.');
     }
 
     // Construct transaction to withdraw from withdrawAccounts account list
@@ -191,12 +193,12 @@ class StakePoolProgramHelper {
 
     if (solWithdrawAuthority != null) {
       if (stakePool.solWithdrawAuthority == null) {
-        throw const MessageException(
+        throw const SolanaPluginException(
             'SOL withdraw authority specified in arguments but stake pool has none');
       }
       if (solWithdrawAuthority.address !=
           stakePool.solWithdrawAuthority?.address) {
-        throw const MessageException("Invalid deposit withdraw specified");
+        throw const SolanaPluginException('Invalid deposit withdraw specified');
       }
     }
 
@@ -218,7 +220,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to increase validator stake.
   static Future<List<TransactionInstruction>> increaseValidatorStake({
-    required SolanaRPC connection,
+    required SolanaProvider connection,
     required SolAddress stakePoolAddress,
     required SolAddress validatorVote,
     required BigInt lamports,
@@ -227,18 +229,19 @@ class StakePoolProgramHelper {
     final stakePool = await connection
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
     final validatorList = await connection.request(
         SolanaRPCGetStakePoolValidatorListAccount(
             address: stakePool.validatorList.address));
     if (validatorList == null) {
-      throw const MessageException("Validator list account does not found.");
+      throw const SolanaPluginException(
+          'Validator list account does not found.');
     }
 
     final validatorInfo = validatorList.validators.firstWhere(
       (v) => v.voteAccountAddress.address == validatorVote.address,
-      orElse: () => throw const MessageException(
+      orElse: () => throw const SolanaPluginException(
           'Vote account not found in validator list'),
     );
 
@@ -308,7 +311,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to decrease validator stake.
   static Future<List<TransactionInstruction>> decreaseValidatorStake(
-    SolanaRPC connection,
+    SolanaProvider connection,
     SolAddress stakePoolAddress,
     SolAddress validatorVote,
     BigInt lamports, {
@@ -317,18 +320,19 @@ class StakePoolProgramHelper {
     final stakePool = await connection
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
     final validatorList = await connection.request(
         SolanaRPCGetStakePoolValidatorListAccount(
             address: stakePool.validatorList.address));
     if (validatorList == null) {
-      throw const MessageException("Validator list account does not found.");
+      throw const SolanaPluginException(
+          'Validator list account does not found.');
     }
 
     final validatorInfo = validatorList.validators.firstWhere(
       (v) => v.voteAccountAddress.address == validatorVote.address,
-      orElse: () => throw const MessageException(
+      orElse: () => throw const SolanaPluginException(
           'Vote account not found in validator list'),
     );
 
@@ -395,7 +399,7 @@ class StakePoolProgramHelper {
   /// Creates instructions required to completely update a stake pool after epoch change.
   static Future<
           Tuple<List<TransactionInstruction>, List<TransactionInstruction>>>
-      updateStakePool(SolanaRPC connection, StakePoolAccount stakePool,
+      updateStakePool(SolanaProvider connection, StakePoolAccount stakePool,
           {bool noMerge = false}) async {
     final stakePoolAddress = stakePool.address;
 
@@ -403,7 +407,8 @@ class StakePoolProgramHelper {
         SolanaRPCGetStakePoolValidatorListAccount(
             address: stakePool.validatorList.address));
     if (validatorList == null) {
-      throw const MessageException("Validator list account does not found.");
+      throw const SolanaPluginException(
+          'Validator list account does not found.');
     }
     final withdrawAuthority =
         StakePoolProgramUtils.findWithdrawAuthorityProgramAddress(
@@ -414,7 +419,7 @@ class StakePoolProgramHelper {
     final instructions = <TransactionInstruction>[];
 
     int startIndex = 0;
-    List<List<ValidatorStakeInfo>> validatorChunks =
+    final List<List<ValidatorStakeInfo>> validatorChunks =
         _arrayChunk(validatorList.validators, 5);
 
     for (final validatorChunk in validatorChunks) {
@@ -469,7 +474,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to redelegate stake.
   static Future<List<TransactionInstruction>> redelegate({
-    required SolanaRPC connection,
+    required SolanaProvider connection,
     required SolAddress stakePoolAddress,
     required SolAddress sourceVoteAccount,
     required BigInt sourceTransientStakeSeed,
@@ -481,7 +486,7 @@ class StakePoolProgramHelper {
     final stakePool = await connection
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
 
     final stakePoolWithdrawAuthority =
@@ -546,7 +551,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to create pool token metadata.
   static Future<List<TransactionInstruction>> createPoolTokenMetadata({
-    required SolanaRPC rpc,
+    required SolanaProvider rpc,
     required SolAddress stakePoolAddress,
     required SolAddress payer,
     required String name,
@@ -556,7 +561,7 @@ class StakePoolProgramHelper {
     final stakePool = await rpc
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
 
     final withdrawAuthority =
@@ -583,7 +588,7 @@ class StakePoolProgramHelper {
 
   /// Creates instructions required to update pool token metadata.
   static Future<List<TransactionInstruction>> updatePoolTokenMetadata({
-    required SolanaRPC rpc,
+    required SolanaProvider rpc,
     required SolAddress stakePoolAddress,
     required String name,
     required String symbol,
@@ -592,7 +597,7 @@ class StakePoolProgramHelper {
     final stakePool = await rpc
         .request(SolanaRPCGetStakePoolAccount(address: stakePoolAddress));
     if (stakePool == null) {
-      throw const MessageException("Stake pool account does not found.");
+      throw const SolanaPluginException('Stake pool account does not found.');
     }
 
     final withdrawAuthority =
@@ -617,7 +622,7 @@ class StakePoolProgramHelper {
   }
 
   static Future<List<WithdrawAccount>> prepareWithdrawAccounts({
-    required SolanaRPC connection,
+    required SolanaProvider connection,
     required StakePoolAccount stakePool,
     required SolAddress stakePoolAddress,
     required BigInt amount,
@@ -628,11 +633,12 @@ class StakePoolProgramHelper {
         SolanaRPCGetStakePoolValidatorListAccount(
             address: stakePool.validatorList.address));
     if (validatorList == null || validatorList.validators.isEmpty) {
-      throw const MessageException("Validator list account does not found.");
+      throw const SolanaPluginException(
+          'Validator list account does not found.');
     }
 
     final minBalanceForRentExemption = await connection.request(
-        SolanaRPCGetMinimumBalanceForRentExemption(
+        SolanaRequestGetMinimumBalanceForRentExemption(
             size: StakeProgramConst.stakeProgramSpace.toInt()));
     final minBalance =
         minBalanceForRentExemption + StakePoolProgramConst.minimumActiveStake;
@@ -686,7 +692,7 @@ class StakePoolProgramHelper {
     accounts.sort(compareFn ?? (a, b) => b.lamports.compareTo(a.lamports));
 
     final reserveStake = await connection
-        .request(SolanaRPCGetAccountInfo(account: stakePool.reserveStake));
+        .request(SolanaRequestGetAccountInfo(account: stakePool.reserveStake));
 
     final reserveStakeBalance =
         (reserveStake?.lamports ?? BigInt.zero) - minBalanceForRentExemption;
@@ -752,7 +758,7 @@ class StakePoolProgramHelper {
 
     // Not enough stake to withdraw the specified amount
     if (remainingAmount > BigInt.zero) {
-      throw const MessageException(
+      throw const SolanaPluginException(
           'No stake accounts found in this pool with enough balance to withdraw.');
     }
 

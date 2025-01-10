@@ -19,15 +19,15 @@ class MetaplexTokenMetaDataCreateMetadataAccountV2Layout
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .createMetadataAccountV2.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.createMetadataAccountV2;
 
   @override
   Map<String, dynamic> serialize() {

@@ -13,8 +13,8 @@ class SPLTokenAmountToUiAmountLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenAmountToUiAmountLayout.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u64(property: "amount")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u64(property: 'amount')
   ]);
 
   /// Constructs an SPLTokenAmountToUiAmountLayout instance from buffer.
@@ -23,7 +23,7 @@ class SPLTokenAmountToUiAmountLayout extends SPLTokenProgramLayout {
         layout: _layout,
         bytes: bytes,
         instruction: SPLTokenProgramInstruction.amountToUiAmount.insturction);
-    return SPLTokenAmountToUiAmountLayout(amount: decode["amount"]);
+    return SPLTokenAmountToUiAmountLayout(amount: decode['amount']);
   }
 
   /// Gets the layout structure.
@@ -32,12 +32,12 @@ class SPLTokenAmountToUiAmountLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.amountToUiAmount.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.amountToUiAmount;
 
   /// Serializes the layout.
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount};
+    return {'amount': amount};
   }
 }

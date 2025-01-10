@@ -19,24 +19,24 @@ class StakePoolDecreaseValidatorStakeLayout extends StakePoolProgramLayout {
         instruction:
             StakePoolProgramInstruction.decreaseValidatorStake.insturction);
     return StakePoolDecreaseValidatorStakeLayout(
-      lamports: decode["lamports"],
-      transientStakeSeed: decode["transientStakeSeed"],
+      lamports: decode['lamports'],
+      transientStakeSeed: decode['transientStakeSeed'],
     );
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.ns64(property: "lamports"),
-    LayoutConst.ns64(property: "transientStakeSeed")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.ns64(property: 'lamports'),
+    LayoutConst.ns64(property: 'transientStakeSeed')
   ]);
   @override
-  int get instruction =>
-      StakePoolProgramInstruction.decreaseValidatorStake.insturction;
+  StakePoolProgramInstruction get instruction =>
+      StakePoolProgramInstruction.decreaseValidatorStake;
 
   @override
   StructLayout get layout => _layout;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"lamports": lamports, "transientStakeSeed": transientStakeSeed};
+    return {'lamports': lamports, 'transientStakeSeed': transientStakeSeed};
   }
 }

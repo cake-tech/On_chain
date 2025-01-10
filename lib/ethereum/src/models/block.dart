@@ -1,5 +1,5 @@
 import 'package:on_chain/ethereum/src/models/transaction.dart';
-import 'package:on_chain/utils/number_utils.dart';
+import 'package:on_chain/utils/utils/number_utils.dart';
 
 /// Represents a withdrawal in the context of Ethereum block.
 class Withdrawal {
@@ -97,7 +97,7 @@ class BlockDetails {
             ?.map((withdrawal) => Withdrawal.fromJson(withdrawal))
             .toList() ??
         <Withdrawal>[];
-    final List<dynamic> transactions = json["transactions"];
+    final List<dynamic> transactions = json['transactions'];
 
     final transactionsInfo = hydrated
         ? transactions.map((e) => TransactionInfo.fromJson(e)).toList()

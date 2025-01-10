@@ -17,25 +17,25 @@ class MetaplexAuctionHouseAuctioneerCancelLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .auctioneerCancel.insturction);
     return MetaplexAuctionHouseAuctioneerCancelLayout(
-        buyerPrice: decode["buyerPrice"], tokenSize: decode["tokenSize"]);
+        buyerPrice: decode['buyerPrice'], tokenSize: decode['tokenSize']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u64(property: "buyerPrice"),
-    LayoutConst.u64(property: "tokenSize"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u64(property: 'buyerPrice'),
+    LayoutConst.u64(property: 'tokenSize'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.auctioneerCancel.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.auctioneerCancel;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"buyerPrice": buyerPrice, "tokenSize": tokenSize};
+    return {'buyerPrice': buyerPrice, 'tokenSize': tokenSize};
   }
 }

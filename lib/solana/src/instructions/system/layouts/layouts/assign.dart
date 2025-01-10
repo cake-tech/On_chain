@@ -10,7 +10,7 @@ class SystemAssignLayout extends SystemProgramLayout {
   final SolAddress programId;
   const SystemAssignLayout({required this.programId});
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u32(property: "instruction"),
+    LayoutConst.u32(property: 'instruction'),
     SolanaLayoutUtils.publicKey('programId')
   ]);
 
@@ -19,15 +19,15 @@ class SystemAssignLayout extends SystemProgramLayout {
         layout: _layout,
         bytes: data,
         instruction: SystemProgramInstruction.assign.insturction);
-    return SystemAssignLayout(programId: decode["programId"]);
+    return SystemAssignLayout(programId: decode['programId']);
   }
 
   @override
   StructLayout get layout => _layout;
   @override
-  int get instruction => SystemProgramInstruction.assign.insturction;
+  SystemProgramInstruction get instruction => SystemProgramInstruction.assign;
   @override
   Map<String, dynamic> serialize() {
-    return {"programId": programId};
+    return {'programId': programId};
   }
 }

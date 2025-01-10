@@ -17,14 +17,14 @@ class MetaplexCandyMachineDeleteCandyMachineLayout
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.deleteCandyMachine.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.deleteCandyMachine;
 
   @override
   Map<String, dynamic> serialize() {

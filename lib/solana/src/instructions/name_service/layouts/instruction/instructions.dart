@@ -1,4 +1,6 @@
+import 'package:on_chain/solana/src/address/sol_address.dart';
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
+import 'package:on_chain/solana/src/instructions/name_service/constant.dart';
 
 class NameServiceProgramInstruction implements ProgramLayoutInstruction {
   @override
@@ -7,15 +9,15 @@ class NameServiceProgramInstruction implements ProgramLayoutInstruction {
   final String name;
   const NameServiceProgramInstruction(this.insturction, this.name);
   static const NameServiceProgramInstruction create =
-      NameServiceProgramInstruction(0, "Create");
+      NameServiceProgramInstruction(0, 'Create');
   static const NameServiceProgramInstruction update =
-      NameServiceProgramInstruction(1, "Update");
+      NameServiceProgramInstruction(1, 'Update');
   static const NameServiceProgramInstruction transfer =
-      NameServiceProgramInstruction(2, "Transfer");
+      NameServiceProgramInstruction(2, 'Transfer');
   static const NameServiceProgramInstruction delete =
-      NameServiceProgramInstruction(3, "Delete");
+      NameServiceProgramInstruction(3, 'Delete');
   static const NameServiceProgramInstruction realloc =
-      NameServiceProgramInstruction(4, "Realloc");
+      NameServiceProgramInstruction(4, 'Realloc');
 
   static const List<NameServiceProgramInstruction> values = [
     create,
@@ -31,4 +33,10 @@ class NameServiceProgramInstruction implements ProgramLayoutInstruction {
       return null;
     }
   }
+
+  @override
+  String get programName => 'NameService';
+
+  @override
+  SolAddress get programAddress => NameServiceProgramConst.programId;
 }

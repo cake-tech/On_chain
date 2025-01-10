@@ -1,4 +1,5 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
+import 'package:on_chain/ada/src/exception/exception.dart';
 
 /// A mixin providing serialization functionality to classes.
 mixin ADASerialization {
@@ -19,8 +20,8 @@ mixin ADASerialization {
   static T desrialize<T extends CborObject>(List<int> cborBytes) {
     final decode = CborObject.fromCbor(cborBytes);
     if (decode is! T) {
-      throw MessageException("Failed to deserialize CBOR bytes into type.",
-          details: {"type": "$T", "Excepted": decode.runtimeType});
+      throw ADAPluginException('Failed to deserialize CBOR bytes into type.',
+          details: {'type': '$T', 'Excepted': decode.runtimeType});
     }
     return decode;
   }
@@ -40,8 +41,8 @@ extension QuickCborObject on CborObject {
     try {
       return this as T;
     } catch (e) {
-      throw MessageException(onError ?? "Failed to cast CBOR object",
-          details: {"Type": "$T", "Value": value});
+      throw ADAPluginException(onError ?? 'Failed to cast CBOR object',
+          details: {'Type': '$T', 'Value': value});
     }
   }
 
@@ -56,9 +57,9 @@ extension QuickCborObject on CborObject {
     }
     if (null is T && value is CborNullValue) return null as T;
     if (value is! T) {
-      throw MessageException("Failed to cast value.", details: {
-        "Value": value.runtimeType,
-        "Type": "$T",
+      throw ADAPluginException('Failed to cast value.', details: {
+        'Value': value.runtimeType,
+        'Type': '$T',
       });
     }
     return value as T;
@@ -69,9 +70,9 @@ extension QuickCborObject on CborObject {
   /// Throws a [MessageException] if the value is not of type [int] or [BigInt].
   BigInt getInteger() {
     if (value is! int && value is! BigInt) {
-      throw MessageException("Failed to cast value to integer.", details: {
-        "Value": value,
-        "Type": value.runtimeType,
+      throw ADAPluginException('Failed to cast value to integer.', details: {
+        'Value': value,
+        'Type': value.runtimeType,
       });
     }
     if (value is int) return BigInt.from(value);
@@ -81,14 +82,14 @@ extension QuickCborObject on CborObject {
   /// Converts the value of the [CborObject] to the specified type [E] using the provided function [toe].
   ///
   /// Throws a [MessageException] if the value cannot be converted to type [T].
-  E to<E, T>(E Function(T e) toe) {
+  E castTo<E, T>(E Function(T e) toe) {
     if (this is T) {
       return toe(this as T);
     }
     if (value is! T) {
-      throw MessageException("Failed to cast value.", details: {
-        "Value": "$value",
-        "Type": "$T",
+      throw ADAPluginException('Failed to cast value.', details: {
+        'Value': '$value',
+        'Type': '$T',
       });
     }
     return toe(value as T);
@@ -108,8 +109,8 @@ extension QuickCborList on CborListValue {
   T getIndex<T>(int index) {
     if (index >= value.length) {
       if (null is T) return null as T;
-      throw MessageException("Index out of bounds.",
-          details: {"length": value.length, "index": index});
+      throw ADAPluginException('Index out of bounds.',
+          details: {'length': value.length, 'index': index});
     }
 
     final CborObject obj = value.elementAt(index);
@@ -118,8 +119,8 @@ extension QuickCborList on CborListValue {
     }
     if (obj is T) return obj as T;
     if (obj.value is! T) {
-      throw MessageException("Failed to cast value.",
-          details: {"Excepted": obj.value.runtimeType, "Type": "$T"});
+      throw ADAPluginException('Failed to cast value.',
+          details: {'Excepted': obj.value.runtimeType, 'Type': '$T'});
     }
     return obj.value;
   }
@@ -130,8 +131,8 @@ extension QuickCborList on CborListValue {
   /// If [start] or [end] are out of bounds, throws a [MessageException]
   CborListValue<T> sublist<T>(int start, [int? end]) {
     if (start >= value.length || (end != null && end >= value.length)) {
-      throw MessageException("Index out of bounds.",
-          details: {"length": value.length, "Start": start, "End": end});
+      throw ADAPluginException('Index out of bounds.',
+          details: {'length': value.length, 'Start': start, 'End': end});
     }
     return CborListValue.fixedLength((value as List<CborObject>)
         .sublist(start, end)
@@ -151,8 +152,8 @@ extension QuickCborMap on CborMapValue {
     if (null is T && val is CborNullValue) return null as T;
     if (val is CborObject && val.value is T) return val.value;
     if (val is! T) {
-      throw MessageException("Failed to cast value.",
-          details: {"Excepted": val.runtimeType, "Type": "$T"});
+      throw ADAPluginException('Failed to cast value.',
+          details: {'Excepted': val.runtimeType, 'Type': '$T'});
     }
     return val;
   }
@@ -163,17 +164,17 @@ extension QuickCborMap on CborMapValue {
   T getValue<T>(CborObject key) {
     if (!value.containsKey(key)) {
       if (null is T) return null as T;
-      throw MessageException("Key does not exist.", details: {
-        "Key": "${key.runtimeType}",
-        "Keys": value.keys.map((e) => e.runtimeType).join(", ")
+      throw ADAPluginException('Key does not exist.', details: {
+        'Key': '${key.runtimeType}',
+        'Keys': value.keys.map((e) => e.runtimeType).join(', ')
       });
     }
     final val = value[key];
     if (null is T && val is CborNullValue) return null as T;
     if (val is CborObject && val.value is T) return val.value;
     if (val is! T) {
-      throw MessageException("Failed to cast value.",
-          details: {"Excepted": "${val.runtimeType}", "Type": "$T"});
+      throw ADAPluginException('Failed to cast value.',
+          details: {'Excepted': '${val.runtimeType}', 'Type': '$T'});
     }
     return val;
   }

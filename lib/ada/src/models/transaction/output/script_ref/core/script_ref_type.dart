@@ -1,6 +1,7 @@
 import 'package:blockchain_utils/cbor/core/cbor.dart';
 import 'package:blockchain_utils/cbor/types/int.dart';
-import 'package:blockchain_utils/exception/exception.dart';
+
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 
 /// Represents the type of a script reference.
@@ -15,10 +16,10 @@ class ScriptRefType with ADASerialization {
   const ScriptRefType._(this.name, this.value);
 
   /// Native script reference type.
-  static const ScriptRefType nativeScript = ScriptRefType._("native_script", 0);
+  static const ScriptRefType nativeScript = ScriptRefType._('native_script', 0);
 
   /// Plutus script reference type.
-  static const ScriptRefType plutusScript = ScriptRefType._("plutus_script", 1);
+  static const ScriptRefType plutusScript = ScriptRefType._('plutus_script', 1);
 
   /// List of all script reference types.
   static const List<ScriptRefType> values = [nativeScript, plutusScript];
@@ -28,8 +29,8 @@ class ScriptRefType with ADASerialization {
       {ScriptRefType? validate}) {
     final type = fromValue(cbor.value);
     if (validate != null && type != validate) {
-      throw MessageException("Invalid ScriptRefType.",
-          details: {"Expected": validate, "Type": type});
+      throw ADAPluginException('Invalid ScriptRefType.',
+          details: {'Expected': validate, 'Type': type});
     }
     return fromValue(cbor.value);
   }
@@ -43,9 +44,9 @@ class ScriptRefType with ADASerialization {
   static ScriptRefType fromValue(int? value) {
     return values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw MessageException(
-          "No ScriptRefType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw ADAPluginException(
+          'No ScriptRefType found matching the specified value',
+          details: {'value': value}),
     );
   }
 
@@ -53,9 +54,9 @@ class ScriptRefType with ADASerialization {
   static ScriptRefType fromName(String? name) {
     return values.firstWhere(
       (element) => element.name == name,
-      orElse: () => throw MessageException(
-          "No ScriptRefType found matching the specified name",
-          details: {"name": name}),
+      orElse: () => throw ADAPluginException(
+          'No ScriptRefType found matching the specified name',
+          details: {'name': name}),
     );
   }
 
@@ -68,6 +69,6 @@ class ScriptRefType with ADASerialization {
   /// Converts the [ScriptRefType] instance to a string representation.
   @override
   String toString() {
-    return "ScriptRefType.$name";
+    return 'ScriptRefType.$name';
   }
 }

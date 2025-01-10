@@ -26,18 +26,18 @@ class MetaplexBubblegumUpdateMetadataLayout
         instruction:
             MetaplexBubblegumProgramInstruction.updateMetadata.insturction);
     return MetaplexBubblegumUpdateMetadataLayout(
-        root: decode["root"],
-        nonce: decode["nonce"],
-        index: decode["index"],
-        currentMetaData: MetaData.fromJson(decode["metaData"]),
-        updateMetadata: UpdateMetaData.fromJson(decode["updateMetaData"]));
+        root: decode['root'],
+        nonce: decode['nonce'],
+        index: decode['index'],
+        currentMetaData: MetaData.fromJson(decode['metaData']),
+        updateMetadata: UpdateMetaData.fromJson(decode['updateMetaData']));
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.blob(32, property: "root"),
-    LayoutConst.u64(property: "nonce"),
-    LayoutConst.u32(property: "index"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.blob(32, property: 'root'),
+    LayoutConst.u64(property: 'nonce'),
+    LayoutConst.u32(property: 'index'),
     MetaData.staticLayout,
     UpdateMetaData.staticLayout
   ]);
@@ -46,17 +46,17 @@ class MetaplexBubblegumUpdateMetadataLayout
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexBubblegumProgramInstruction.updateMetadata.insturction;
+  MetaplexBubblegumProgramInstruction get instruction =>
+      MetaplexBubblegumProgramInstruction.updateMetadata;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "root": root,
-      "nonce": nonce,
-      "index": index,
-      "metaData": currentMetaData.serialize(),
-      "updateMetaData": updateMetadata.serialize()
+      'root': root,
+      'nonce': nonce,
+      'index': index,
+      'metaData': currentMetaData.serialize(),
+      'updateMetaData': updateMetadata.serialize()
     };
   }
 }

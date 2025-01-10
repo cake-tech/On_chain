@@ -1,9 +1,10 @@
 import 'package:blockchain_utils/utils/utils.dart';
 import 'package:blockchain_utils/bip/ecc/keys/ed25519_keys.dart';
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:blockchain_utils/layout/layout.dart';
 import 'package:blockchain_utils/signer/solana/solana_signer.dart';
 import 'package:on_chain/solana/src/instructions/ed25519/constant.dart';
+import 'package:on_chain/solana/src/instructions/ed25519/instruction/instructions.dart';
 import 'package:on_chain/solana/src/keypair/private_key.dart';
 import 'package:on_chain/solana/src/keypair/public_key.dart';
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
@@ -88,9 +89,9 @@ class Ed25519ProgramLayout extends ProgramLayout {
     int? instructionIndex,
   }) {
     if (signature.length != Ed25519ProgramConst.signatureLen) {
-      throw MessageException("invalid signature length.", details: {
-        "Excepted": Ed25519ProgramConst.signatureLen,
-        "length": signature.length
+      throw SolanaPluginException('invalid signature length.', details: {
+        'Excepted': Ed25519ProgramConst.signatureLen,
+        'length': signature.length
       });
     }
     final int index = instructionIndex ?? mask16;
@@ -118,25 +119,25 @@ class Ed25519ProgramLayout extends ProgramLayout {
   factory Ed25519ProgramLayout.fromBuffer(List<int> data) {
     final decode =
         ProgramLayout.decodeAndValidateStruct(layout: _layout, bytes: data);
-    final int publicKeyOffset = decode["publicKeyOffset"];
-    final int signatureOffset = decode["signatureOffset"];
-    final int messageOffset = decode["messageDataOffset"];
-    final int messageSize = decode["messageDataSize"];
+    final int publicKeyOffset = decode['publicKeyOffset'];
+    final int signatureOffset = decode['signatureOffset'];
+    final int messageOffset = decode['messageDataOffset'];
+    final int messageSize = decode['messageDataSize'];
     final pubKey = data.sublist(
         publicKeyOffset, publicKeyOffset + Ed25519KeysConst.pubKeyByteLen);
     final signature = data.sublist(
         signatureOffset, signatureOffset + SolanaSignerConst.signatureLen);
     final message = data.sublist(messageOffset, messageOffset + messageSize);
     return Ed25519ProgramLayout._(
-      numSignatures: decode["numSignatures"],
-      padding: decode["padding"],
+      numSignatures: decode['numSignatures'],
+      padding: decode['padding'],
       signatureOffset: signatureOffset,
-      signatureInstructionIndex: decode["signatureInstructionIndex"],
+      signatureInstructionIndex: decode['signatureInstructionIndex'],
       publicKeyOffset: publicKeyOffset,
-      publicKeyInstructionIndex: decode["publicKeyInstructionIndex"],
+      publicKeyInstructionIndex: decode['publicKeyInstructionIndex'],
       messageDataOffset: messageOffset,
       messageDataSize: messageSize,
-      messageInstructionIndex: decode["messageInstructionIndex"],
+      messageInstructionIndex: decode['messageInstructionIndex'],
       message: message,
       publicKey: SolanaPublicKey.fromBytes(pubKey),
       signature: signature,
@@ -145,7 +146,7 @@ class Ed25519ProgramLayout extends ProgramLayout {
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "numSignatures"),
+    LayoutConst.u8(property: 'numSignatures'),
     LayoutConst.u8(property: 'padding'),
     LayoutConst.u16(property: 'signatureOffset'),
     LayoutConst.u16(property: 'signatureInstructionIndex'),
@@ -159,7 +160,8 @@ class Ed25519ProgramLayout extends ProgramLayout {
   StructLayout get layout => _layout;
 
   @override
-  final int instruction = -1;
+  final Ed25519ProgramInstruction instruction =
+      Ed25519ProgramInstruction.ed25519;
 
   int get length {
     final publicKeyOffset = _layout.span;
@@ -171,15 +173,34 @@ class Ed25519ProgramLayout extends ProgramLayout {
   @override
   Map<String, dynamic> serialize() {
     return {
-      "numSignatures": numSignatures,
-      "padding": padding,
-      "signatureOffset": signatureOffset,
-      "signatureInstructionIndex": signatureInstructionIndex,
-      "publicKeyOffset": publicKeyOffset,
-      "publicKeyInstructionIndex": publicKeyInstructionIndex,
-      "messageDataOffset": messageDataOffset,
-      "messageDataSize": messageDataSize,
-      "messageInstructionIndex": messageInstructionIndex,
+      'numSignatures': numSignatures,
+      'padding': padding,
+      'signatureOffset': signatureOffset,
+      'signatureInstructionIndex': signatureInstructionIndex,
+      'publicKeyOffset': publicKeyOffset,
+      'publicKeyInstructionIndex': publicKeyInstructionIndex,
+      'messageDataOffset': messageDataOffset,
+      'messageDataSize': messageDataSize,
+      'messageInstructionIndex': messageInstructionIndex,
+    };
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'numSignatures': numSignatures,
+      'padding': padding,
+      'signatureOffset': signatureOffset,
+      'signatureInstructionIndex': signatureInstructionIndex,
+      'publicKeyOffset': publicKeyOffset,
+      'publicKeyInstructionIndex': publicKeyInstructionIndex,
+      'messageDataOffset': messageDataOffset,
+      'messageDataSize': messageDataSize,
+      'messageInstructionIndex': messageInstructionIndex,
+      'publicKey': publicKey.toAddress().address,
+      'signature': BytesUtils.toHexString(signature, prefix: '0x'),
+      'message': StringUtils.tryDecode(message) ??
+          BytesUtils.toHexString(message, prefix: '0x')
     };
   }
 

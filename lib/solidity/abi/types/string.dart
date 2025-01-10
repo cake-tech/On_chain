@@ -1,4 +1,4 @@
-part of "package:on_chain/solidity/abi/abi.dart";
+part of 'package:on_chain/solidity/abi/abi.dart';
 
 /// ABICoder implementation for encoding and decoding string types.
 class StringCoder implements ABICoder<String> {
@@ -10,7 +10,9 @@ class StringCoder implements ABICoder<String> {
   DecoderResult<String> decode(AbiParameter params, List<int> bytes) {
     final decode = const BytesCoder().decode(AbiParameter.bytes, bytes);
     return DecoderResult(
-        result: StringUtils.decode(decode.result), consumed: decode.consumed);
+        result: StringUtils.decode(decode.result),
+        consumed: decode.consumed,
+        name: params.name);
   }
 
   /// Encodes a string value to ABI-encoded bytes.

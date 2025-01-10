@@ -1,4 +1,4 @@
-part of "package:on_chain/solidity/abi/abi.dart";
+part of 'package:on_chain/solidity/abi/abi.dart';
 
 /// ABICoder implementation for encoding and decoding Ethereum and Tron addresses.
 class AddressCoder implements ABICoder<SolidityAddress> {
@@ -15,10 +15,9 @@ class AddressCoder implements ABICoder<SolidityAddress> {
     final addrBytes = bytes.sublist(
         ABIConst.uintBytesLength - addrLength, ABIConst.uintBytesLength);
     return DecoderResult(
-        result: params.tronTypes
-            ? TronAddress.fromEthAddress(addrBytes)
-            : ETHAddress.fromBytes(addrBytes),
-        consumed: ABIConst.uintBytesLength);
+        result: SolidityAddress.fromBytes(addrBytes),
+        consumed: ABIConst.uintBytesLength,
+        name: params.name);
   }
 
   /// Encodes a BaseHexAddress to ABI-encoded bytes.
@@ -31,7 +30,7 @@ class AddressCoder implements ABICoder<SolidityAddress> {
       addrBytes = addrBytes.sublist(TronAddress.lengthInBytes - addrLength);
     }
     bytes.setAll(ABIConst.uintBytesLength - addrLength, addrBytes);
-    return EncoderResult(isDynamic: false, encoded: bytes);
+    return EncoderResult(isDynamic: false, encoded: bytes, name: params.name);
   }
 
   /// Legacy EIP-712 encoding for BaseHexAddress.
@@ -42,6 +41,7 @@ class AddressCoder implements ABICoder<SolidityAddress> {
     if (keepSize) return abiEncode(params, input);
     List<int> addrBytes = input.toBytes();
     addrBytes = addrBytes.sublist(addrBytes.length - addrLength);
-    return EncoderResult(isDynamic: false, encoded: input.toBytes());
+    return EncoderResult(
+        isDynamic: false, encoded: input.toBytes(), name: params.name);
   }
 }

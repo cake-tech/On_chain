@@ -1,4 +1,4 @@
-import 'package:blockchain_utils/exception/exception.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 
 /// Defines the ExtensionType class to represent different types of extensions.
 class ExtensionType {
@@ -115,13 +115,13 @@ class ExtensionType {
 
   /// Creates an ExtensionType instance from the provided value.
   ///
-  /// Throws a [MessageException] if no ExtensionType is found for the given value.
+  /// Throws a [SolanaPluginException] if no ExtensionType is found for the given value.
   factory ExtensionType.fromValue(int v) {
     try {
       return values.firstWhere((element) => element.value == v);
     } on StateError {
-      throw MessageException("No ExtensionType found for the given value.",
-          details: {"value": v});
+      throw SolanaPluginException('No ExtensionType found for the given value.',
+          details: {'value': v});
     }
   }
 
@@ -184,13 +184,13 @@ class ExtensionType {
       case ExtensionType.transferHookAccount:
         return ExtensionType.uninitialized;
       default:
-        throw MessageException("unsuported type",
-            details: {"ExtensionType": name});
+        throw SolanaPluginException('unsuported type',
+            details: {'ExtensionType': name});
     }
   }
 
   @override
   String toString() {
-    return "ExtensionType.$name";
+    return 'ExtensionType.$name';
   }
 }

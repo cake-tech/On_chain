@@ -18,32 +18,32 @@ class MetaplexAuctioneerCancelLayout extends MetaplexAuctioneerProgramLayout {
         bytes: data,
         instruction: MetaplexAuctioneerProgramInstruction.cancel.insturction);
     return MetaplexAuctioneerCancelLayout(
-        auctioneerAuthorityBump: decode["auctioneerAuthorityBump"],
-        buyerPrice: decode["buyerPrice"],
-        tokenSize: decode["tokenSize"]);
+        auctioneerAuthorityBump: decode['auctioneerAuthorityBump'],
+        buyerPrice: decode['buyerPrice'],
+        tokenSize: decode['tokenSize']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "auctioneerAuthorityBump"),
-    LayoutConst.u64(property: "buyerPrice"),
-    LayoutConst.u64(property: "tokenSize"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'auctioneerAuthorityBump'),
+    LayoutConst.u64(property: 'buyerPrice'),
+    LayoutConst.u64(property: 'tokenSize'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctioneerProgramInstruction.cancel.insturction;
+  MetaplexAuctioneerProgramInstruction get instruction =>
+      MetaplexAuctioneerProgramInstruction.cancel;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "auctioneerAuthorityBump": auctioneerAuthorityBump,
-      "buyerPrice": buyerPrice,
-      "tokenSize": tokenSize
+      'auctioneerAuthorityBump': auctioneerAuthorityBump,
+      'buyerPrice': buyerPrice,
+      'tokenSize': tokenSize
     };
   }
 }

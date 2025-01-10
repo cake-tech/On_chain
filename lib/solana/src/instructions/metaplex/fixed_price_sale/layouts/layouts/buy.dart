@@ -14,28 +14,28 @@ class MetaplexFixedPriceSaleBuyLayout
         bytes: data,
         instruction: MetaplexFixedPriceSaleProgramInstruction.buy.insturction);
     return MetaplexFixedPriceSaleBuyLayout(
-        tradeHistoryBump: decode["tradeHistoryBump"],
-        vaultOwnerBump: decode["vaultOwnerBump"]);
+        tradeHistoryBump: decode['tradeHistoryBump'],
+        vaultOwnerBump: decode['vaultOwnerBump']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "tradeHistoryBump"),
-    LayoutConst.u8(property: "vaultOwnerBump"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'tradeHistoryBump'),
+    LayoutConst.u8(property: 'vaultOwnerBump'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.buy.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.buy;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "tradeHistoryBump": tradeHistoryBump,
-      "vaultOwnerBump": vaultOwnerBump
+      'tradeHistoryBump': tradeHistoryBump,
+      'vaultOwnerBump': vaultOwnerBump
     };
   }
 }

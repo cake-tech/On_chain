@@ -16,24 +16,24 @@ class MetaplexAuctionHouseCloseEscrowAccountLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .closeEscrowAccount.insturction);
     return MetaplexAuctionHouseCloseEscrowAccountLayout(
-        escrowPaymentBump: decode["escrowPaymentBump"]);
+        escrowPaymentBump: decode['escrowPaymentBump']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "escrowPaymentBump"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'escrowPaymentBump'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.closeEscrowAccount.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.closeEscrowAccount;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"escrowPaymentBump": escrowPaymentBump};
+    return {'escrowPaymentBump': escrowPaymentBump};
   }
 }

@@ -17,14 +17,14 @@ class MetaplexTokenMetaDataFreezeDelegatedAccountLayout
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .freezeDelegatedAccount.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.freezeDelegatedAccount;
 
   @override
   Map<String, dynamic> serialize() {

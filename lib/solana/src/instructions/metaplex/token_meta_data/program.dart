@@ -1,6 +1,5 @@
-import 'package:blockchain_utils/exception/exceptions.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 import 'package:on_chain/solana/src/address/sol_address.dart';
-import 'package:on_chain/solana/src/instructions/associated_token_account/constant.dart';
 import 'package:on_chain/solana/src/instructions/instructions.dart';
 import 'package:on_chain/solana/src/borsh_serialization/program_layout.dart';
 import 'package:on_chain/solana/src/models/account/account_meta.dart';
@@ -8,10 +7,10 @@ import 'package:on_chain/solana/src/models/transaction/instruction.dart';
 
 class MetaplexTokenMetaDataProgram extends TransactionInstruction {
   MetaplexTokenMetaDataProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
 
   factory MetaplexTokenMetaDataProgram.approveCollectionAuthority(
       {required SolAddress collectionAuthorityRecord,
@@ -1235,7 +1234,7 @@ class MetaplexTokenMetaDataProgram extends TransactionInstruction {
   }) {
     if (burner != null) {
       if (useAuthorityRecord == null) {
-        throw const MessageException(
+        throw const SolanaPluginException(
             "When providing 'burner' then 'accounts.useAuthorityRecord' need(s) to be provided as well.");
       }
     }

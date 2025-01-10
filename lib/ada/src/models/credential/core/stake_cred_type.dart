@@ -1,5 +1,6 @@
 import 'package:blockchain_utils/cbor/cbor.dart';
-import 'package:blockchain_utils/exception/exception.dart';
+
+import 'package:on_chain/ada/src/exception/exception.dart';
 import 'package:on_chain/ada/src/serialization/cbor_serialization.dart';
 
 /// Represents the type of a stake credential.
@@ -14,10 +15,10 @@ class StakeCredType with ADASerialization {
   const StakeCredType._({required this.name, required this.value});
 
   /// Represents a key stake credential type.
-  static const StakeCredType key = StakeCredType._(name: "key", value: 0);
+  static const StakeCredType key = StakeCredType._(name: 'key', value: 0);
 
   /// Represents a script stake credential type.
-  static const StakeCredType script = StakeCredType._(name: "script", value: 1);
+  static const StakeCredType script = StakeCredType._(name: 'script', value: 1);
 
   /// A list containing all defined [StakeCredType] values.
   static const List<StakeCredType> values = [key, script];
@@ -31,9 +32,9 @@ class StakeCredType with ADASerialization {
   static StakeCredType fromValue(int? value) {
     return values.firstWhere(
       (element) => element.value == value,
-      orElse: () => throw MessageException(
-          "No StakeCredType found matching the specified value",
-          details: {"value": value}),
+      orElse: () => throw ADAPluginException(
+          'No StakeCredType found matching the specified value',
+          details: {'value': value}),
     );
   }
 
@@ -41,9 +42,9 @@ class StakeCredType with ADASerialization {
   static StakeCredType fromName(String? name) {
     return values.firstWhere(
       (element) => element.name == name,
-      orElse: () => throw MessageException(
-          "No StakeCredType found matching the specified name",
-          details: {"name": name}),
+      orElse: () => throw ADAPluginException(
+          'No StakeCredType found matching the specified name',
+          details: {'name': name}),
     );
   }
 
@@ -54,7 +55,7 @@ class StakeCredType with ADASerialization {
 
   @override
   String toString() {
-    return "StakeCredType.$name";
+    return 'StakeCredType.$name';
   }
 
   @override

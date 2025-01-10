@@ -27,35 +27,35 @@ class MetaplexTokenMetaDataUpdateMetadataAccountV2Layout
             .updateMetadataAccountV2.insturction);
     return MetaplexTokenMetaDataUpdateMetadataAccountV2Layout(
         data:
-            decode["data"] == null ? null : MetaDataV2.fromJson(decode["data"]),
-        isMutable: decode["isMutable"],
-        primarySaleHappened: decode["primarySaleHappened"],
-        newUpdateAuthority: decode["newUpdateAuthority"]);
+            decode['data'] == null ? null : MetaDataV2.fromJson(decode['data']),
+        isMutable: decode['isMutable'],
+        primarySaleHappened: decode['primarySaleHappened'],
+        newUpdateAuthority: decode['newUpdateAuthority']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.optional(MetaDataV2.staticLayout, property: "data"),
-    SolanaLayoutUtils.optionPubkey(property: "newUpdateAuthority"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.optional(MetaDataV2.staticLayout, property: 'data'),
+    SolanaLayoutUtils.optionPubkey(property: 'newUpdateAuthority'),
     LayoutConst.optional(LayoutConst.boolean(),
-        property: "primarySaleHappened"),
-    LayoutConst.optional(LayoutConst.boolean(), property: "isMutable"),
+        property: 'primarySaleHappened'),
+    LayoutConst.optional(LayoutConst.boolean(), property: 'isMutable'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .updateMetadataAccountV2.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction.updateMetadataAccountV2;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "newUpdateAuthority": newUpdateAuthority,
-      "primarySaleHappened": primarySaleHappened,
-      "isMutable": isMutable,
-      "data": data?.serialize()
+      'newUpdateAuthority': newUpdateAuthority,
+      'primarySaleHappened': primarySaleHappened,
+      'isMutable': isMutable,
+      'data': data?.serialize()
     };
   }
 }

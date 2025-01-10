@@ -7,9 +7,10 @@ class Transaction extends TronProtocolBufferImpl {
   /// Create a new [Transaction] instance by parsing a JSON map.
   factory Transaction.fromJson(Map<String, dynamic> json) {
     final rawData = TransactionRaw.fromJson(json['raw_data']);
-    final signature = (json['signature'] as List)
-        .map((s) => BytesUtils.fromHexString(s))
-        .toList();
+    final signature = (json['signature'] as List?)
+            ?.map((s) => BytesUtils.fromHexString(s))
+            .toList() ??
+        [];
 
     return Transaction(rawData: rawData, signature: signature);
   }
@@ -24,7 +25,7 @@ class Transaction extends TronProtocolBufferImpl {
     final decode = TronProtocolBufferImpl.decode(bytes);
     return Transaction(
         rawData: TransactionRaw.deserialize(decode.getField(1)),
-        signature: decode.getField(2));
+        signature: decode.getField<List<List<int>>?>(2) ?? const []);
   }
 
   /// The raw data of the transaction.
@@ -43,10 +44,19 @@ class Transaction extends TronProtocolBufferImpl {
 
   /// Convert the [Transaction] object to a JSON representation.
   @override
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({
+    bool signatures = true,
+    bool? visible,
+    bool rawDataHex = false,
+    bool txID = false,
+  }) {
     return {
-      "raw_data": rawData.toJson(),
-      "signature": signature.map((s) => BytesUtils.toHexString(s)).toList(),
+      'raw_data': rawData.toJson(),
+      if (signatures)
+        'signature': signature.map((s) => BytesUtils.toHexString(s)).toList(),
+      if (txID) 'txID': rawData.txID,
+      if (rawDataHex) 'raw_data_hex': rawData.toHex,
+      if (visible != null) 'visible': visible
     };
   }
 

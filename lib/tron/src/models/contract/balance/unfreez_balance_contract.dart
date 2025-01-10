@@ -8,11 +8,11 @@ class UnfreezeBalanceContract extends TronBaseContract {
   /// Create a new [UnfreezeBalanceContract] instance by parsing a JSON map.
   factory UnfreezeBalanceContract.fromJson(Map<String, dynamic> json) {
     return UnfreezeBalanceContract(
-      ownerAddress: TronAddress(json["owner_address"]),
-      resource: ResourceCode.fromName(json["resource"]),
-      receiverAddress: json["receiver_address"] == null
+      ownerAddress: TronAddress(json['owner_address']),
+      resource: ResourceCode.fromName(json['resource']),
+      receiverAddress: json['receiver_address'] == null
           ? null
-          : TronAddress(json["receiver_address"]),
+          : TronAddress(json['receiver_address']),
     );
   }
   factory UnfreezeBalanceContract.deserialize(List<int> bytes) {
@@ -21,7 +21,7 @@ class UnfreezeBalanceContract extends TronBaseContract {
         ownerAddress: TronAddress.fromBytes(decode.getField(1)),
         resource: decode
             .getResult(10)
-            ?.to<ResourceCode, int>((e) => ResourceCode.fromValue(e)),
+            ?.castTo<ResourceCode, int>((e) => ResourceCode.fromValue(e)),
         receiverAddress: TronAddress.fromBytes(decode.getField(15)));
   }
 
@@ -30,6 +30,7 @@ class UnfreezeBalanceContract extends TronBaseContract {
       {required this.ownerAddress, this.resource, this.receiverAddress});
 
   /// Transaction initiator address
+  @override
   final TronAddress ownerAddress;
 
   /// Resource type
@@ -49,16 +50,16 @@ class UnfreezeBalanceContract extends TronBaseContract {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "owner_address": ownerAddress.toString(),
-      "resource": resource?.name,
-      "receiver_address": receiverAddress?.toString(),
+      'owner_address': ownerAddress.toString(),
+      'resource': resource?.name,
+      'receiver_address': receiverAddress?.toString(),
     };
   }
 
   /// Convert the [UnfreezeBalanceContract] object to its string representation.
   @override
   String toString() {
-    return "UnfreezeBalanceContract{${toJson()}}";
+    return 'UnfreezeBalanceContract{${toJson()}}';
   }
 
   @override

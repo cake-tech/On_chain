@@ -26,22 +26,22 @@ class SPLTokenMetaDataInitializeLayout extends SPLTokenMetaDataProgramLayout {
 
   /// Decodes the provided byte array to construct a new [SPLTokenMetaDataInitializeLayout] instance.
   factory SPLTokenMetaDataInitializeLayout.fromBuffer(List<int> data) {
-    Map<String, dynamic> decode =
+    final Map<String, dynamic> decode =
         SPLTokenMetaDataProgramLayout.decodeAndValidateStruct(
             layout: staticLayout,
             bytes: data,
             instructionBytes:
                 SPLTokenMetaDataProgramSplDiscriminate.initialize.insturction);
     return SPLTokenMetaDataInitializeLayout(
-        name: decode["name"], uri: decode["uri"], symbol: decode["symbol"]);
+        name: decode['name'], uri: decode['uri'], symbol: decode['symbol']);
   }
 
   /// Creates a static layout based on the provided lengths of name, symbol, and URI bytes.
   static final StructLayout staticLayout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.string(property: "name"),
-    LayoutConst.string(property: "symbol"),
-    LayoutConst.string(property: "uri"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.string(property: 'name'),
+    LayoutConst.string(property: 'symbol'),
+    LayoutConst.string(property: 'uri'),
   ]);
 
   /// The layout structure of this create instruction.
@@ -50,16 +50,16 @@ class SPLTokenMetaDataInitializeLayout extends SPLTokenMetaDataProgramLayout {
 
   /// Gets the instruction bytes for the create instruction.
   @override
-  List<int> get instruction =>
-      SPLTokenMetaDataProgramSplDiscriminate.initialize.insturction;
+  SPLTokenMetaDataProgramSplDiscriminate get instruction =>
+      SPLTokenMetaDataProgramSplDiscriminate.initialize;
 
   /// Serializes the create instruction data.
   @override
   Map<String, dynamic> serialize() {
     return {
-      "name": name,
-      "symbol": symbol,
-      "uri": uri,
+      'name': name,
+      'symbol': symbol,
+      'uri': uri,
     };
   }
 }

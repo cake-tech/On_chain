@@ -3,25 +3,36 @@ import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
 import 'package:on_chain/tron/src/models/contract/smart_contract/smart_contract_abi.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/protbuf/decoder.dart';
+import 'package:on_chain/utils/utils.dart';
 
 class SmartContract extends TronProtocolBufferImpl {
   /// Create a new [SmartContract] instance by parsing a JSON map.
   factory SmartContract.fromJson(Map<String, dynamic> json) {
     return SmartContract(
-        originAddress: TronAddress(json["origin_address"]),
-        bytecode: BytesUtils.fromHexString(json["bytecode"]),
-        callValue: BigintUtils.tryParse(json["call_value"]),
-        abi: SmartContractABI.fromJson(json["abi"]),
-        consumeUserResourcePercent:
-            BigintUtils.tryParse(json["consume_user_resource_percent"]),
-        name: json["name"],
-        originEnergyLimit: BigintUtils.tryParse(json["origin_energy_limit"]),
-        trxHash: BytesUtils.tryFromHexString(json["trx_hash"]),
-        codeHash: BytesUtils.tryFromHexString(json["code_hash"]),
-        version: IntUtils.tryParse(json["version"]),
-        contractAddress: json["contract_address"] == null
+        originAddress: OnChainUtils.parseTronAddress(
+            value: json['origin_address'], name: 'origin_address'),
+        bytecode:
+            OnChainUtils.parseHex(value: json['bytecode'], name: 'bytecode'),
+        callValue: OnChainUtils.parseBigInt(
+            value: json['call_value'], name: 'call_value'),
+        abi: OnChainUtils.parseMap<String, dynamic>(
+                    value: json['abi'], name: 'abi', throwOnNull: false) ==
+                null
             ? null
-            : TronAddress(json["contract_address"]));
+            : SmartContractABI.fromJson(json['abi']),
+        consumeUserResourcePercent: OnChainUtils.parseBigInt(
+            value: json['consume_user_resource_percent'],
+            name: 'consume_user_resource_percent'),
+        name: OnChainUtils.parseString(value: json['name'], name: 'name'),
+        originEnergyLimit: OnChainUtils.parseBigInt(
+            value: json['origin_energy_limit'], name: 'origin_energy_limit'),
+        trxHash:
+            OnChainUtils.parseHex(value: json['trx_hash'], name: 'trx_hash'),
+        codeHash:
+            OnChainUtils.parseHex(value: json['code_hash'], name: 'code_hash'),
+        version: OnChainUtils.parseInt(value: json['version'], name: 'version'),
+        contractAddress: OnChainUtils.parseTronAddress(
+            value: json['contract_address'], name: 'contract_address'));
   }
   factory SmartContract.deserialize(List<int> bytes) {
     final decode = TronProtocolBufferImpl.decode(bytes);
@@ -29,7 +40,7 @@ class SmartContract extends TronProtocolBufferImpl {
         originAddress: TronAddress.fromBytes(decode.getField(1)),
         bytecode: decode.getField(4),
         callValue: decode.getField(5),
-        abi: decode.getResult(3)?.to<SmartContractABI, List<int>>(
+        abi: decode.getResult(3)?.castTo<SmartContractABI, List<int>>(
             (e) => SmartContractABI.deserialize(e)),
         consumeUserResourcePercent: decode.getField(6),
         name: decode.getField(7),
@@ -39,7 +50,7 @@ class SmartContract extends TronProtocolBufferImpl {
         version: decode.getField(11),
         contractAddress: decode
             .getResult(2)
-            ?.to<TronAddress, List<int>>((e) => TronAddress.fromBytes(e)));
+            ?.castTo<TronAddress, List<int>>((e) => TronAddress.fromBytes(e)));
   }
 
   /// Create a new [SmartContract] instance with specified parameters.
@@ -80,7 +91,9 @@ class SmartContract extends TronProtocolBufferImpl {
         abi,
         bytecode,
         callValue,
-        consumeUserResourcePercent,
+        consumeUserResourcePercent == BigInt.zero
+            ? null
+            : consumeUserResourcePercent,
         name,
         originEnergyLimit,
         codeHash,
@@ -92,23 +105,23 @@ class SmartContract extends TronProtocolBufferImpl {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "origin_address": originAddress.toString(),
-      "contract_address": contractAddress?.toString(),
-      "abi": abi?.toJson(),
-      "bytecode": BytesUtils.toHexString(bytecode),
-      "call_value": callValue?.toString(),
-      "consume_user_resource_percent": consumeUserResourcePercent?.toString(),
-      "name": name,
-      "origin_energy_limit": originEnergyLimit?.toString(),
-      "code_hash": BytesUtils.tryToHexString(codeHash),
-      "trx_hash": BytesUtils.tryToHexString(trxHash),
-      "version": version,
+      'origin_address': originAddress.toString(),
+      'contract_address': contractAddress?.toString(),
+      'abi': abi?.toJson(),
+      'bytecode': BytesUtils.toHexString(bytecode),
+      'call_value': callValue?.toString(),
+      'consume_user_resource_percent': consumeUserResourcePercent?.toString(),
+      'name': name,
+      'origin_energy_limit': originEnergyLimit?.toString(),
+      'code_hash': BytesUtils.tryToHexString(codeHash),
+      'trx_hash': BytesUtils.tryToHexString(trxHash),
+      'version': version,
     }..removeWhere((key, value) => value == null);
   }
 
   /// Convert the [SmartContract] object to its string representation.
   @override
   String toString() {
-    return "SmartContract{${toJson()}}";
+    return 'SmartContract{${toJson()}}';
   }
 }

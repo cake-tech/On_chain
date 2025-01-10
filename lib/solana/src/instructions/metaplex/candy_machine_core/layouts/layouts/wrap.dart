@@ -12,14 +12,14 @@ class MetaplexCandyMachineWrapLayout extends MetaplexCandyMachineProgramLayout {
     return const MetaplexCandyMachineWrapLayout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.blob(8, property: "instruction")]);
+      LayoutConst.struct([LayoutConst.blob(8, property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.wrap.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.wrap;
 
   @override
   Map<String, dynamic> serialize() {

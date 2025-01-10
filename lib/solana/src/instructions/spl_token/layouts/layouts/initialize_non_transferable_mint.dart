@@ -11,7 +11,7 @@ class SPLTokenInitializeNonTransferableMintLayout
 
   /// StructLayout structure for initializing a non-transferable mint.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenInitializeNonTransferableMintLayout instance from buffer.
   factory SPLTokenInitializeNonTransferableMintLayout.fromBuffer(
@@ -31,8 +31,8 @@ class SPLTokenInitializeNonTransferableMintLayout
 
   /// Instruction associated with the layout.
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.initializeNonTransferableMint.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.initializeNonTransferableMint;
 
   /// Serializes the layout data.
   @override

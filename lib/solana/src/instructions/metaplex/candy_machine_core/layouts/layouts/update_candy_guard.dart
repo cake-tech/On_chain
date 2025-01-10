@@ -16,22 +16,22 @@ class MetaplexCandyMachineUpdateCandyGuardLayout
         instruction: MetaplexCandyMachineProgramInstruction
             .updateCandyGuard.insturction);
     return MetaplexCandyMachineUpdateCandyGuardLayout(
-        data: (decode["data"] as List).cast());
+        data: (decode['data'] as List).cast());
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.vecU8(property: "data")
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.vecU8(property: 'data')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexCandyMachineProgramInstruction.updateCandyGuard.insturction;
+  MetaplexCandyMachineProgramInstruction get instruction =>
+      MetaplexCandyMachineProgramInstruction.updateCandyGuard;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"data": data};
+    return {'data': data};
   }
 }

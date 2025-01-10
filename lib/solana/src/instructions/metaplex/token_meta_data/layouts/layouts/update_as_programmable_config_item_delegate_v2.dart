@@ -21,32 +21,33 @@ class MetaplexTokenMetaDataUpdateAsProgrammableConfigItemDelegateV2Layout
             .updateAsProgrammableConfigItemDelegateV2.insturction,
         discriminator: discriminator);
     return MetaplexTokenMetaDataUpdateAsProgrammableConfigItemDelegateV2Layout(
-        ruleSet: RuleSetToggle.fromJson(decode["ruleSet"]),
-        authorizationData: decode["authorizationData"] == null
+        ruleSet: RuleSetToggle.fromJson(decode['ruleSet']),
+        authorizationData: decode['authorizationData'] == null
             ? null
-            : Payload.fromJson(decode["authorizationData"]));
+            : Payload.fromJson(decode['authorizationData']));
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u8(property: "discriminator"),
-    LayoutConst.wrap(RuleSetToggle.staticLayout, property: "ruleSet"),
-    LayoutConst.optional(Payload.staticLayout, property: "authorizationData")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u8(property: 'discriminator'),
+    LayoutConst.wrap(RuleSetToggle.staticLayout, property: 'ruleSet'),
+    LayoutConst.optional(Payload.staticLayout, property: 'authorizationData')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .updateAsProgrammableConfigItemDelegateV2.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction
+          .updateAsProgrammableConfigItemDelegateV2;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "authorizationData": authorizationData?.serialize(),
-      "ruleSet": ruleSet.serialize(),
-      "discriminator": discriminator
+      'authorizationData': authorizationData?.serialize(),
+      'ruleSet': ruleSet.serialize(),
+      'discriminator': discriminator
     };
   }
 }

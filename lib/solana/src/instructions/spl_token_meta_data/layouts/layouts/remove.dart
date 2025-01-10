@@ -23,14 +23,14 @@ class SPLTokenMetaDataRemoveFieldLayout extends SPLTokenMetaDataProgramLayout {
             SPLTokenMetaDataProgramSplDiscriminate.remove.insturction);
 
     return SPLTokenMetaDataRemoveFieldLayout(
-        idempotent: decode["idempotent"], key: decode["key"]);
+        idempotent: decode['idempotent'], key: decode['key']);
   }
 
   /// Creates a static layout based on fields.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.boolean(property: "idempotent"),
-    LayoutConst.string(property: "key"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.boolean(property: 'idempotent'),
+    LayoutConst.string(property: 'key'),
   ]);
 
   /// The layout structure of this remove field instruction.
@@ -39,12 +39,12 @@ class SPLTokenMetaDataRemoveFieldLayout extends SPLTokenMetaDataProgramLayout {
 
   /// Gets the instruction bytes for the remove field instruction.
   @override
-  List<int> get instruction =>
-      SPLTokenMetaDataProgramSplDiscriminate.remove.insturction;
+  SPLTokenMetaDataProgramSplDiscriminate get instruction =>
+      SPLTokenMetaDataProgramSplDiscriminate.remove;
 
   /// Serializes the remove field instruction data.
   @override
   Map<String, dynamic> serialize() {
-    return {"key": key, "idempotent": idempotent};
+    return {'key': key, 'idempotent': idempotent};
   }
 }

@@ -17,23 +17,28 @@ class ComputeBudgetRequestHeapFrameLayout extends ComputeBudgetProgramLayout {
         bytes: data,
         instruction:
             ComputeBudgetProgramInstruction.requestHeapFrame.insturction);
-    return ComputeBudgetRequestHeapFrameLayout(bytes: decode["bytes"]);
+    return ComputeBudgetRequestHeapFrameLayout(bytes: decode['bytes']);
   }
   // StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u32(property: "bytes"),
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u32(property: 'bytes'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      ComputeBudgetProgramInstruction.requestHeapFrame.insturction;
+  ComputeBudgetProgramInstruction get instruction =>
+      ComputeBudgetProgramInstruction.requestHeapFrame;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"bytes": bytes};
+    return {'bytes': bytes};
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'bytes': bytes};
   }
 }

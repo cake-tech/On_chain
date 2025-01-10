@@ -16,24 +16,24 @@ class MetaplexTokenEntanglerUpdateEntangledPairLayout
         instruction: MetaplexTokenEntanglerProgramInstruction
             .updateEntangledPair.insturction);
     return MetaplexTokenEntanglerUpdateEntangledPairLayout(
-        price: decode["price"], paysEveryTime: decode["paysEveryTime"]);
+        price: decode['price'], paysEveryTime: decode['paysEveryTime']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u64(property: "price"),
-    LayoutConst.boolean(property: "paysEveryTime"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u64(property: 'price'),
+    LayoutConst.boolean(property: 'paysEveryTime'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexTokenEntanglerProgramInstruction.updateEntangledPair.insturction;
+  MetaplexTokenEntanglerProgramInstruction get instruction =>
+      MetaplexTokenEntanglerProgramInstruction.updateEntangledPair;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"paysEveryTime": paysEveryTime, "price": price};
+    return {'paysEveryTime': paysEveryTime, 'price': price};
   }
 }

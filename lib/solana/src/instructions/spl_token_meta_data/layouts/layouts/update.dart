@@ -13,7 +13,7 @@ class SPLTokenMetaDataUpdateLayout extends SPLTokenMetaDataProgramLayout {
 
   /// Decodes the provided byte array to construct a new `SPLTokenMetaDataUpdateLayout` instance.
   factory SPLTokenMetaDataUpdateLayout.fromBuffer(List<int> bytes) {
-    Map<String, dynamic> decode =
+    final Map<String, dynamic> decode =
         SPLTokenMetaDataProgramLayout.decodeAndValidateStruct(
             layout: _layout,
             bytes: bytes,
@@ -21,14 +21,14 @@ class SPLTokenMetaDataUpdateLayout extends SPLTokenMetaDataProgramLayout {
                 SPLTokenMetaDataProgramSplDiscriminate.update.insturction);
 
     return SPLTokenMetaDataUpdateLayout(
-        field: SPLTokenMetaDataField.fromJson(decode["metaDataField"]));
+        field: SPLTokenMetaDataField.fromJson(decode['metaDataField']));
   }
 
   /// Creates a static layout based on the provided value length and key length.
   static final _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
+    LayoutConst.blob(8, property: 'instruction'),
     LayoutConst.wrap(SPLTokenMetaDataField.staticLayout,
-        property: "metaDataField")
+        property: 'metaDataField')
   ]);
 
   /// The layout structure of this update instruction.
@@ -37,12 +37,12 @@ class SPLTokenMetaDataUpdateLayout extends SPLTokenMetaDataProgramLayout {
 
   /// Gets the instruction bytes for the update instruction.
   @override
-  List<int> get instruction =>
-      SPLTokenMetaDataProgramSplDiscriminate.update.insturction;
+  SPLTokenMetaDataProgramSplDiscriminate get instruction =>
+      SPLTokenMetaDataProgramSplDiscriminate.update;
 
   /// Serializes the update instruction data.
   @override
   Map<String, dynamic> serialize() {
-    return {"metaDataField": field.serialize()};
+    return {'metaDataField': field.serialize()};
   }
 }

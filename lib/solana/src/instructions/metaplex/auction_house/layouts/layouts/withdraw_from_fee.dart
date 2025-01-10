@@ -13,24 +13,24 @@ class MetaplexAuctionHouseWithdrawFromFeeLayout
         bytes: data,
         instruction:
             MetaplexAuctionHouseProgramInstruction.withdrawFromFee.insturction);
-    return MetaplexAuctionHouseWithdrawFromFeeLayout(amount: decode["amount"]);
+    return MetaplexAuctionHouseWithdrawFromFeeLayout(amount: decode['amount']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u64(property: "amount"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u64(property: 'amount'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.withdrawFromFee.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.withdrawFromFee;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"amount": amount};
+    return {'amount': amount};
   }
 }

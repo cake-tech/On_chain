@@ -1,12 +1,13 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/address/tron_address.dart';
+import 'package:on_chain/tron/src/exception/exception.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base_contract.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/common.dart';
 
 /// Class for encoding Tron transactions using minimal protobuf encoding.
 class ProtocolBufferEncoder {
-  static final BigInt _maxInt64 = BigInt.parse("7FFFFFFFFFFFFFFF", radix: 16);
-  static final BigInt _minInt64 = BigInt.parse("8000000000000000", radix: 16);
+  static final BigInt _maxInt64 = BigInt.parse('7FFFFFFFFFFFFFFF', radix: 16);
+  static final BigInt _minInt64 = BigInt.parse('8000000000000000', radix: 16);
 
   static const int _int64BitLength = 63;
   static const int int32BitLength = 31;
@@ -16,8 +17,8 @@ class ProtocolBufferEncoder {
     if (value.bitLength <= _int64BitLength) {
       return;
     }
-    throw MessageException("Value overflows 64-bit signed integer range",
-        details: {"input": value});
+    throw TronPluginException('Value overflows 64-bit signed integer range',
+        details: {'input': value});
   }
 
   /// Validate if an [int] value fits within the 32-bit signed integer range.
@@ -25,8 +26,8 @@ class ProtocolBufferEncoder {
     if (value.bitLength <= int32BitLength) {
       return;
     }
-    throw MessageException("Value overflows 32-bit signed integer range",
-        details: {"input": value});
+    throw TronPluginException('Value overflows 32-bit signed integer range',
+        details: {'input': value});
   }
 
   /// Encode a protobuf field with the given [fieldNumber] and [value].
@@ -52,13 +53,13 @@ class ProtocolBufferEncoder {
     } else if (value is Map) {
       return _encodeMap(fieldNumber, value);
     }
-    throw MessageException("unsupported type",
-        details: {"runtime": value.runtimeType, "value": value});
+    throw TronPluginException('unsupported type',
+        details: {'runtime': value.runtimeType, 'value': value});
   }
 
   /// Encode a [Map] with the given [fieldNumber] and [value].
   static List<int> _encodeMap(int fieldNumber, Map value) {
-    List<int> result = [];
+    final List<int> result = [];
     for (final i in value.entries) {
       final key = encode(1, i.key);
       final val = encode(2, i.value);
@@ -72,8 +73,8 @@ class ProtocolBufferEncoder {
   /// Encode length of the data for the given [fieldNumber] and [value].
   static List<int> _encodeLength(int fieldNumber, int value) {
     _validateInt(value);
-    List<int> result = [];
-    int tag = (fieldNumber << 3) | 2;
+    final List<int> result = [];
+    final int tag = (fieldNumber << 3) | 2;
     result.addAll(_encodeVarint32(tag));
     result.addAll(_encodeVarint32(value));
 
@@ -83,7 +84,7 @@ class ProtocolBufferEncoder {
   /// Encode a list with the given [fieldNumber] and [value].
   static List<int> _encodeList(int fieldNumber, List<dynamic> value) {
     if (value.isEmpty) return [];
-    List<int> result = [];
+    final List<int> result = [];
     for (final i in value) {
       result.addAll(encode(fieldNumber, i));
     }
@@ -93,10 +94,10 @@ class ProtocolBufferEncoder {
   /// Encode a [BigInt] with the given [fieldNumber] and [value].
   static List<int> _encodeBigInt(int fieldNumber, BigInt value) {
     _validateBigInt(value);
-    List<int> result = [];
+    final List<int> result = [];
 
     // Combine field number and wire type (0 for varint)
-    int tag = (fieldNumber << 3) | 0;
+    final int tag = (fieldNumber << 3) | 0;
     BigInt mybeZigZag = value;
     if (value.isNegative) {
       mybeZigZag = ((value & _maxInt64) | _minInt64);
@@ -110,7 +111,7 @@ class ProtocolBufferEncoder {
 
   /// Utility function to encode a 64-bit varint.
   static List<int> _encodeVarintBigInt(BigInt value) {
-    List<int> result = [];
+    final List<int> result = [];
     while (value > BigInt.from(0x7F)) {
       result.add((value & BigInt.from(0x7F) | BigInt.from(0x80)).toInt());
       value >>= 7;
@@ -121,7 +122,7 @@ class ProtocolBufferEncoder {
 
   /// Encode a 32-bit varint with the given [value].
   static List<int> _encodeVarint32(int value) {
-    List<int> result = [];
+    final List<int> result = [];
     while (value > 0x7F) {
       result.add((value & 0x7F) | 0x80);
       value >>= 7;
@@ -133,8 +134,8 @@ class ProtocolBufferEncoder {
   /// Encode an [int] with the given [fieldNumber]
   static List<int> _encodeInt(int fieldNumber, int value) {
     _validateInt(value);
-    List<int> result = [];
-    int tag = (fieldNumber << 3) | 0;
+    final List<int> result = [];
+    final int tag = (fieldNumber << 3) | 0;
     result.addAll(_encodeVarint32(tag));
     if (value.isNegative) {
       final BigInt zigzag = ((BigInt.from(value) & _maxInt64) | _minInt64);
@@ -148,7 +149,7 @@ class ProtocolBufferEncoder {
 
   /// Encode a byte array with the given [fieldNumber] and [value].
   static List<int> _encodeBytes(int fieldNumber, List<int> value) {
-    List<int> result = [];
+    final List<int> result = [];
     result.addAll(_encodeLength(fieldNumber, value.length));
     result.addAll(value);
 

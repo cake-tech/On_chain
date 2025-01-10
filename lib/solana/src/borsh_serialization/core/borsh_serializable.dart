@@ -1,4 +1,5 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
+import 'package:on_chain/solana/src/exception/exception.dart';
 
 /// Abstract class for objects that can be serialized using a specific layout.
 abstract class LayoutSerializable {
@@ -30,24 +31,43 @@ abstract class LayoutSerializable {
       required StructLayout layout,
       Map<String, dynamic> validator = const {}}) {
     try {
-      final decode = layout.deserialize(bytes).value;
-
+      final decode = layout.deserialize(bytes);
       for (final i in validator.entries) {
         if (i.value is List) {
-          if (!CompareUtils.iterableIsEqual(i.value, decode[i.key])) {
-            throw MessageException("cannot validate borsh bytes",
-                details: {"excepted": validator, "instruction": decode});
+          if (!CompareUtils.iterableIsEqual(i.value, decode.value[i.key])) {
+            throw SolanaPluginException('cannot validate borsh bytes',
+                details: {'excepted': validator, 'instruction': decode});
           }
         } else {
-          if (i.value != decode[i.key]) {
-            throw MessageException("cannot validate borsh bytes",
-                details: {"excepted": validator, "instruction": decode});
+          if (i.value != decode.value[i.key]) {
+            throw SolanaPluginException('cannot validate borsh bytes',
+                details: {'excepted': validator, 'instruction': decode});
           }
         }
       }
-      return decode;
+      return decode.value;
     } catch (e) {
-      throw const MessageException("cannot validate borsh bytes");
+      throw const SolanaPluginException('cannot validate borsh bytes');
     }
+  }
+
+  static Object _toString(dynamic value) {
+    if (value is List<int>) {
+      return BytesUtils.toHexString(value, prefix: '0x');
+    } else if (value is BigInt) {
+      return value.toString();
+    } else if (value is LayoutSerializable) {
+      return value.toJson();
+    }
+    return value.toString();
+  }
+
+  Map<String, dynamic> toJson() {
+    final json = serialize()..removeWhere((k, v) => v == null);
+    final Map<String, dynamic> toHuman = {};
+    for (final i in json.entries) {
+      toHuman[i.key] = _toString(i.value);
+    }
+    return toHuman;
   }
 }

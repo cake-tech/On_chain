@@ -19,7 +19,7 @@ class NameServiceDeleteLayout extends NameServiceProgramLayout {
 
   /// The layout structure.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
+    LayoutConst.u8(property: 'instruction'),
   ]);
 
   /// The layout structure.
@@ -28,7 +28,8 @@ class NameServiceDeleteLayout extends NameServiceProgramLayout {
 
   /// The instruction associated with the layout.
   @override
-  int get instruction => NameServiceProgramInstruction.delete.insturction;
+  NameServiceProgramInstruction get instruction =>
+      NameServiceProgramInstruction.delete;
 
   /// Serializes the layout data.
   @override

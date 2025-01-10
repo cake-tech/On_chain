@@ -17,22 +17,22 @@ class NameServiceUpdateLayout extends NameServiceProgramLayout {
 
   /// Creates a NameServiceUpdateLayout instance from buffer data.
   factory NameServiceUpdateLayout.fromBuffer(List<int> data) {
-    Map<String, dynamic> decode = ProgramLayout.decodeAndValidateStruct(
+    final Map<String, dynamic> decode = ProgramLayout.decodeAndValidateStruct(
       layout: _layout,
       bytes: data,
       instruction: NameServiceProgramInstruction.update.insturction,
     );
     return NameServiceUpdateLayout(
-      inputData: decode["inputData"],
-      offset: decode["offset"],
+      inputData: decode['inputData'],
+      offset: decode['offset'],
     );
   }
 
   /// The layout structure.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u32(property: "offset"),
-    LayoutConst.vecU8(property: "inputData")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u32(property: 'offset'),
+    LayoutConst.vecU8(property: 'inputData')
   ]);
 
   /// The layout structure.
@@ -41,11 +41,12 @@ class NameServiceUpdateLayout extends NameServiceProgramLayout {
 
   /// The instruction associated with the layout.
   @override
-  int get instruction => NameServiceProgramInstruction.update.insturction;
+  NameServiceProgramInstruction get instruction =>
+      NameServiceProgramInstruction.update;
 
   /// Serializes the layout data.
   @override
   Map<String, dynamic> serialize() {
-    return {"inputData": inputData, "offset": offset};
+    return {'inputData': inputData, 'offset': offset};
   }
 }

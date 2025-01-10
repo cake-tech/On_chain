@@ -10,7 +10,7 @@ class SPLTokenSyncNativeLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for syncing native tokens in SPL.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenSyncNativeLayout instance from buffer.
   factory SPLTokenSyncNativeLayout.fromBuffer(List<int> bytes) {
@@ -27,7 +27,8 @@ class SPLTokenSyncNativeLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.syncNative.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.syncNative;
 
   /// Serializes the layout data.
   @override

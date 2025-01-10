@@ -13,23 +13,23 @@ class MetaplexFixedPriceSaleClaimResourceLayout
         instruction:
             MetaplexFixedPriceSaleProgramInstruction.claimResource.insturction);
     return MetaplexFixedPriceSaleClaimResourceLayout(
-        vaultOwnerBump: decode["vaultOwnerBump"]);
+        vaultOwnerBump: decode['vaultOwnerBump']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "vaultOwnerBump"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'vaultOwnerBump'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.claimResource.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.claimResource;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"vaultOwnerBump": vaultOwnerBump};
+    return {'vaultOwnerBump': vaultOwnerBump};
   }
 }

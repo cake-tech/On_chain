@@ -19,13 +19,13 @@ class NameServiceTransferLayout extends NameServiceProgramLayout {
       bytes: data,
       instruction: NameServiceProgramInstruction.transfer.insturction,
     );
-    return NameServiceTransferLayout(newOwnerKey: decode["newOwnerKey"]);
+    return NameServiceTransferLayout(newOwnerKey: decode['newOwnerKey']);
   }
 
   /// The layout structure.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    SolanaLayoutUtils.publicKey("newOwnerKey"),
+    LayoutConst.u8(property: 'instruction'),
+    SolanaLayoutUtils.publicKey('newOwnerKey'),
   ]);
 
   /// The layout structure.
@@ -34,11 +34,12 @@ class NameServiceTransferLayout extends NameServiceProgramLayout {
 
   /// The instruction associated with the layout.
   @override
-  int get instruction => NameServiceProgramInstruction.transfer.insturction;
+  NameServiceProgramInstruction get instruction =>
+      NameServiceProgramInstruction.transfer;
 
   /// Serializes the layout data.
   @override
   Map<String, dynamic> serialize() {
-    return {"newOwnerKey": newOwnerKey};
+    return {'newOwnerKey': newOwnerKey};
   }
 }

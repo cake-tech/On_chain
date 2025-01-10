@@ -26,41 +26,41 @@ class MetaplexAuctionHouseCreateAuctionHouseLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .createAuctionHouse.insturction);
     return MetaplexAuctionHouseCreateAuctionHouseLayout(
-        feePayerBump: decode["feePayerBump"],
-        bump: decode["bump"],
-        treasuryBump: decode["treasuryBump"],
-        sellerFeeBasisPoints: decode["sellerFeeBasisPoints"],
-        requiresSignOff: decode["requiresSignOff"],
-        canChangeSalePrice: decode["canChangeSalePrice"]);
+        feePayerBump: decode['feePayerBump'],
+        bump: decode['bump'],
+        treasuryBump: decode['treasuryBump'],
+        sellerFeeBasisPoints: decode['sellerFeeBasisPoints'],
+        requiresSignOff: decode['requiresSignOff'],
+        canChangeSalePrice: decode['canChangeSalePrice']);
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "bump"),
-    LayoutConst.u8(property: "feePayerBump"),
-    LayoutConst.u8(property: "treasuryBump"),
-    LayoutConst.u16(property: "sellerFeeBasisPoints"),
-    LayoutConst.boolean(property: "requiresSignOff"),
-    LayoutConst.boolean(property: "canChangeSalePrice"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'bump'),
+    LayoutConst.u8(property: 'feePayerBump'),
+    LayoutConst.u8(property: 'treasuryBump'),
+    LayoutConst.u16(property: 'sellerFeeBasisPoints'),
+    LayoutConst.boolean(property: 'requiresSignOff'),
+    LayoutConst.boolean(property: 'canChangeSalePrice'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.createAuctionHouse.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.createAuctionHouse;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "feePayerBump": feePayerBump,
-      "treasuryBump": treasuryBump,
-      "sellerFeeBasisPoints": sellerFeeBasisPoints,
-      "requiresSignOff": requiresSignOff,
-      "canChangeSalePrice": canChangeSalePrice,
-      "bump": bump
+      'feePayerBump': feePayerBump,
+      'treasuryBump': treasuryBump,
+      'sellerFeeBasisPoints': sellerFeeBasisPoints,
+      'requiresSignOff': requiresSignOff,
+      'canChangeSalePrice': canChangeSalePrice,
+      'bump': bump
     };
   }
 }

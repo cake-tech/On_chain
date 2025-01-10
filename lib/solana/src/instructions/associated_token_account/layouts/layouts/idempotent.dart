@@ -17,16 +17,21 @@ class AssociatedTokenAccountProgramIdempotentLayout
     return const AssociatedTokenAccountProgramIdempotentLayout();
   }
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
   @override
   StructLayout get layout => _layout;
 
   @override
-  int? get instruction =>
-      AssociatedTokenAccountProgramInstruction.idempotent.insturction;
+  AssociatedTokenAccountProgramInstruction get instruction =>
+      AssociatedTokenAccountProgramInstruction.idempotent;
 
   @override
   Map<String, dynamic> serialize() {
+    return {};
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
     return {};
   }
 }

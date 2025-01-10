@@ -1,7 +1,7 @@
 import 'package:on_chain/ethereum/src/address/evm_address.dart';
 import 'package:on_chain/ethereum/src/models/models.dart';
 import 'package:on_chain/ethereum/src/transaction/eth_transaction.dart';
-import 'package:on_chain/utils/number_utils.dart';
+import 'package:on_chain/utils/utils/number_utils.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 
 /// Represents information about an Ethereum transaction.
@@ -120,7 +120,7 @@ class TransactionInfo {
   /// Creates a [TransactionInfo] instance from a JSON map.
   factory TransactionInfo.fromJson(Map<String, dynamic> json) {
     return TransactionInfo(
-      accessList: (json["accessList"] as List?)
+      accessList: (json['accessList'] as List?)
               ?.map((e) => AccessListEntry.fromJson(e))
               .toList() ??
           <AccessListEntry>[],

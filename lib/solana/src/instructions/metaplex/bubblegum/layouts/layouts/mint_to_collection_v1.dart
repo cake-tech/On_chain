@@ -14,21 +14,21 @@ class MetaplexBubblegumMintToCollectionV1Layout
         instruction:
             MetaplexBubblegumProgramInstruction.mintToCollectionV1.insturction);
     return MetaplexBubblegumMintToCollectionV1Layout(
-        metaData: MetaData.fromJson(decode["metaData"]));
+        metaData: MetaData.fromJson(decode['metaData']));
   }
 
   static final StructLayout _layout = LayoutConst.struct(
-      [LayoutConst.blob(8, property: "instruction"), MetaData.staticLayout]);
+      [LayoutConst.blob(8, property: 'instruction'), MetaData.staticLayout]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexBubblegumProgramInstruction.mintToCollectionV1.insturction;
+  MetaplexBubblegumProgramInstruction get instruction =>
+      MetaplexBubblegumProgramInstruction.mintToCollectionV1;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"metaData": metaData.serialize()};
+    return {'metaData': metaData.serialize()};
   }
 }

@@ -10,7 +10,7 @@ class SPLTokenCloseAccountLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenCloseAccountLayout.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenCloseAccountLayout instance from buffer.
   factory SPLTokenCloseAccountLayout.fromBuffer(List<int> bytes) {
@@ -27,7 +27,8 @@ class SPLTokenCloseAccountLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction = SPLTokenProgramInstruction.closeAccount.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.closeAccount;
 
   /// Serializes the layout.
   @override

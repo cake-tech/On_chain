@@ -18,14 +18,15 @@ class MetaplexTokenMetaDataDeprecatedMintNewEditionFromMasterEditionViaPrintingT
   }
 
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => MetaplexTokenMetaDataProgramInstruction
-      .deprecatedMintNewEditionFromMasterEditionViaPrintingToken.insturction;
+  MetaplexTokenMetaDataProgramInstruction get instruction =>
+      MetaplexTokenMetaDataProgramInstruction
+          .deprecatedMintNewEditionFromMasterEditionViaPrintingToken;
 
   @override
   Map<String, dynamic> serialize() {

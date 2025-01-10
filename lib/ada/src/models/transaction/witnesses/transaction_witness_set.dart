@@ -38,12 +38,12 @@ class TransactionWitnessSet with ADASerialization {
   factory TransactionWitnessSet.deserialize(CborMapValue cbor) {
     final v1 = cbor
         .getValueFromIntKey<CborListValue?>(3)
-        ?.to<List<PlutusScript>, CborListValue<CborObject>>((e) {
+        ?.castTo<List<PlutusScript>, CborListValue<CborObject>>((e) {
       return e.value.map((i) => PlutusScript.deserialize(i.cast())).toList();
     });
     final v2 = cbor
         .getValueFromIntKey<CborListValue?>(6)
-        ?.to<List<PlutusScript>, CborListValue<CborObject>>((e) => e.value
+        ?.castTo<List<PlutusScript>, CborListValue<CborObject>>((e) => e.value
             .map((i) =>
                 PlutusScript.deserialize(i.cast(), language: Language.plutusV2))
             .toList());
@@ -53,23 +53,21 @@ class TransactionWitnessSet with ADASerialization {
             ?.value
             .map((e) => Vkeywitness.deserialize(e))
             .toList(),
-        nativeScripts: cbor
-            .getValueFromIntKey<CborListValue?>(1)
-            ?.to<List<NativeScript>, CborListValue<CborObject>>((e) => e.value
-                .map((e) => NativeScript.deserialize(e.cast()))
-                .toList()),
+        nativeScripts: cbor.getValueFromIntKey<CborListValue?>(1)?.castTo<List<NativeScript>, CborListValue<CborObject>>((e) =>
+            e.value.map((e) => NativeScript.deserialize(e.cast())).toList()),
         bootstraps: cbor
             .getValueFromIntKey<CborListValue?>(2)
-            ?.to<List<BootstrapWitness>, CborListValue<CborObject>>((e) => e.value
+            ?.castTo<List<BootstrapWitness>, CborListValue<CborObject>>((e) => e.value
                 .map((e) => BootstrapWitness.deserialize(e.cast()))
                 .toList()),
         plutusScripts:
             v1 == null && v2 == null ? null : [...v1 ?? [], ...v2 ?? []],
-        plutusData: cbor
-            .getValueFromIntKey<CborListValue?>(4)
-            ?.to<PlutusList, CborListValue>((e) => PlutusList.deserialize(e)),
-        redeemers: cbor.getValueFromIntKey<CborListValue?>(5)?.to<List<Redeemer>, CborListValue<CborObject>>(
-            (e) => e.value.map((i) => Redeemer.deserialize(i.cast())).toList()));
+        plutusData: cbor.getValueFromIntKey<CborListValue?>(4)?.castTo<PlutusList, CborListValue>(
+            (e) => PlutusList.deserialize(e)),
+        redeemers: cbor
+            .getValueFromIntKey<CborListValue?>(5)
+            ?.castTo<List<Redeemer>, CborListValue<CborObject>>(
+                (e) => e.value.map((i) => Redeemer.deserialize(i.cast())).toList()));
   }
   TransactionWitnessSet copyWith({
     List<Vkeywitness>? vKeys,
@@ -129,35 +127,35 @@ class TransactionWitnessSet with ADASerialization {
 
   factory TransactionWitnessSet.fromJson(Map<String, dynamic> json) {
     return TransactionWitnessSet(
-        vKeys: (json["vkeys"] as List?)
+        vKeys: (json['vkeys'] as List?)
             ?.map((e) => Vkeywitness.fromJson(e))
             .toList(),
-        nativeScripts: (json["native_scripts"] as List?)
+        nativeScripts: (json['native_scripts'] as List?)
             ?.map((e) => NativeScript.fromJson(e))
             .toList(),
-        redeemers: (json["redeemers"] as List?)
+        redeemers: (json['redeemers'] as List?)
             ?.map((e) => Redeemer.fromJson(e))
             .toList(),
-        bootstraps: (json["bootstraps"] as List?)
+        bootstraps: (json['bootstraps'] as List?)
             ?.map((e) => BootstrapWitness.fromJson(e))
             .toList(),
-        plutusScripts: (json["plutus_scripts"] as List?)
+        plutusScripts: (json['plutus_scripts'] as List?)
             ?.map((e) => PlutusScript.fromJson(e))
             .toList(),
-        plutusData: (json["plutus_data"] == null
+        plutusData: (json['plutus_data'] == null
             ? null
-            : PlutusData.fromJson(json["plutus_data"]) as PlutusList));
+            : PlutusData.fromJson(json['plutus_data']) as PlutusList));
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "vkeys": vKeys?.map((e) => e.toJson()).toList(),
-      "native_scripts": nativeScripts?.map((e) => e.toJson()).toList(),
-      "bootstraps": bootstraps?.map((e) => e.toJson()).toList(),
-      "plutus_scripts": plutusScripts?.map((e) => e.toJson()).toList(),
-      "plutus_data": plutusData?.toJson(),
-      "redeemers": redeemers?.map((e) => e.toJson()).toList()
+      'vkeys': vKeys?.map((e) => e.toJson()).toList(),
+      'native_scripts': nativeScripts?.map((e) => e.toJson()).toList(),
+      'bootstraps': bootstraps?.map((e) => e.toJson()).toList(),
+      'plutus_scripts': plutusScripts?.map((e) => e.toJson()).toList(),
+      'plutus_data': plutusData?.toJson(),
+      'redeemers': redeemers?.map((e) => e.toJson()).toList()
     };
   }
 }

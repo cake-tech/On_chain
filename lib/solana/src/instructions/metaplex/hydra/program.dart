@@ -9,10 +9,10 @@ import 'constant.dart';
 
 class MetaplexHydraProgram extends TransactionInstruction {
   MetaplexHydraProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
 
   factory MetaplexHydraProgram.addMemberNft(
       {required SolAddress authority,

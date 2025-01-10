@@ -19,31 +19,31 @@ class MetaplexFixedPriceSaleInitSellingResourceLayout
         instruction: MetaplexFixedPriceSaleProgramInstruction
             .initSellingResource.insturction);
     return MetaplexFixedPriceSaleInitSellingResourceLayout(
-        masterEditionBump: decode["masterEditionBump"],
-        vaultOwnerBump: decode["vaultOwnerBump"],
-        maxSupply: decode["maxSupply"]);
+        masterEditionBump: decode['masterEditionBump'],
+        vaultOwnerBump: decode['vaultOwnerBump'],
+        maxSupply: decode['maxSupply']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.u8(property: "masterEditionBump"),
-    LayoutConst.u8(property: "vaultOwnerBump"),
-    LayoutConst.optional(LayoutConst.u64(), property: "maxSupply"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.u8(property: 'masterEditionBump'),
+    LayoutConst.u8(property: 'vaultOwnerBump'),
+    LayoutConst.optional(LayoutConst.u64(), property: 'maxSupply'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexFixedPriceSaleProgramInstruction.initSellingResource.insturction;
+  MetaplexFixedPriceSaleProgramInstruction get instruction =>
+      MetaplexFixedPriceSaleProgramInstruction.initSellingResource;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "masterEditionBump": masterEditionBump,
-      "vaultOwnerBump": vaultOwnerBump,
-      "maxSupply": maxSupply
+      'masterEditionBump': masterEditionBump,
+      'vaultOwnerBump': vaultOwnerBump,
+      'maxSupply': maxSupply
     };
   }
 }

@@ -14,23 +14,23 @@ class MetaplexNFTPacksRequestCardForRedeemLayout
         bytes: data,
         instruction: MetaplexNFTPacksProgramInstruction
             .requestCardForRedeem.insturction);
-    return MetaplexNFTPacksRequestCardForRedeemLayout(index: decode["index"]);
+    return MetaplexNFTPacksRequestCardForRedeemLayout(index: decode['index']);
   }
 
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u8(property: "instruction"),
-    LayoutConst.u32(property: "index")
+    LayoutConst.u8(property: 'instruction'),
+    LayoutConst.u32(property: 'index')
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction =>
-      MetaplexNFTPacksProgramInstruction.requestCardForRedeem.insturction;
+  MetaplexNFTPacksProgramInstruction get instruction =>
+      MetaplexNFTPacksProgramInstruction.requestCardForRedeem;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"index": index};
+    return {'index': index};
   }
 }

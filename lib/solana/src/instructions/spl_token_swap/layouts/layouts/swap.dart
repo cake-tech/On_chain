@@ -27,8 +27,8 @@ class SPLTokenSwapSwapLayout extends SPLTokenSwapProgramLayout {
     );
 
     return SPLTokenSwapSwapLayout(
-      amountIn: decode["amountIn"],
-      minimumAmountOut: decode["minimumAmountOut"],
+      amountIn: decode['amountIn'],
+      minimumAmountOut: decode['minimumAmountOut'],
     );
   }
 
@@ -42,13 +42,14 @@ class SPLTokenSwapSwapLayout extends SPLTokenSwapProgramLayout {
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => SPLTokenSwapProgramInstruction.swap.insturction;
+  SPLTokenSwapProgramInstruction get instruction =>
+      SPLTokenSwapProgramInstruction.swap;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "amountIn": amountIn,
-      "minimumAmountOut": minimumAmountOut,
+      'amountIn': amountIn,
+      'minimumAmountOut': minimumAmountOut,
     };
   }
 }

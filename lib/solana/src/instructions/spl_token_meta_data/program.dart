@@ -7,10 +7,10 @@ import 'package:on_chain/solana/src/models/transaction/instruction.dart';
 /// Represents transaction instructions related to the SPL token metadata program.
 class SPLTokenMetaDataProgram extends TransactionInstruction {
   SPLTokenMetaDataProgram({
-    required List<AccountMeta> keys,
-    required SolAddress programId,
+    required super.keys,
+    required super.programId,
     required ProgramLayout layout,
-  }) : super(keys: keys, layout: layout, programId: programId);
+  }) : super(data: layout.toBytes());
 
   factory SPLTokenMetaDataProgram.fromBytes({
     required List<AccountMeta> keys,

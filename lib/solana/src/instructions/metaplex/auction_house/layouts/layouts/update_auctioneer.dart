@@ -16,26 +16,26 @@ class MetaplexAuctionHouseUpdateAuctioneerLayout
         instruction: MetaplexAuctionHouseProgramInstruction
             .updateAuctioneer.insturction);
     return MetaplexAuctionHouseUpdateAuctioneerLayout(
-        scopes: (decode["scopes"] as List)
+        scopes: (decode['scopes'] as List)
             .map((e) => AuthorityScope.fromValue(e))
             .toList());
   }
 
   /// StructLayout layout definition.
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.blob(8, property: "instruction"),
-    LayoutConst.vec(LayoutConst.u8(), property: "scopes"),
+    LayoutConst.blob(8, property: 'instruction'),
+    LayoutConst.vec(LayoutConst.u8(), property: 'scopes'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  List<int> get instruction =>
-      MetaplexAuctionHouseProgramInstruction.updateAuctioneer.insturction;
+  MetaplexAuctionHouseProgramInstruction get instruction =>
+      MetaplexAuctionHouseProgramInstruction.updateAuctioneer;
 
   @override
   Map<String, dynamic> serialize() {
-    return {"scopes": scopes.map((e) => e.value).toList()};
+    return {'scopes': scopes.map((e) => e.value).toList()};
   }
 }

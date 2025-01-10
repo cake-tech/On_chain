@@ -2,14 +2,14 @@ import 'package:on_chain/tron/src/address/tron_address.dart';
 import 'package:on_chain/tron/src/models/contract/base_contract/base.dart';
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:on_chain/tron/src/protbuf/decoder.dart';
+import 'package:on_chain/utils/utils/utils.dart';
 
 class AccountId extends TronProtocolBufferImpl {
-  ///     final decode = TronProtocolBufferImpl.decode(bytes);
-
   factory AccountId.fromJson(Map<String, dynamic> json) {
     return AccountId(
-        name: StringUtils.tryEncode(json["name"]),
-        address: TronAddress(json["address"]));
+        name: OnChainUtils.parseBytes(value: json['name'], name: 'name'),
+        address: OnChainUtils.parseTronAddress(
+            value: json['address'], name: 'address'));
   }
   factory AccountId.deserialize(List<int> bytes) {
     final decode = TronProtocolBufferImpl.decode(bytes);
@@ -32,12 +32,12 @@ class AccountId extends TronProtocolBufferImpl {
 
   @override
   Map<String, dynamic> toJson() {
-    return {"address": address.toString(), "name": StringUtils.tryDecode(name)}
+    return {'address': address.toString(), 'name': StringUtils.tryDecode(name)}
       ..removeWhere((key, value) => value == null);
   }
 
   @override
   String toString() {
-    return "AccountId{${toJson()}}";
+    return 'AccountId{${toJson()}}';
   }
 }

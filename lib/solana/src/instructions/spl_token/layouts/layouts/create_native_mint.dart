@@ -10,7 +10,7 @@ class SPLTokenCreateNativeMintLayout extends SPLTokenProgramLayout {
 
   /// StructLayout structure for SPLTokenCreateNativeMintLayout.
   static final StructLayout _layout =
-      LayoutConst.struct([LayoutConst.u8(property: "instruction")]);
+      LayoutConst.struct([LayoutConst.u8(property: 'instruction')]);
 
   /// Constructs an SPLTokenCreateNativeMintLayout instance from buffer.
   factory SPLTokenCreateNativeMintLayout.fromBuffer(List<int> bytes) {
@@ -27,8 +27,8 @@ class SPLTokenCreateNativeMintLayout extends SPLTokenProgramLayout {
 
   /// Instruction associated with the layout.
   @override
-  final int instruction =
-      SPLTokenProgramInstruction.createNativeMint.insturction;
+  final SPLTokenProgramInstruction instruction =
+      SPLTokenProgramInstruction.createNativeMint;
 
   /// Serializes the layout.
   @override

@@ -21,14 +21,14 @@ class VoteProgramAuthorizeWithSeedLayout extends VoteProgramLayout {
         bytes: data,
         instruction: VoteProgramInstruction.authorizeWithSeed.insturction);
     final voteData =
-        Map<String, dynamic>.from(decode["voteAuthorizeWithSeedArgs"]);
+        Map<String, dynamic>.from(decode['voteAuthorizeWithSeedArgs']);
     return VoteProgramAuthorizeWithSeedLayout(
-        newAuthorized: voteData["newAuthorized"],
+        newAuthorized: voteData['newAuthorized'],
         currentAuthorityDerivedKeyOwnerPubkey:
-            voteData["currentAuthorityDerivedKeyOwnerPubkey"],
+            voteData['currentAuthorityDerivedKeyOwnerPubkey'],
         currentAuthorityDerivedKeySeed:
-            voteData["currentAuthorityDerivedKeySeed"],
-        voteAuthorizationType: voteData["voteAuthorizationType"]);
+            voteData['currentAuthorityDerivedKeySeed'],
+        voteAuthorizationType: voteData['voteAuthorizationType']);
   }
   factory VoteProgramAuthorizeWithSeedLayout(
       {required SolAddress newAuthorized,
@@ -43,30 +43,31 @@ class VoteProgramAuthorizeWithSeedLayout extends VoteProgramLayout {
         voteAuthorizationType: voteAuthorizationType);
   }
   static final StructLayout _layout = LayoutConst.struct([
-    LayoutConst.u32(property: "instruction"),
+    LayoutConst.u32(property: 'instruction'),
     LayoutConst.struct([
-      LayoutConst.u32(property: "voteAuthorizationType"),
-      SolanaLayoutUtils.publicKey("currentAuthorityDerivedKeyOwnerPubkey"),
-      LayoutConst.rustString(property: "currentAuthorityDerivedKeySeed"),
-      SolanaLayoutUtils.publicKey("newAuthorized")
-    ], property: "voteAuthorizeWithSeedArgs"),
+      LayoutConst.u32(property: 'voteAuthorizationType'),
+      SolanaLayoutUtils.publicKey('currentAuthorityDerivedKeyOwnerPubkey'),
+      LayoutConst.rustString(property: 'currentAuthorityDerivedKeySeed'),
+      SolanaLayoutUtils.publicKey('newAuthorized')
+    ], property: 'voteAuthorizeWithSeedArgs'),
   ]);
 
   @override
   StructLayout get layout => _layout;
 
   @override
-  int get instruction => VoteProgramInstruction.authorizeWithSeed.insturction;
+  VoteProgramInstruction get instruction =>
+      VoteProgramInstruction.authorizeWithSeed;
 
   @override
   Map<String, dynamic> serialize() {
     return {
-      "voteAuthorizeWithSeedArgs": {
-        "voteAuthorizationType": voteAuthorizationType,
-        "currentAuthorityDerivedKeyOwnerPubkey":
+      'voteAuthorizeWithSeedArgs': {
+        'voteAuthorizationType': voteAuthorizationType,
+        'currentAuthorityDerivedKeyOwnerPubkey':
             currentAuthorityDerivedKeyOwnerPubkey,
-        "currentAuthorityDerivedKeySeed": currentAuthorityDerivedKeySeed,
-        "newAuthorized": newAuthorized
+        'currentAuthorityDerivedKeySeed': currentAuthorityDerivedKeySeed,
+        'newAuthorized': newAuthorized
       }
     };
   }
