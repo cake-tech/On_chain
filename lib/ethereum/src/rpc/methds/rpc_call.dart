@@ -9,8 +9,8 @@ import 'package:blockchain_utils/blockchain_utils.dart';
 ///   coded into a contract or even to test what the effect of a transaction would be without running it live.
 /// [geth.ethereum.org](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call)
 class EthereumRequestCall extends EthereumRequest<Object?, Object?> {
-  EthereumRequestCall._(this.contractAddress, this.raw, this.from,
-      this._function, BlockTagOrNumber? blockNumber)
+  EthereumRequestCall._(
+      this.contractAddress, this.raw, this.from, this._function, BlockTagOrNumber? blockNumber)
       : super(blockNumber: blockNumber);
   factory EthereumRequestCall.fromRaw(
       {required String contractAddress,
@@ -47,7 +47,7 @@ class EthereumRequestCall extends EthereumRequest<Object?, Object?> {
   @override
   dynamic onResonse(result) {
     if (_function != null) {
-      return _function.decodeOutput(BytesUtils.fromHexString(result as String));
+      return _function!.decodeOutput(BytesUtils.fromHexString(result as String));
     }
 
     return super.onResonse(result);
