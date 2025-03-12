@@ -1,3 +1,20 @@
+## 6.1.0
+
+- Update dependencies.
+- Added Support for aptos graphQL.
+- Fix Sui multisig address validator
+
+## 6.0.0
+
+- Update dependencies.
+- Added Sui Network support.
+- Added Aptos Network support.
+
+## 5.1.0
+
+- Update dependencies.
+- Allow deserialization ADA transaction inputs encoded as Cbor(Set).
+
 ## 5.0.0
 
 - Minimum required Dart SDK version updated to 3.3.

@@ -21,7 +21,7 @@ mixin ADASerialization {
     final decode = CborObject.fromCbor(cborBytes);
     if (decode is! T) {
       throw ADAPluginException('Failed to deserialize CBOR bytes into type.',
-          details: {'type': '$T', 'Excepted': decode.runtimeType});
+          details: {'type': '$T', 'expected': decode.runtimeType});
     }
     return decode;
   }
@@ -120,7 +120,7 @@ extension QuickCborList on CborListValue {
     if (obj is T) return obj as T;
     if (obj.value is! T) {
       throw ADAPluginException('Failed to cast value.',
-          details: {'Excepted': obj.value.runtimeType, 'Type': '$T'});
+          details: {'expected': obj.value.runtimeType, 'Type': '$T'});
     }
     return obj.value;
   }
@@ -153,7 +153,7 @@ extension QuickCborMap on CborMapValue {
     if (val is CborObject && val.value is T) return val.value;
     if (val is! T) {
       throw ADAPluginException('Failed to cast value.',
-          details: {'Excepted': val.runtimeType, 'Type': '$T'});
+          details: {'expected': val.runtimeType, 'Type': '$T'});
     }
     return val;
   }
@@ -174,8 +174,24 @@ extension QuickCborMap on CborMapValue {
     if (val is CborObject && val.value is T) return val.value;
     if (val is! T) {
       throw ADAPluginException('Failed to cast value.',
-          details: {'Excepted': '${val.runtimeType}', 'Type': '$T'});
+          details: {'expected': '${val.runtimeType}', 'Type': '$T'});
     }
     return val;
+  }
+
+  List<dynamic>? getIterableFromIntKey(int key, {bool throwOnNull = true}) {
+    final val = value[CborIntValue(key)];
+    if (val == null || val is CborNullValue) {
+      if (throwOnNull) {
+        throw ADAPluginException('Object not found.', details: {"key": key});
+      }
+    }
+    if (val is CborListValue) {
+      return val.value;
+    }
+    if (val is CborSetValue) {
+      return val.value.toList();
+    }
+    throw ADAPluginException('value is not iterable.', details: {"key": key});
   }
 }
