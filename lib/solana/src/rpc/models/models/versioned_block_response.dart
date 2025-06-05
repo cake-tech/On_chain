@@ -24,7 +24,7 @@ class VersionedBlockResponse {
         previousBlockhash: SolAddress.uncheckCurve(json["previousBlockhash"]),
         parentSlot: json["parentSlot"],
         transactions: (json["transactions"] as List).map((e) {
-          return VersionedTransactionResponse.fromJson(e);
+          return VersionedTransactionResponse.fromJson(e, false);
         }).toList(),
         rewards: (json["rewards"] as List?)
             ?.map((e) => RewardResponse.fromJson(e))

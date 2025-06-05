@@ -5,14 +5,14 @@ import 'package:on_chain/solana/src/rpc/utils/solana_rpc_utils.dart';
 
 /// Returns transaction details for a confirmed transaction
 /// https://solana.com/docs/rpc/http/gettransaction
-class SolanaRPCGetTransaction
-    extends SolanaRPCRequest<VersionedTransactionResponse> {
-  const SolanaRPCGetTransaction(
-      {required this.transactionSignature,
-      this.maxSupportedTransactionVersion,
-      Commitment? commitment,
-      SolanaRPCEncoding? encoding = SolanaRPCEncoding.base64})
-      : super(commitment: commitment);
+class SolanaRPCGetTransaction extends SolanaRPCRequest<VersionedTransactionResponse> {
+  const SolanaRPCGetTransaction({
+    required this.transactionSignature,
+    this.maxSupportedTransactionVersion,
+    SolanaRPCEncoding? encoding = SolanaRPCEncoding.base64,
+    super.commitment,
+    this.skipVerification = false,
+  });
 
   /// getTransaction
   @override
@@ -26,6 +26,9 @@ class SolanaRPCGetTransaction
   /// If this parameter is omitted, only legacy transactions will be returned,
   /// and any versioned transaction will prompt the error.
   final int? maxSupportedTransactionVersion;
+
+  /// Skip verification of signatures.
+  final bool skipVerification;
 
   @override
   List<dynamic> toJson() {
@@ -42,6 +45,6 @@ class SolanaRPCGetTransaction
 
   @override
   VersionedTransactionResponse onResonse(result) {
-    return VersionedTransactionResponse.fromJson(result);
+    return VersionedTransactionResponse.fromJson(result, skipVerification);
   }
 }

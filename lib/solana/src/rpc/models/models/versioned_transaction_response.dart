@@ -15,7 +15,7 @@ class VersionedTransactionResponse {
       required this.slot,
       required this.transaction,
       required this.version});
-  factory VersionedTransactionResponse.fromJson(Map<String, dynamic> json) {
+  factory VersionedTransactionResponse.fromJson(Map<String, dynamic> json, bool skipVerification) {
     final version =
         json["version"] == null ? null : TransactionType.find(json["version"]);
     final meta = json["meta"] == null
@@ -28,7 +28,7 @@ class VersionedTransactionResponse {
     } else {
       transaction = SolanaTransaction.deserialize(
           SolanaRPCEncoding.decode(json["transaction"]),
-          verifySignatures: version != null);
+          verifySignatures: skipVerification ? false : version != null);
     }
     return VersionedTransactionResponse(
         blockTime: BigintUtils.tryParse(json["blockTime"]),
