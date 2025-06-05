@@ -136,7 +136,7 @@ class SolanaTransaction {
     return transaction;
   }
   factory SolanaTransaction.fromJson(Map<String, dynamic> json,
-      {TransactionType? version}) {
+      {TransactionType? version, bool skipVerification = false}) {
     final message = VersionedMessage.fromJson(json["message"], type: version);
 
     final List<List<int>> signatures = (json["signatures"] as List)
@@ -156,7 +156,7 @@ class SolanaTransaction {
 
           /// Supports only versioned Transaction legacy or V0.
           /// Older Transactions may fail.
-          verifySignature: version != null);
+          verifySignature: skipVerification ? false : version != null);
     }
     return transaction;
   }

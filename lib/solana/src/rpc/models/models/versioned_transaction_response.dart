@@ -16,19 +16,20 @@ class VersionedTransactionResponse {
       required this.transaction,
       required this.version});
   factory VersionedTransactionResponse.fromJson(Map<String, dynamic> json, bool skipVerification) {
-    final version =
-        json["version"] == null ? null : TransactionType.find(json["version"]);
-    final meta = json["meta"] == null
-        ? null
-        : ConfirmedTransactionMeta.fromJson(json["meta"]);
+    final version = json["version"] == null ? null : TransactionType.find(json["version"]);
+    final meta = json["meta"] == null ? null : ConfirmedTransactionMeta.fromJson(json["meta"]);
     SolanaTransaction transaction;
     if (json["transaction"] is Map) {
-      transaction =
-          SolanaTransaction.fromJson(json["transaction"], version: version);
+      transaction = SolanaTransaction.fromJson(
+        json["transaction"],
+        version: version,
+        skipVerification: skipVerification,
+      );
     } else {
       transaction = SolanaTransaction.deserialize(
-          SolanaRPCEncoding.decode(json["transaction"]),
-          verifySignatures: skipVerification ? false : version != null);
+        SolanaRPCEncoding.decode(json["transaction"]),
+        verifySignatures: skipVerification ? false : version != null,
+      );
     }
     return VersionedTransactionResponse(
         blockTime: BigintUtils.tryParse(json["blockTime"]),
